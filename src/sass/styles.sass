@@ -29,15 +29,63 @@ html
 
 #header
   color: $brand-primary
-  h1
-    font-weight: bold
+
+  $bold-border-width: 10px // Border width of the bottom of center header
   .header-center
     font-family: $font-family-serif
+    height: 4 * $line-height
+    padding-top: $line-height
+    border-bottom: $bold-border-width solid $brand-primary
+  h1
+    font-weight: bold
+    margin: 0
+
+  // Ribbon header only for larger screen
+  @media screen and (min-width: $screen-sm-min)
+    .header-center
+      position: relative // for pseudo-elements
+
+      &:before, &:after
+        content: ''
+        position: absolute
+        bottom: -$bold-border-width
+
+      &:before
+        width: image-width("left-fold.png")
+        height: image-height("left-fold.png")
+        background: image-url("left-fold.png")
+        left: 0
+
+      &:after
+        width: image-width("right-fold.png")
+        height: image-height("right-fold.png")
+        background: image-url("right-fold.png")
+        right: 0
+
+    $border-width: rem-calc(7px) // Border width of the thinner left&right arm
+
+    .header-left, .header-right
+      padding-top: 2 * $line-height
+      height: 3 * $line-height + $border-width
+      border-bottom: $border-width solid $gray
+      position: relative // For pseudo elements
+      &:after
+        content: ''
+        position: absolute
+        bottom: -$border-width
+        border: transparent solid $border-width
+        border-top: 0
+        border-bottom-color: $body-bg
+
+    .header-left:after
+      left: -$border-width
+    .header-right:after
+      right: -$border-width
 
 // Table row layout
 //
 .l-row
-  padding: rem-calc($line-height-computed) 0 rem-calc($line-height-computed - 1px)
+  padding: $line-height 0 rem-calc($line-height-px - 1px)
   border-bottom: rem-calc(1px) dashed $brand-success
 
   ul
@@ -56,7 +104,7 @@ html
       // Canceling letter-spacing right space
       // http://stackoverflow.com/questions/14678154/centre-align-text-that-has-extra-letter-spacing-applied
       margin-right: $letter-spacing * -1
-      margin: 0 0 rem-calc($line-height-computed)
+      margin: 0 0 $line-height
 
       @media screen and (min-width: $screen-sm-min)
         margin: 0
@@ -97,4 +145,4 @@ html
           z-index: -1
 
 #edit
-  margin-top: rem-calc($line-height-computed)
+  margin-top: $line-height
