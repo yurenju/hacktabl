@@ -30,10 +30,7 @@ push: build
 
 	cp Makefile build/
 
-	# Get the current commit info in master branch
-	msg=`git log -n 1 --pretty=format:"%h - %s"`
-
-	MSG=$(msg) $(MAKE) push-in-build -C build
+	MSG="$(shell git log -n 1 --pretty=format:'%h - %s')" $(MAKE) push-in-build -C build
 
 
 clean:
