@@ -6,3 +6,95 @@
 @import variables
 @import bootstrap
 @import compass/typography
+@import compass/css3
+
+html
+  font-size: $font-size-base
+
+.btn
+  +transition(all ease-in-out .1s)
+  outline: none
+  &:focus, &:focus:active
+    outline: none
+  &::-moz-focus-inner
+    border: 0
+
+.btn-primary
+  border: none
+  +box-shadow(0 4px $brand-primary)
+
+  &:active
+    +translate3d(0, 4px, 0)
+    +box-shadow(0 0 $brand-primary)
+
+#header
+  color: $brand-primary
+  h1
+    font-weight: bold
+  .header-center
+    font-family: $font-family-serif
+
+// Table row layout
+//
+.l-row
+  padding: rem-calc($line-height-computed) 0 rem-calc($line-height-computed - 1px)
+  border-bottom: rem-calc(1px) dashed $brand-success
+
+  ul
+    padding-left: 1rem
+    margin-bottom: 0
+
+  .row-center
+    $letter-spacing: rem-calc(7px)
+    $font-size-px: 14px
+
+    font-family: $font-family-serif
+    color: $brand-success
+
+    h2
+      letter-spacing: $letter-spacing
+      // Canceling letter-spacing right space
+      // http://stackoverflow.com/questions/14678154/centre-align-text-that-has-extra-letter-spacing-applied
+      margin-right: $letter-spacing * -1
+      margin: 0 0 rem-calc($line-height-computed)
+
+      @media screen and (min-width: $screen-sm-min)
+        margin: 0
+
+    .ampersand
+      font-size: rem-calc($font-size-px)
+      color: rgba($brand-success, 0.32)
+      // Canceling the extra space of h2 on the right
+      margin-right: $letter-spacing
+      letter-spacing: 0
+
+      @media screen and (min-width: $screen-sm-min)
+        position: relative
+        display: block
+        line-height: 20px/$font-size-px
+
+
+        &:before
+          content: ''
+          border-top: 1px solid rgba($brand-success, 0.32)
+          top: 50%
+          position: absolute
+          $w: $font-size-h2 * 2 + $letter-spacing
+          width: $w
+          left: 50%
+          margin-left: $w/-2
+          z-index: -2
+
+        &:after
+          content: ''
+          background: $body-bg
+          position: absolute
+          top: 0
+          left: 50%
+          height: 100%
+          width: 2rem
+          margin-left: -1em
+          z-index: -1
+
+#edit
+  margin-top: rem-calc($line-height-computed)

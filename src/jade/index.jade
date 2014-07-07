@@ -1,27 +1,29 @@
 doctype html
 html(ng-app="app")
   head
+    meta(charset="utf-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1")
     title 自經區正反意見比較表
     != stylesheetLinkTag('styles', {assetsPath: 'public/stylesheets/'})
 
   body(ng-controller="AppCtrl as App")
     div.container
       header#header.row
-        .header-ceter.col-xs-4.col-xs-push-4.text-center: h1
+        .header-center.col-sm-4.col-sm-push-4.col-xs-12.text-center: h1
           | 自經比一比
-        .header-left.col-xs-4.col-xs-pull-4.text-left
+        .header-left.col-sm-4.col-sm-pull-4.col-xs-6.text-left
           | 正方／支持自經區
-        .header-right.col-xs-4.text-right
-          | 反方／反對自經區／自經區疑慮
+        .header-right.col-sm-4.col-xs-6.text-right
+          | 反方／自經區疑慮
 
       main#main
         .row.l-row
-          .row-center.col-xs-2.col-xs-push-5.text-center
+          .row-center.col-sm-2.col-sm-push-5.col-xs-12.text-center
             h2
               | 租稅
-              span &amp;
+              span.ampersand &amp;
               | 土地
-          .row-left.col-xs-5.col-xs-pull-2
+          .row-left.col-sm-5.col-sm-pull-2.col-xs-6
             ul
               li 條例 §13-2 規定行政院會核定新示範區的設立。
               li 新示範區經費等需經過地方議會同意，受民意機關監督。
@@ -29,26 +31,26 @@ html(ng-app="app")
               li §32 外籍專業人士，三年內所得稅半價。
               li §33 內銷貨物佔年度銷售總額 10% 內可免稅，超過者仍要交稅，鼓勵外銷。
               li 法規評估報告p31：以上三優惠的租稅淨效益為正，比「直接補助」對國家之衝擊小。
-          .row-right.col-xs-5
+          .row-right.col-sm-5.col-xs-6
             ul
               li 條例 §19 公有不動產（如政府土地）可以逕行讓售，不受民意機關同意與行政院核准（土地法 §25），公有地可不經民意監督私相讓售。
               li 過去減稅讓電子業受益，但國外直接投資不增反減，稅賦天平歪斜。
 
         .row.l-row
-          .row-center.col-xs-2.col-xs-push-5.text-center
+          .row-center.col-sm-2.col-sm-push-5.col-xs-12.text-center
             h2
               | 教育
-              span &amp;
+              span.ampersand &amp;
               | 人才
-          .row-left.col-xs-5.col-xs-pull-2
+          .row-left.col-sm-5.col-sm-pull-2.col-xs-6
             ul
               li 法規評估報告p23：簡化行政程序，特定職業（會計師§58、建築師§59、律師§60）以特別法立法，吸引外籍專業人士於示範區工作。
               li p25：每年預計吸引 93 個外籍專業人士。
-          .row-right.col-xs-5
+          .row-right.col-sm-5.col-xs-6
             ul
               li 為自經區鬆綁的外國人從事就業服務法審核標準之勞工預核制違背其母法就業服務法§47優先雇用本勞之精神。
 
-      #edit.row: .col-lg-4.col-lg-offset-4.col-xs-6.col-xs-offset-3
+      #edit.row: .col-lg-4.col-lg-offset-4.col-xs-8.col-xs-offset-2
           button.btn.btn-primary.btn-lg.btn-block 編輯表格
 
     != javascriptIncludeTag('app', {assetsPath: 'public/javascripts/'})
