@@ -1,0 +1,38 @@
+{
+  "name": "fepztw",
+  "version": "0.0.0",
+  "description": "自經區正反意見比較表",
+  "main": "index.html",
+  "devDependencies": {
+    "LiveScript": "1.2.x",
+    "karma": "~0.12.16",
+    "karma-live-preprocessor": "*",
+    "karma-safari-launcher": "~0.1.1",
+    "karma-firefox-launcher": "~0.1.3",
+    "karma-chrome-launcher": "~0.1.3",
+    "karma-jasmine": "~0.1.5",
+    "gulp": "*",
+    "gulp-uglify": "*",
+    "gulp-jade": "*",
+    "gulp-filter": "*",
+    "gulp-compass": "*",
+    "gulp-livescript": "*",
+    "gulp-livereload": "*",
+    "connect": "*",
+    "gulp-angular-templatecache": "~1.2.1"
+  },
+  "dependencies": {
+    "sprocket": "git+https://github.com/MrOrz/sprocket.git#emit-error-to-stream-when-require-failed"
+  },
+  "scripts": {
+    "test": "node_modules/karma/bin/karma start test/karma.conf.js",
+    "start": "gulp --require LiveScript server",
+    "deploy": "make deploy"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://git@github.com:fepztw/fepztw.github.io.git"
+  },
+  "author": "MrOrz",
+  "license": "MIT"
+}

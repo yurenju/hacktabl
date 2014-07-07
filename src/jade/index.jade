@@ -1,0 +1,15 @@
+doctype html
+html(ng-app="app")
+  head
+    title 自經區正反意見比較表
+    != stylesheetLinkTag('styles', {assetsPath: 'public/stylesheets/'})
+
+  body(ng-controller="AppCtrl as App")
+
+    div#body
+      {{App.msg}}
+
+    footer.text-center: .container: .row: .col-xs-12
+      p kerker
+
+    != javascriptIncludeTag('app', {assetsPath: 'public/javascripts/'})
