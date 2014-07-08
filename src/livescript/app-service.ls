@@ -49,6 +49,14 @@ angular.module \app.service, []
     return ->
       callbacks.splice callbacks.indexOf(callback), 1
 
+.service \Spy, class Spy
+  ->
+    @spies = []
+    @current = null
+
+  add: (spy-id) -> @spies = @spies ++ spy-id
+  remove: (spy-id) -> @spies.splice @spies.indexOf(spy-id), 1
+
 .factory \MockData, <[
        $q  $timeout
 ]> ++ ($q, $timeout) ->
@@ -62,6 +70,7 @@ angular.module \app.service, []
 
       perspectives:
         * title: <[政策 條例]>
+          full-title: \政策與條例
           positions:
             * '2012年政府民調顯示，超過 6 成民意支持台灣加入區域經濟整合，包含 TPP。'
               '美國 CSIS 民調 100% 支持台灣參加 RCEP 與 TPP 區域經濟整合。'
@@ -71,14 +80,17 @@ angular.module \app.service, []
               '空白授權的法案，細節訂完之後，需要送立法院備查，立法院也可以退案。'
             * []
         * title: <[農業 環境]>
+          full-title: \農業與環境
           positions: [[], []]
         * title: <[健康 醫療]>
+          full-title: \健康與醫療
           positions:
             * '簡化行政程序，特定職業以特別法立法，吸引外籍專業人士於示範區工作。'
               '每年預計吸引 93 個外籍專業人士。'
             * '為自經區鬆綁的外國人從事就業服務法審核標準之勞工預核制違背其母法就業服務法§47優先雇用本勞之精神。'
               ...
         * title: <[租稅 土地]>
+          full-title: \租稅與土地
           positions:
             * '公有不動產讓售不受民意監督，但必須依照市價售出，符合公產權益。'
               '規定行政院會核定新示範區的設立。'
@@ -90,6 +102,7 @@ angular.module \app.service, []
             * '公有不動產（如政府土地）可以逕行讓售，不受民意機關同意與行政院核准，公有地可不經民意監督私相讓售。'
               '過去減稅讓電子業受益，但國外直接投資不增反減，稅賦天平歪斜。'
         * title: <[物流 金融]>
+          full-title: \物流與金融
           positions:
             * '智慧物流之貨物進出示範區需用電子系統向海關通關，區內廠商必須建立電子帳冊受海關稽核。'
               ...

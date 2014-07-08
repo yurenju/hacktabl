@@ -1,6 +1,14 @@
 #= require app-service.js
 
 angular.module \app.directive, <[app.service]>
+
+# Scroll spy
+#
+# Usage: <div vu-sticky="200">...</div>
+#
+# Adds the class "is-sticky" to the element when the window.scrollTop exceeds
+# the specified value.
+#
 .directive \vuSticky, <[
        WindowScroller
 ]> ++ (WindowScroller) ->
@@ -25,3 +33,69 @@ angular.module \app.directive, <[app.service]>
         elem.remove-class CLASS_NAME
 
     scope.$on \$destroy, unsubscribe
+
+# Scroll spy
+#
+# Usage: <div vu-spy="'The title'">...</div>
+#
+# Sets the Spy service index when the element's top is passing the top edge of
+# the screen.
+#
+.directive \vuSpy, <[
+       $window  Spy
+]> ++ ($window, Spy) ->
+
+  # Returned linking function
+  (scope, elem, attrs) ->
+
+    const spy-id = scope.$eval(attrs.vuSpy)
+
+    # Adding spy-id into the spies array
+    #
+    Spy.add spy-id
+
+    # Cached DOM rect value.
+    #
+    rect = windowHeight = null
+    !function update-cache
+      rect := elem[0].getBoundingClientRect!
+      windowHeight := $window.innerHeight
+
+    # Debounced scroll event handling using requestAnimationFrame
+    # http://www.html5rocks.com/en/tutorials/speed/animations/
+    #
+    is-requesting = false
+
+    # Set the current spy and reset the is-requesting flag,
+    # which is probably related to the "writing" of DOM
+    #
+    !function do-request
+      scope.$apply ->
+        Spy.current = Spy.spies.indexOf(spy-id)
+      is-requesting := false
+
+    do !function scrollHandler
+      # Update rect from DOM
+      update-cache!
+      # console.log 'scrollHandler', spy-id, rect, elem
+
+      # Continue to do-request only if it's not currently requesting,
+      # and the element is crossing the top edge of the window.
+      #
+      return unless !is-requesting and rect.top <= 0 and rect.bottom > 0
+
+      $window.requestAnimationFrame do-request
+      is-requesting := true
+
+
+    # Setup scroll callback
+    #
+    !function unsubscribe-scroll
+      angular.element($window).off 'scroll', scroll-handler
+
+    angular.element($window).on 'scroll', scroll-handler
+
+    # Remove spy and callback on scope destroy
+    scope.$on \$destory , ->
+      Spy.remove spy-id
+      unsubscribe-scroll!

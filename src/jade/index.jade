@@ -6,12 +6,17 @@ html(ng-app="app")
     title 自經區正反意見比較表
     != stylesheetLinkTag('styles', {assetsPath: 'public/stylesheets/'})
 
-  body(ng-controller="AppCtrl as App")
+  body(ng-controller="AppCtrl as App" vu-spy="'自經比一比'")
     header#header
       .container: .row
         .col-xs-6.text-center.col-xs-push-3
           h1
-            | 自經比一比
+            //- The title that reflects the currently spied perspective title
+            span.title(
+              ng-repeat="title in App.Spy.spies track by $index"
+              ng-class="{'is-prev': App.Spy.current > $index, 'is-next': App.Spy.current < $index}"
+            )
+              | {{title}}
 
         .header-left.col-xs-3.col-xs-pull-6
           span.glyphicon.glyphicon-ok-sign
@@ -27,7 +32,7 @@ html(ng-app="app")
 
     div.container
       main#main
-        .row.l-row(ng-repeat="row in ::App.data.perspectives")
+        .row.l-row(ng-repeat="row in ::App.data.perspectives" vu-spy="row.fullTitle")
           .row-center.col-sm-2.col-sm-push-5.col-xs-12.text-center
             h2
               | {{::row.title[0]}}

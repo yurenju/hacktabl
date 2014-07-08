@@ -35,10 +35,16 @@ html
 
     // The element after #header should have enough margin-top
     + *
-      margin-top: $h
+      padding-top: $h
 
     h1
       margin: ($line-count - $line-height-large) * $line-height / 2
+
+    .title.is-prev
+      +translate3d(0, -$h, 0)
+    .title.is-next
+      +translate3d(0, $h, 0)
+
     .header-left, .header-right
       padding-top: ($line-count - 1) * $line-height / 2
 
@@ -54,6 +60,20 @@ html
   h1
     font-size: $font-size-large
     line-height: $line-height-large
+    height: $line-height-large * $line-height
+    position: relative // For the .title inside
+    overflow: hidden  // Hide excessive .title
+
+  .title
+    display: block
+    position: absolute
+    left: 0
+    top: 0
+    right: 0
+    bottom: 0
+    +translate3d(0, 0, 0)
+    +transition(all .15s ease-in-out)
+
 
   @media screen and (min-width: $screen-sm-min)
     +set-heights(3)  // Sticky bar on large screens should be 3 lines high.
