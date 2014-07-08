@@ -9,13 +9,31 @@ html(ng-app="app")
   body(ng-controller="AppCtrl as App")
     div.container
       header#header.row
-        .header-center.col-sm-4.col-sm-push-4.col-xs-12.text-center: h1
-          | 自經比一比
+        .header-center.col-sm-4.col-sm-push-4.col-xs-12.text-center
+          h1
+            | 自經比一比
+
         .header-left.col-sm-4.col-sm-pull-4.col-xs-6
           | 正方／支持自經區
         .header-right.col-sm-4.col-xs-6
           | 反方／自經區疑慮
 
+    header#sticky(vu-sticky="100")
+      .container: .row
+        .header-left.col-xs-2
+          span.glyphicon.glyphicon-ok-sign
+          | 
+          | 正方
+        .col-xs-8.text-center
+          h1
+            | 自經比一比
+
+        .header-right.col-xs-2.text-right
+          | 反方
+          | 
+          span.glyphicon.glyphicon-exclamation-sign
+
+    div.container
       main#main
         .row.l-row
           .row-center.col-sm-2.col-sm-push-5.col-xs-12.text-center

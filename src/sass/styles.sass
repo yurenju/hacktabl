@@ -101,6 +101,40 @@ html
       &:after
         right: -$border-width
 
+// Sticky bar
+#sticky
+
+  // All styles that is related to heights of sticky bar
+  =set-heights($line-count)
+    height: $line-count * $line-height
+    +translate3d(0, -$line-count*$line-height, 0)
+    h1
+      margin: ($line-count - $line-height-large) * $line-height / 2
+    .header-left, .header-right
+      padding-top: ($line-count - 1) * $line-height / 2
+
+  +set-heights(2) // Mobile sticky bar should be 2 lines high.
+  position: fixed
+  top: 0
+  left: 0
+  right: 0
+  +transition(all .2s ease-in-out)
+  background: rgba($brand-primary, .95)
+  color: $body-bg
+  z-index: $zindex-navbar-fixed
+
+  h1
+    font-size: $font-size-large
+    line-height: $line-height-large
+
+  // style when being sticky.
+  &.is-sticky
+    +translate3d(0,0,0)
+
+  @media screen and (min-width: $screen-sm-min)
+    +set-heights(3)  // Sticky bar on large screens should be 3 lines high.
+
+
 // Table row layout
 //
 .l-row
