@@ -135,11 +135,10 @@ html
       letter-spacing: $letter-spacing
       // Canceling letter-spacing right space
       // http://stackoverflow.com/questions/14678154/centre-align-text-that-has-extra-letter-spacing-applied
-      margin-right: $letter-spacing * -1
-      margin: 0 0 $line-height
+      margin: 0 $letter-spacing * -1 $line-height 0
 
       @media screen and (min-width: $screen-sm-min)
-        margin: 0
+        margin-bottom: 0
 
     .ampersand
       font-size: rem-calc($font-size-px)
