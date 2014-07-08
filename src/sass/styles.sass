@@ -28,86 +28,15 @@ html
     +box-shadow(0 0 $brand-primary)
 
 #header
-  color: $brand-primary
-
-  $bold-border-width: 10px // Border width of the bottom of center header
-  .header-center
-    font-family: $font-family-serif
-    height: 4 * $line-height
-    padding-top: $line-height
-    background: $brand-primary
-    color: $body-bg
-
-  h1
-    font-weight: bold
-    margin: 0
-
-  .header-left, .header-right
-    text-align: center
-    font-size: rem-calc($font-size-large)
-    line-height: $line-height-large
-
-  // Ribbon header only for larger screen
-  @media screen and (min-width: $screen-sm-min)
-    .header-center
-      position: relative // for pseudo-elements
-      background: transparent
-      color: $brand-primary
-      border-bottom: $bold-border-width solid $brand-primary
-
-      &:before, &:after
-        content: ''
-        position: absolute
-        bottom: -$bold-border-width
-
-      &:before
-        width: image-width("left-fold.png")
-        height: image-height("left-fold.png")
-        background: image-url("left-fold.png")
-        left: 0
-
-      &:after
-        width: image-width("right-fold.png")
-        height: image-height("right-fold.png")
-        background: image-url("right-fold.png")
-        right: 0
-
-    $border-width: rem-calc(7px) // Border width of the thinner left&right arm
-
-    .header-left, .header-right
-      padding-top: 2 * $line-height
-      height: 3 * $line-height + $border-width
-      border-bottom: $border-width solid $gray
-      position: relative // For pseudo elements
-      font-size: 1rem
-      line-height: $line-height-base
-
-      // white triangle that shapes the end of the ribbon
-      &:after
-        content: ''
-        position: absolute
-        bottom: -$border-width
-        border: transparent solid $border-width
-        border-top: 0
-        border-bottom-color: $body-bg
-
-    .header-left
-      text-align: left
-      &:after
-        left: -$border-width
-
-    .header-right
-      text-align: right
-      &:after
-        right: -$border-width
-
-// Sticky bar
-#sticky
-
   // All styles that is related to heights of sticky bar
   =set-heights($line-count)
-    height: $line-count * $line-height
-    +translate3d(0, -$line-count*$line-height, 0)
+    $h:$line-count * $line-height
+    height: $h
+
+    // The element after #header should have enough margin-top
+    + *
+      margin-top: $h
+
     h1
       margin: ($line-count - $line-height-large) * $line-height / 2
     .header-left, .header-right
@@ -118,7 +47,6 @@ html
   top: 0
   left: 0
   right: 0
-  +transition(all .2s ease-in-out)
   background: rgba($brand-primary, .95)
   color: $body-bg
   z-index: $zindex-navbar-fixed
@@ -126,10 +54,6 @@ html
   h1
     font-size: $font-size-large
     line-height: $line-height-large
-
-  // style when being sticky.
-  &.is-sticky
-    +translate3d(0,0,0)
 
   @media screen and (min-width: $screen-sm-min)
     +set-heights(3)  // Sticky bar on large screens should be 3 lines high.
