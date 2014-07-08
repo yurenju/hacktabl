@@ -7,6 +7,7 @@
 @import bootstrap
 @import compass/typography
 @import compass/css3
+@import compass/layout/stretching
 
 html
   font-size: $font-size-base
@@ -40,6 +41,12 @@ html
     h1
       margin: ($line-count - $line-height-large) * $line-height / 2
 
+    .toolbox
+      padding-top: ($line-count - $line-height-large) * $line-height / 2
+
+    .titlebar-container
+      height: $h
+
     .title.is-prev
       +translate3d(0, -$h, 0)
     .title.is-next
@@ -47,6 +54,9 @@ html
 
     .header-left, .header-right
       padding-top: ($line-count - 1) * $line-height / 2
+
+    .titlebar.ng-leave.ng-leave-active, .titlebar.ng-enter
+      +translate3d(0, $h, 0)
 
   +set-heights(2) // Mobile sticky bar should be 2 lines high.
   position: fixed
@@ -65,18 +75,22 @@ html
     overflow: hidden  // Hide excessive .title
 
   .title
-    display: block
-    position: absolute
-    left: 0
-    top: 0
-    right: 0
-    bottom: 0
+    +stretch
     +translate3d(0, 0, 0)
     +transition(all .15s ease-in-out)
 
-
   @media screen and (min-width: $screen-sm-min)
     +set-heights(3)  // Sticky bar on large screens should be 3 lines high.
+
+  .titlebar-container // Cropping the titlebar
+    overflow: hidden
+
+  .titlebar
+    +stretch
+    +transition(all .15s ease-in-out)
+
+  .titlebar.ng-leave, .titlebar.ng-enter.ng-enter-active
+    +translate3d(0, 0, 0)
 
 
 // Table row layout

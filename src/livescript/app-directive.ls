@@ -99,3 +99,13 @@ angular.module \app.directive, <[app.service]>
     scope.$on \$destory , ->
       Spy.remove spy-id
       unsubscribe-scroll!
+
+#
+# Disable ng-animate
+#
+.directive \noAnimate, <[
+       $animate
+]> ++ ($animate) ->
+  (scope, elem) ->
+    console.log 'no ng-animate on element', elem
+    $animate.enabled false, elem

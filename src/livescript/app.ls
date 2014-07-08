@@ -1,4 +1,5 @@
 #= require angular/angular.min.js
+#= require angular-animate/angular-animate.min.js
 #= require angular-template.js
 #= require app-controller.js
 #= require app-template.js
@@ -9,4 +10,5 @@ angular.module 'app', <[
   app.template
   app.directive
   angular.template
+  ngAnimate
 ]>
