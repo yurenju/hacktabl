@@ -35,92 +35,22 @@ html(ng-app="app")
 
     div.container
       main#main
-        .row.l-row
+        .row.l-row(ng-repeat="row in ::App.data.perspectives")
           .row-center.col-sm-2.col-sm-push-5.col-xs-12.text-center
             h2
-              | 政策
+              | {{::row.title[0]}}
               span.ampersand &amp;
-              | 條例
-          .row-left.col-sm-5.col-sm-pull-2.col-xs-6
-            ul
-              li 2012年政府民調顯示，超過 6 成民意支持台灣加入區域經濟整合，包含 TPP。
-              li 美國 CSIS 民調 100% 支持台灣參加 RCEP 與 TPP 區域經濟整合。
-              li 產業與企業開放，主管機關是經濟部，什麼階段開放了什麼，都會公布。如果覺得作不好，就監督經濟部。
-              li 示範區面對的「外國」，依國內法制，不包含中國。示範區對中國大陸另有限制。
-              li 去年的法令修改與鬆綁，必須要自經區條例通過後才會生效，並且受立法院監看；若自經區沒過，那法規鬆綁就不會生效。
-              li 空白授權的法案，細節訂完之後，需要送立法院備查，立法院也可以退案。
-          .row-right.col-sm-5.col-xs-6
-            .column-empty(ng-include="'public/templates/empty.html'")
+              | {{::row.title[1]}}
 
-        .row.l-row
-          .row-center.col-sm-2.col-sm-push-5.col-xs-12.text-center
-            h2
-              | 農業
-              span.ampersand &amp;
-              | 環境
-          .row-left.col-sm-5.col-sm-pull-2.col-xs-6
-            .column-empty(ng-include="'public/templates/empty.html'")
-          .row-right.col-sm-5.col-xs-6
-            .column-empty(ng-include="'public/templates/empty.html'")
+          .row-left.col-sm-5.col-sm-pull-2.col-xs-6(ng-switch="::row.positions[0].length")
+            ul(ng-switch-default)
+              li(ng-repeat="argument in ::row.positions[0]") {{ ::argument }}
+            div(ng-switch-when="0"): .column-empty(ng-include="'public/templates/empty.html'")
 
-        .row.l-row
-          .row-center.col-sm-2.col-sm-push-5.col-xs-12.text-center
-            h2
-              | 健康
-              span.ampersand &amp;
-              | 醫療
-          .row-left.col-sm-5.col-sm-pull-2.col-xs-6
-            .column-empty(ng-include="'public/templates/empty.html'")
-          .row-right.col-sm-5.col-xs-6
-            .column-empty(ng-include="'public/templates/empty.html'")
-
-        .row.l-row
-          .row-center.col-sm-2.col-sm-push-5.col-xs-12.text-center
-            h2
-              | 教育
-              span.ampersand &amp;
-              | 人才
-          .row-left.col-sm-5.col-sm-pull-2.col-xs-6
-            ul
-              li 簡化行政程序，特定職業以特別法立法，吸引外籍專業人士於示範區工作。
-              li 每年預計吸引 93 個外籍專業人士。
-          .row-right.col-sm-5.col-xs-6
-            ul
-              li 為自經區鬆綁的外國人從事就業服務法審核標準之勞工預核制違背其母法就業服務法§47優先雇用本勞之精神。
-
-        .row.l-row
-          .row-center.col-sm-2.col-sm-push-5.col-xs-12.text-center
-            h2
-              | 租稅
-              span.ampersand &amp;
-              | 土地
-          .row-left.col-sm-5.col-sm-pull-2.col-xs-6
-            ul
-              li 公有不動產讓售不受民意監督，但必須依照市價售出，符合公產權益。
-              li 規定行政院會核定新示範區的設立。
-              li 新示範區經費等需經過地方議會同意，故新設示範區會受民意機關監督。
-              li 國外對示範區內的實質投資免稅。
-              li 外籍專業人士，三年內所得稅半價。
-              li 內銷貨物佔年度銷售總額 10% 內可免稅，超過者仍要交稅，鼓勵外銷。
-              li 租稅淨效益為正，比「直接補助」對國家之衝擊小。
-          .row-right.col-sm-5.col-xs-6
-            ul
-              li 公有不動產（如政府土地）可以逕行讓售，不受民意機關同意與行政院核准，公有地可不經民意監督私相讓售。
-              li 過去減稅讓電子業受益，但國外直接投資不增反減，稅賦天平歪斜。
-
-
-        .row.l-row
-          .row-center.col-sm-2.col-sm-push-5.col-xs-12.text-center
-            h2
-              | 物流
-              span.ampersand &amp;
-              | 金融
-          .row-left.col-sm-5.col-sm-pull-2.col-xs-6
-            ul
-              li 智慧物流之貨物進出示範區需用電子系統向海關通關，區內廠商必須建立電子帳冊受海關稽核。
-              li 未依規定者，需要和海關申報補稅；未向海關通報者，罰一至三倍罰款並沒收貨物。
-          .row-right.col-sm-5.col-xs-6
-            .column-empty(ng-include="'public/templates/empty.html'")
+          .row-right.col-sm-5.col-xs-6(ng-switch="::row.positions[1].length")
+            ul(ng-switch-default="")
+              li(ng-repeat="argument in ::row.positions[1]") {{ ::argument }}
+            div(ng-switch-when="0"): .column-empty(ng-include="'public/templates/empty.html'")
 
       #edit.row: .col-lg-4.col-lg-offset-4.col-xs-8.col-xs-offset-2
         a.btn.btn-primary.btn-lg.btn-block(ng-href="{{App.EDIT_URL}}")
