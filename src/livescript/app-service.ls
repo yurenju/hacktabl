@@ -1,4 +1,7 @@
 angular.module \app.service, []
+#
+# Debounced window scroll event listener, built to avoid layout threshing
+#
 .factory \WindowScroller, <[
        $window  $timeout  $rootScope
 ]> ++ ($window, $timeout, $rootScope) ->
@@ -49,6 +52,9 @@ angular.module \app.service, []
     return ->
       callbacks.splice callbacks.indexOf(callback), 1
 
+#
+# The app-wide scroll-spy state machine
+#
 .service \Spy, class Spy
   ->
     @spies = []
@@ -57,6 +63,34 @@ angular.module \app.service, []
   add: (spy-id) -> @spies = @spies ++ spy-id
   remove: (spy-id) -> @spies.splice @spies.indexOf(spy-id), 1
 
+#
+# The app-wide multi-purpose state machine
+#
+.service \State, class State
+
+  # Defined state name and their possible values.
+  # The first enumerated value of each state is the default state value.
+  #
+  @enum =
+    titlebar: <[title toolbox]>
+
+  ->
+    # Set the states to the instance
+    #
+    for own let name, values of @@enum
+      @[name] = values[0]
+
+  # Cycle through the state value, given a state name
+  #
+  $cycle: (name) ->
+    current-index = @@enum[name].indexOf @[name]
+    new-index = (current-index + 1) % @@enum[name].length
+    console.log(current-index, new-index)
+    @[name] = @@enum[name][new-index]
+
+#
+# Data mocking the parsed data from Google Doc
+#
 .factory \MockData, <[
        $q  $timeout
 ]> ++ ($q, $timeout) ->
