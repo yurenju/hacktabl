@@ -51,6 +51,7 @@ html(ng-app="app")
               li 為自經區鬆綁的外國人從事就業服務法審核標準之勞工預核制違背其母法就業服務法§47優先雇用本勞之精神。
 
       #edit.row: .col-lg-4.col-lg-offset-4.col-xs-8.col-xs-offset-2
-          button.btn.btn-primary.btn-lg.btn-block 編輯表格
+        a.btn.btn-primary.btn-lg.btn-block(ng-href="{{App.EDIT_URL}}")
+          | 編輯表格
 
     != javascriptIncludeTag('app', {assetsPath: 'public/javascripts/'})
