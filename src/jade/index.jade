@@ -24,7 +24,15 @@ html(ng-app="app")
               )
                 | {{title}}
           aside.titlebar.toolbox(ng-switch-when="toolbox")
-            | Toolbox!
+            .toolbox-btn-group.btn-group
+              button.btn: span.glyphicon.glyphicon-th-list
+            .toolbox-btn-group.btn-group
+              button.btn: span.glyphicon.glyphicon-tags
+              button.btn: span.glyphicon.glyphicon-book
+            .toolbox-btn-group.btn-group
+              button.btn: span.glyphicon.glyphicon-star
+
+
 
 
         .header-left.col-xs-3.col-xs-pull-6

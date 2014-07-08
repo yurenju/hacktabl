@@ -42,7 +42,10 @@ html
       margin: ($line-count - $line-height-large) * $line-height / 2
 
     .toolbox
-      padding-top: ($line-count - $line-height-large) * $line-height / 2
+      $btn-height: ($line-count - 1) * $line-height
+      padding-top: ($h - $btn-height) / 2
+      button
+        height: $btn-height
 
     .titlebar-container
       height: $h
@@ -91,6 +94,18 @@ html
 
   .titlebar.ng-leave, .titlebar.ng-enter.ng-enter-active
     +translate3d(0, 0, 0)
+
+  .toolbox
+    .toolbox-btn-group // Overriding bootstrap btn-group
+      float: none
+      display: inline-block
+    button
+      border: 0
+      background: $gray
+      color: $brand-primary
+
+      &:hover
+        background: $gray-dark
 
 
 // Table row layout
