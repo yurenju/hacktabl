@@ -41,11 +41,17 @@ html
     h1
       margin: ($line-count - $line-height-large) * $line-height / 2
 
+    $toolbox-btn-height: ($line-count - 1) * $line-height
+    $toolbox-padding: ($h - $toolbox-btn-height) / 2
     .toolbox
-      $btn-height: ($line-count - 1) * $line-height
-      padding-top: ($h - $btn-height) / 2
+      padding-top: $toolbox-padding
       button
-        height: $btn-height
+        height: $toolbox-btn-height
+
+    .toolbox-btn-group
+      margin-left: $toolbox-padding
+      &:first-child
+        margin-left: 0
 
     .titlebar-container
       height: $h
