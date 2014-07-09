@@ -5,6 +5,7 @@ const PATHS =
   JS: <[
       src/livescript/*.ls
       src/livescript/*.ls.ejs
+      vendor/javascripts/*.ls
       vendor/bower_components/**/*.js
       !vendor/bower_components/angular-bootstrap/misc/*
       tmp/javascripts/*.js
@@ -12,7 +13,11 @@ const PATHS =
   HTML:
     TEMPLATES: <[src/jade/templates/*.jade]>
     ROOT: <[src/jade/*.jade]>
-    BOOTSTRAP: <[vendor/bower_components/angular-bootstrap/template/modal/*.html]>
+    BOOTSTRAP:
+      modal: "vendor/bower_components/angular-bootstrap/template/modal/*.html"
+      tooltip: "vendor/bower_components/angular-bootstrap/template/tooltip/*.html"
+      popover: "vendor/bower_components/angular-bootstrap/template/popover/*.html"
+
   CSS: <[
       src/sass/*.sass
     ]>
@@ -21,6 +26,7 @@ const PATHS =
 require! {
   connect
   gulp
+  q
   'gulp-compass'
   'gulp-livereload'
   'gulp-filter'
@@ -84,12 +90,22 @@ gulp.task \template, ->
 # All selected templates are collected into module "angular.template".
 #
 gulp.task \bootstrap-template, ->
-  gulp.src PATHS.HTML.BOOTSTRAP
-  .pipe gulp-angular-templatecache 'angular-template.js', do
-    module: 'angular.template'
-    root: 'template/modal'
-    standalone: true
-  .pipe gulp.dest 'tmp/javascripts'
+  promises = for own let component, files of PATHS.HTML.BOOTSTRAP
+    deferred = q.defer!
+
+    gulp.src files
+    .pipe gulp-angular-templatecache "angular-template-#{component}.js", do
+      module: "angular.template.#{component}"
+      root: "template/#{component}"
+      standalone: true
+    .pipe gulp.dest 'tmp/javascripts/angular-templates'
+    .on \end, ->
+      # console.log component, "template generated"
+      deferred.resolve!
+
+    deferred.promise
+
+  return q.all(promises)
 
 # Sass compilation using compass
 #
@@ -119,7 +135,7 @@ gulp.task \js, <[bootstrap-template template]>, ->
 gulp.task \server, <[html]>, ->
   console.log 'Starting livereload server...'
 
-  gulp.watch PATHS.CSS ++ PATHS.JS ++ PATHS.HTML.TEMPLATES ++ PATHS.HTML.ROOT ++ PATHS.HTML.BOOTSTRAP, <[html]>
+  gulp.watch PATHS.CSS ++ PATHS.JS ++ PATHS.HTML.TEMPLATES ++ PATHS.HTML.ROOT, <[html]>
 
   gulp.watch <[index.html]>
       .on 'change', gulp-livereload.changed

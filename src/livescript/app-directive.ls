@@ -1,6 +1,8 @@
 #= require app-service.js
+#= require angular-animate/angular-animate.min.js
+#= require ui-bootstrap-selected.js
 
-angular.module \app.directive, <[app.service]>
+angular.module \app.directive, <[app.service ngAnimate ui.bootstrap.selected]>
 
 # Scroll spy
 #
@@ -107,5 +109,5 @@ angular.module \app.directive, <[app.service]>
        $animate
 ]> ++ ($animate) ->
   (scope, elem) ->
-    console.log 'no ng-animate on element', elem
+    # console.log 'no ng-animate on element', elem
     $animate.enabled false, elem
