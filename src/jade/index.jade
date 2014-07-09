@@ -8,8 +8,9 @@ html(ng-app="app")
 
   body(ng-controller="AppCtrl as App")
     header#header(ng-mouseenter="App.State.titlebar='toolbox'")
-      .container: .row
-        .titlebar-container.col-xs-6.text-center.col-xs-push-3(
+      .container
+
+        .titlebar-container.text-center(
           ng-switch="App.State.titlebar"
         )
           div.titlebar(ng-switch-when="title")
@@ -60,14 +61,13 @@ html(ng-app="app")
               )
                 span.glyphicon.glyphicon-star
 
-
-        .header-left.col-xs-3.col-xs-pull-6
+        .header-left.pull-left
           span.glyphicon.glyphicon-ok-sign
           | 
           | 正方
           span.hidden-xs ／支持自經區
 
-        .header-right.col-xs-3.text-right
+        .header-right.pull-right
           | 反方
           span.hidden-xs ／自經區的疑慮
           | 

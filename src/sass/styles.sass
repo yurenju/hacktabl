@@ -53,9 +53,6 @@ html
       &:first-child
         margin-left: 0
 
-    .titlebar-container
-      height: $h
-
     .title.is-prev
       +translate3d(0, -$h, 0)
     .title.is-next
@@ -94,6 +91,7 @@ html
 
   .titlebar-container // Cropping the titlebar
     // Create containing block for the fixed menu
+    +stretch
     overflow: hidden
 
   .titlebar
