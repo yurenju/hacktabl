@@ -25,6 +25,7 @@ html(ng-app="app")
             .toolbox-btn-group.btn-group(dropdown)
 
               button.btn(
+                ng-click="Header.openInfoModal()"
                 tooltip="關於比較表"
                 tooltip-placement="bottom" tooltip-append-to-body="true"
               )
@@ -56,6 +57,7 @@ html(ng-app="app")
 
             .toolbox-btn-group.btn-group
               button.btn(
+                ng-click="Header.openSubscribeModal()"
                 tooltip="表格更新時告訴我"
                 tooltip-placement="bottom" tooltip-append-to-body="true"
               )
@@ -97,7 +99,9 @@ html(ng-app="app")
             div(ng-switch-when="0"): .column-empty(ng-include="'public/templates/empty.html'")
 
       #edit.row: .col-lg-4.col-lg-offset-4.col-xs-8.col-xs-offset-2
-        a.btn.btn-primary.btn-lg.btn-block(ng-href="{{App.EDIT_URL}}")
+        a.btn.btn-primary.btn-lg.btn-block(
+          ng-click="App.openEditModal($event)"
+          ng-href="{{App.EDIT_URL}}")
           | 編輯表格
 
     != javascriptIncludeTag('app', {assetsPath: 'public/javascripts/'})

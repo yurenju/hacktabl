@@ -1,10 +1,11 @@
 #= require app-constant.js
 #= require app-service.js
+#= require ui-bootstrap-selected.js
 
-angular.module \app.controller, <[app.constant app.service]>
+angular.module \app.controller, <[app.constant app.service ui.bootstrap.selected]>
 .controller \AppCtrl, <[
-       EDIT_URL  MockData Spy  State
-]> ++ (EDIT_URL, data,    Spy, State)!->
+       EDIT_URL  MockData Spy  State  $modal
+]> ++ (EDIT_URL, data,    Spy, State, $modal)!->
   @EDIT_URL = EDIT_URL
 
   data.then (d) ~>
@@ -12,9 +13,15 @@ angular.module \app.controller, <[app.constant app.service]>
 
   @State = State
 
+  @openEditModal = (evt) !->
+    evt.prevent-default!
+    $modal.open do
+      templateUrl: 'public/templates/edit.html'
+
+
 .controller \HeaderCtrl, <[
-       Spy  State  $scope  $anchorScroll  $location
-]> ++ (Spy, State, $scope, $anchorScroll, $location)!->
+       Spy  State  $scope  $anchorScroll  $location  $modal
+]> ++ (Spy, State, $scope, $anchorScroll, $location, $modal)!->
 
   @Spy = Spy
 
@@ -27,3 +34,12 @@ angular.module \app.controller, <[app.constant app.service]>
   # Show 'title' in titlebar when scrollspy changes
   $scope.$watch (-> Spy.current), ->
     State.titlebar = 'title'
+
+  @openInfoModal = !->
+    $modal.open do
+      templateUrl: 'public/templates/info.html'
+
+  @openSubscribeModal = !->
+    $modal.open do
+      templateUrl: 'public/templates/subscribe-modal.html'
+      size: 'sm'
