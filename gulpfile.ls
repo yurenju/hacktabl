@@ -8,7 +8,7 @@ const PATHS =
       vendor/javascripts/*.ls
       vendor/bower_components/**/*.js
       !vendor/bower_components/angular-bootstrap/misc/*
-      tmp/javascripts/*.js
+      tmp/javascripts/**/*.js
     ]>
   HTML:
     TEMPLATES: <[src/jade/templates/*.jade]>
