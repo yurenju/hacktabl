@@ -16,8 +16,6 @@ const PATHS =
     BOOTSTRAP:
       modal: "vendor/bower_components/angular-bootstrap/template/modal/*.html"
       tooltip: "vendor/bower_components/angular-bootstrap/template/tooltip/*.html"
-      popover: "vendor/bower_components/angular-bootstrap/template/popover/*.html"
-
   CSS: <[
       src/sass/*.sass
     ]>

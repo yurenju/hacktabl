@@ -69,6 +69,7 @@ html
 
   +set-heights(2) // Mobile sticky bar should be 2 lines high.
   position: fixed
+  +translate3d(0,0,0) // Confine repaint rectangle
   top: 0
   left: 0
   right: 0
@@ -92,6 +93,7 @@ html
     +set-heights(3)  // Sticky bar on large screens should be 3 lines high.
 
   .titlebar-container // Cropping the titlebar
+    // Create containing block for the fixed menu
     overflow: hidden
 
   .titlebar
@@ -113,12 +115,28 @@ html
       &:hover
         background: $gray-dark
 
+  .menu-perspective
+    // Use position: fixed to break through overflow: hidden of .titlebar-container
+    position: fixed
+    left: 50%
+    margin-left: -5rem // Fine-tuned to align the button...
+    margin-top: -0.5rem
 
 // Table row layout
 //
 .l-row
   padding: $line-height 0 rem-calc($line-height-px - 1px)
   border-bottom: rem-calc(1px) dashed $brand-success
+  position: relative // containing block of scroll-anchor
+
+  // The anchor for scrolling & spy
+  .scroll-anchor
+    +stretch
+    top: -2 * $line-height + rem-calc(1px) // Height of the fixed header, minus 1px space
+    z-index: -1 // Do not block input
+
+    @media screen and (min-width: $screen-sm-min)
+      top: -3 * $line-height + rem-calc(1px) // Height of the fixed header, minus 1px space
 
   ul
     padding-left: 1rem

@@ -15,8 +15,8 @@
 #= require angular-bootstrap/src/bindHtml/bindHtml.js
 #= require angular-bootstrap/src/tooltip/tooltip.js
 
-## Popover, requires tooltip as its dependency
-#= require angular-bootstrap/src/popover/popover.js
+## Dropdown, no templates!
+#= require angular-bootstrap/src/dropdown/dropdown.js
 
 angular.module \ui.bootstrap.selected, <[
   angular.template.modal
@@ -25,6 +25,5 @@ angular.module \ui.bootstrap.selected, <[
   angular.template.tooltip
   ui.bootstrap.tooltip
 
-  angular.template.popover
-  ui.bootstrap.popover
+  ui.bootstrap.dropdown
 ]>

@@ -7,10 +7,7 @@ html(ng-app="app")
     != stylesheetLinkTag('styles', {assetsPath: 'public/stylesheets/'})
 
   body(ng-controller="AppCtrl as App")
-    header#header(
-        ng-mouseenter="App.State.titlebar='toolbox'"
-        ng-mouseleave="App.State.titlebar='title'"
-      )
+    header#header(ng-mouseenter="App.State.titlebar='toolbox'")
       .container: .row
         .titlebar-container.col-xs-6.text-center.col-xs-push-3(
           ng-switch="App.State.titlebar"
@@ -24,15 +21,44 @@ html(ng-app="app")
               )
                 | {{title}}
           aside.titlebar.toolbox(ng-switch-when="toolbox")
-            .toolbox-btn-group.btn-group
-              button.btn: span.glyphicon.glyphicon-th-list
-            .toolbox-btn-group.btn-group
-              button.btn: span.glyphicon.glyphicon-tags
-              button.btn: span.glyphicon.glyphicon-book
-            .toolbox-btn-group.btn-group
-              button.btn: span.glyphicon.glyphicon-star
+            .toolbox-btn-group.btn-group(dropdown)
 
+              button.btn(
+                tooltip="關於比較表"
+                tooltip-placement="bottom" tooltip-append-to-body="true"
+              )
+                span.glyphicon.glyphicon-info-sign
 
+              button.btn(
+                dropdown-toggle
+                tooltip="面相／主題"
+                tooltip-placement="bottom" tooltip-append-to-body="true"
+              )
+                span.glyphicon.glyphicon-th-list
+
+              ul.dropdown-menu.menu-perspective(role="menu")
+                li(ng-repeat="title in App.Spy.spies track by $index")
+                  a(ng-href="#{{title}}" ng-click="App.scrollTo($event, title)") {{::title}}
+
+            .toolbox-btn-group.btn-group
+              button.btn(
+                tooltip="開／關爭議標記"
+                tooltip-placement="bottom" tooltip-append-to-body="true"
+              )
+                span.glyphicon.glyphicon-tags
+
+              button.btn(
+                tooltip="開／關資料來源"
+                tooltip-placement="bottom" tooltip-append-to-body="true"
+              )
+                span.glyphicon.glyphicon-book
+
+            .toolbox-btn-group.btn-group
+              button.btn(
+                tooltip="表格更新時告訴我"
+                tooltip-placement="bottom" tooltip-append-to-body="true"
+              )
+                span.glyphicon.glyphicon-star
 
 
         .header-left.col-xs-3.col-xs-pull-6
@@ -48,10 +74,12 @@ html(ng-app="app")
           span.glyphicon.glyphicon-exclamation-sign
 
     //- The scroll spy placeholder for the page title
-    div(vu-spy="'自經比一比'")
-    div.container
+    div(vu-spy="'自經比一比'" id="自經比一比")
+
+    div.container(ng-click="App.State.titlebar='title'")
       main#main
-        .row.l-row(ng-repeat="row in ::App.data.perspectives" vu-spy="row.fullTitle")
+        .row.l-row(ng-repeat="row in ::App.data.perspectives")
+          a.scroll-anchor(id="{{::row.fullTitle}}" vu-spy="row.fullTitle")
           .row-center.col-sm-2.col-sm-push-5.col-xs-12.text-center
             h2
               | {{::row.title[0]}}
