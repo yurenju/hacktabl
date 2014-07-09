@@ -7,19 +7,19 @@ html(ng-app="app")
     != stylesheetLinkTag('styles', {assetsPath: 'public/stylesheets/'})
 
   body(ng-controller="AppCtrl as App")
-    header#header(ng-mouseenter="App.State.titlebar='toolbox'")
+    header#header(
+      ng-mouseenter="App.State.titlebar='toolbox'"
+      ng-controller="HeaderCtrl as Header")
       .container
 
         .titlebar-container.text-center(
-          ng-switch="App.State.titlebar"
-        )
+          ng-switch="App.State.titlebar")
           div.titlebar(ng-switch-when="title")
             h1(no-animate)
               //- The title that reflects the currently spied perspective title
               span.title(
-                ng-repeat="title in App.Spy.spies track by $index"
-                ng-class="{'is-prev': App.Spy.current > $index, 'is-next': App.Spy.current < $index}"
-              )
+                ng-repeat="title in Header.Spy.spies track by $index"
+                ng-class="{'is-prev': Header.Spy.current > $index, 'is-next': Header.Spy.current < $index}")
                 | {{title}}
           aside.titlebar.toolbox(ng-switch-when="toolbox")
             .toolbox-btn-group.btn-group(dropdown)
@@ -38,8 +38,8 @@ html(ng-app="app")
                 span.glyphicon.glyphicon-th-list
 
               ul.dropdown-menu.menu-perspective(role="menu")
-                li(ng-repeat="title in App.Spy.spies track by $index")
-                  a(ng-href="#{{title}}" ng-click="App.scrollTo($event, title)") {{::title}}
+                li(ng-repeat="title in Header.Spy.spies track by $index")
+                  a(ng-href="#{{title}}" ng-click="Header.scrollTo($event, title)") {{::title}}
 
             .toolbox-btn-group.btn-group
               button.btn(
