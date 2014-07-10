@@ -145,3 +145,28 @@ angular.module \app.service, []
     deferred.resolve data
 
   return deferred.promise
+
+# Saves / loads the preference from localStorage.
+# The user preference include email and experiment settings
+#
+.service \UserPreference, class UserPreference
+  # localStorage object reference, populated in constructor
+  storage = null
+
+  @$inject = <[
+    $window
+  ]>
+  ( $window ) ->
+    storage := $window.localStorage # Populate the storage reference
+
+  subscribe: (email) !->
+    storage.email := email
+
+  get-email: ->
+    storage.email
+
+  backout: !->
+    storage.isBackedout := true
+
+  can-send-data: ->
+    !storage.isBackedout

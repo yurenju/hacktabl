@@ -1,18 +1,18 @@
 form(
   action="//ntumobile.us8.list-manage.com/subscribe/post?u=148389f54bebfebbb905777bf&amp;id=16805b868e"
-  method="post" target="_blank" name="App.subscribeForm" novalidate
-  ng-submit="$close()")
+  ng-controller="SubscriptionCtrl as Subscribe"
+  method="post" target="_blank"
+  ng-submit="Subscribe.subscribe()" )
 
   h4 表格更新時通知我
 
-  input.form-control(name="EMAIL" ng-modal="App.email"
-    type="email" placeholder="請輸入 Email address...")
+  input.form-control(name="EMAIL" ng-model="Subscribe.email"
+    type="email" placeholder="請輸入 Email address..." required)
   div.help-block 寄件頻率不會高於一週兩次。
 
   //- real people should not fill this in and expect good things - do not remove this or risk form bot signups
   div(style="position: absolute; left: -5000px;")
     input(type="text" tabindex="-1" name="b_148389f54bebfebbb905777bf_16805b868e")
-
 
   p
     button(type="submit").btn.btn-primary.btn-lg 訂閱表格

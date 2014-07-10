@@ -54,3 +54,16 @@ angular.module \app.controller, <[app.constant app.service ui.bootstrap.selected
   @EDIT_URL = EDIT_URL
   @RULE_URL = RULE_URL
 
+
+.controller \SubscriptionCtrl, <[
+       UserPreference $scope
+]> ++ (UserPref,      $scope) !->
+  console.log 'Subscription control'
+  @email = UserPref.get-email!
+
+  @subscribe = !~>
+    console.log 'SUBSCRIBE', @email
+    UserPref.subscribe @email
+
+    # If in modal ($close exists in $scope), close the modal
+    $scope.$close && $scope.$close()
