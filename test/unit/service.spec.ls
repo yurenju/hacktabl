@@ -84,3 +84,12 @@ describe \ItemSplitter (...) !->
     expect ItemSplitter(input) .toEqual do
       content  : '<span class="c5">公有不動產（如政府土地）可以逕行讓售，不受</span><span class="c5">民意機關同意與行政院核准</span><sup><a href="#cmnt11" name="cmnt_ref11">[k]</a></sup><span class="c5">，公有地可不經民意監督私相讓售。</span>'
       ref       : '<a href="BBBB">沃草自經爭議書</a>、<a href="AAAA">自經區草案 §19</a>'
+
+describe \TableParser (...) !->
+  it 'should be a function', inject (TableParser) !->
+    expect(typeof TableParser).toBe 'function'
+
+  it 'should return valid object, given a string without reference', inject (TableParser) !->
+    expect TableParser('arbitary string') .toEqual do
+      position-title : ''
+      perspectives   : []

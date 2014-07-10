@@ -274,6 +274,24 @@ angular.module \app.service, []
       .replace(SPAN_END, '').replace(CLASS, '').trim()
 
 #
-# Find table and extract rows and columns.
+# Find table and extract data into the following format:
+# {
+#   positionTitle: [],
+#   perspectives: [ // 面向
+#     {
+#       title: [a, b],
+#       fullTitle: "a&b",
+#       positions: [[{ref, content}, ...], [...]] // 立場發言
+#     }
+#     ...
+#   ]
 #
-.factory
+#
+.factory \TableParser, ->
+
+  # Returned function
+  (doc) ->
+
+    # Returned object
+    position-title: ''
+    perspectives: []
