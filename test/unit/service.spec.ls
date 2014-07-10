@@ -72,14 +72,14 @@ describe \ItemSplitter (...) !->
       ref      : ''
 
   it 'should extract simple reference from <li> content', inject (ItemSplitter) !->
-    input      = '<span class="c5">國外對示範區內的實質投資免稅。</span><span class="c9">[來源 </span><span class="c9 c18"><a class="c3" href="AAAA">自經區草案§31</a></span><span class="c21 c9">]</span>'
+    input      = '<span class="c5">國外對示範區內的實質投資免稅。</span><span class="c9">[出處 </span><span class="c9 c18"><a class="c3" href="AAAA">自經區草案§31</a></span><span class="c21 c9">]</span>'
 
     expect ItemSplitter(input) .toEqual do
       argument : '<span class="c5">國外對示範區內的實質投資免稅。</span>'
       ref      : '<a href="AAAA">自經區草案§31</a>'
 
   it 'should extract reference with multiple <a>', inject (ItemSplitter) !->
-    input       = '<span class="c5">公有不動產（如政府土地）可以逕行讓售，不受</span><span class="c5">民意機關同意與行政院核准</span><sup><a href="#cmnt11" name="cmnt_ref11">[k]</a></sup><span class="c5">，公有地可不經民意監督私相讓售。</span><span class="c9">[來源 </span><span class="c9 c18"><a class="c3" href="BBBB">沃草自經爭議書</a></span><span class="c9">、</span><span class="c9 c18"><a class="c3" href="AAAA">自經區草案 §19</a></span><span class="c9 c21">]</span>'
+    input       = '<span class="c5">公有不動產（如政府土地）可以逕行讓售，不受</span><span class="c5">民意機關同意與行政院核准</span><sup><a href="#cmnt11" name="cmnt_ref11">[k]</a></sup><span class="c5">，公有地可不經民意監督私相讓售。</span><span class="c9">[出處 </span><span class="c9 c18"><a class="c3" href="BBBB">沃草自經爭議書</a></span><span class="c9">、</span><span class="c9 c18"><a class="c3" href="AAAA">自經區草案 §19</a></span><span class="c9 c21">]</span>'
 
     expect ItemSplitter(input) .toEqual do
       argument  : '<span class="c5">公有不動產（如政府土地）可以逕行讓售，不受</span><span class="c5">民意機關同意與行政院核准</span><sup><a href="#cmnt11" name="cmnt_ref11">[k]</a></sup><span class="c5">，公有地可不經民意監督私相讓售。</span>'
