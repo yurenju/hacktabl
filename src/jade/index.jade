@@ -93,12 +93,12 @@ html(ng-app="app")
 
           .row-left.col-sm-5.col-sm-pull-2.col-xs-6(ng-switch="::row.positions[0].length")
             ul(ng-switch-default)
-              li(ng-repeat="argument in ::row.positions[0]") {{ ::argument.content }}
+              li(ng-repeat="argument in ::row.positions[0]" ng-bind-html="::argument.content")
             div(ng-switch-when="0"): .column-empty(ng-include="'public/templates/empty.html'")
 
           .row-right.col-sm-5.col-xs-6(ng-switch="::row.positions[1].length")
             ul(ng-switch-default="")
-              li(ng-repeat="argument in ::row.positions[1]") {{ ::argument.content }}
+              li(ng-repeat="argument in ::row.positions[1]" ng-bind-html="::argument.content")
             div(ng-switch-when="0"): .column-empty(ng-include="'public/templates/empty.html'")
 
       #edit.row: .col-lg-4.col-lg-offset-4.col-xs-8.col-xs-offset-2

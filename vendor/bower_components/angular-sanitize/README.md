@@ -1,7 +1,7 @@
-# bower-angular-resource
+# bower-angular-sanitize
 
 This repo is for distribution on `bower`. The source for this module is in the
-[main AngularJS repo](https://github.com/angular/angular.js/tree/master/src/ngResource).
+[main AngularJS repo](https://github.com/angular/angular.js/tree/master/src/ngSanitize).
 Please file issues and pull requests against that repo.
 
 ## Install
@@ -9,25 +9,25 @@ Please file issues and pull requests against that repo.
 Install with `bower`:
 
 ```shell
-bower install angular-resource
+bower install angular-sanitize
 ```
 
 Add a `<script>` to your `index.html`:
 
 ```html
-<script src="/bower_components/angular-resource/angular-resource.js"></script>
+<script src="/bower_components/angular-sanitize/angular-sanitize.js"></script>
 ```
 
-And add `ngResource` as a dependency for your app:
+And add `ngSanitize` as a dependency for your app:
 
 ```javascript
-angular.module('myApp', ['ngResource']);
+angular.module('myApp', ['ngSanitize']);
 ```
 
 ## Documentation
 
 Documentation is available on the
-[AngularJS docs site](http://docs.angularjs.org/api/ngResource).
+[AngularJS docs site](http://docs.angularjs.org/api/ngSanitize).
 
 ## License
 

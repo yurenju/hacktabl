@@ -1,8 +1,9 @@
 #= require app-service.js
 #= require angular-animate/angular-animate.min.js
+#= require angular-sanitize/angular-sanitize.min.js
 #= require ui-bootstrap-selected.js
 
-angular.module \app.directive, <[app.service ngAnimate ui.bootstrap.selected]>
+angular.module \app.directive, <[app.service ngAnimate ngSanitize ui.bootstrap.selected]>
 
 # Scroll spy
 #
