@@ -12,6 +12,11 @@
 html
   font-size: $font-size-base
 
+body
+  // Make sure there is always a scroll on the right.
+  // bootstrap modal needs the scroll to prevent the body from shifting around.
+  overflow-y: scroll
+
 .btn
   +transition(all ease-in-out .1s)
   outline: none
@@ -32,7 +37,14 @@ html
 .modal-footer
   text-align: left
 
+
+
 #header
+  // Generates containing block layout
+  //
+  .containing-block
+    position: relative
+
   // All styles that is related to heights of sticky bar
   =set-heights($line-count)
     $h:$line-count * $line-height
@@ -41,6 +53,10 @@ html
     // The element after #header should have enough margin-top
     + *
       padding-top: $h
+
+    // Make containing block the same height of #header.
+    .containing-block
+      height: $h
 
     h1
       margin: ($line-count - $line-height-large) * $line-height / 2
@@ -77,6 +93,11 @@ html
   background: rgba($brand-primary, .95)
   color: $body-bg
   z-index: $zindex-navbar-fixed
+
+  // Set right padding when modal dialog is open.
+  // Otherwise the modal may shift a bit when dialog open/closes.
+  .modal-open &
+    padding-right: inherit // Inherit body's padding-right set by javascript.
 
   h1
     font-size: $font-size-large

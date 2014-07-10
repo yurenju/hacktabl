@@ -10,7 +10,7 @@ html(ng-app="app")
     header#header(
       ng-mouseenter="App.State.titlebar='toolbox'"
       ng-controller="HeaderCtrl as Header")
-      .container
+      .container.containing-block
 
         .titlebar-container.text-center(
           ng-switch="App.State.titlebar")
