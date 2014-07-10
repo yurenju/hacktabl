@@ -206,3 +206,25 @@ angular.module \app.service, []
 
   can-send-data: ->
     !storage.isBackedout
+
+#
+# Parses arguments (論述)
+#
+.service \ArgumentParser, class ArgumentParser
+  @@COMMENT_TEMPLATE = '
+    <span comment="{{id}}" comment-placement="top" comment-trigger="click"
+     comment-append-to-body="true">{{content}}</span>
+    '
+
+  ->
+    return (doc) -> doc
+
+#
+# Split a <li> content into an argument and its reference
+#
+.service \ItemSplitter, class ItemSplitter
+  ->
+    return (doc) ->
+      argument: 'a'
+      ref: 'b'
+

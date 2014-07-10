@@ -10,20 +10,24 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jasmine', 'requirejs'],
+    frameworks: ['jasmine'],
 
 
     // list of files / patterns to load in the browser
     files: [
-      'test/test-main.js',
-      {pattern: 'public/javascripts/*.js', included: false},
-      {pattern: 'test/unit/**/*.spec.ls', included: false}
+      'vendor/bower_components/angular/angular.min.js',
+      'vendor/bower_components/angular-animate/angular-animate.min.js',
+      'vendor/bower_components/angular-sanitize/angular-sanitize.min.js',
+      'vendor/bower_components/angular-bootstrap/src/*/*.js',
+      'vendor/bower_components/angular-mocks/angular-mocks.js',
+      'src/livescript/**/*.ls',
+      'test/unit/**/*.spec.ls'
     ],
 
 
     // list of files to exclude
     exclude: [
-      
+
     ],
 
 
@@ -59,7 +63,8 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Chrome', 'Safari', 'Firefox'],
+    // browsers: ['Chrome', 'Safari', 'Firefox'],
+    browsers: ['Chrome'],
 
 
     // Continuous Integration mode
