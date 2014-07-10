@@ -210,21 +210,21 @@ angular.module \app.service, []
 #
 # Parses arguments (論述)
 #
-.service \ArgumentParser, class ArgumentParser
-  @@COMMENT_TEMPLATE = '
+.factory \ArgumentParser, ->
+  parser = (doc) -> doc
+
+  parser.COMMENT_TEMPLATE = '
     <span comment="{{id}}" comment-placement="top" comment-trigger="click"
      comment-append-to-body="true">{{content}}</span>
     '
 
-  ->
-    return (doc) -> doc
+  return parser
 
 #
 # Split a <li> content into an argument and its reference
 #
-.service \ItemSplitter, class ItemSplitter
-  ->
-    return (doc) ->
-      argument: 'a'
-      ref: 'b'
+.factory \ItemSplitter, ->
+  (doc) ->
+    argument: 'a'
+    ref: 'b'
 
