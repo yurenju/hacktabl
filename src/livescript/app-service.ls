@@ -252,7 +252,7 @@ angular.module \app.service, []
   return parser
 
 #
-# Split a <li> content into an argument and its reference
+# Split a <li> content into content and its reference
 #
 .factory \ItemSplitter, ->
   const SPLITTER = /<span class="[^"]+">\s*\[\s*出處\s*/gm
@@ -267,7 +267,12 @@ angular.module \app.service, []
     idx = doc.length if idx is -1
 
     # Returned object
-    argument: doc.slice(0, idx)
+    content: doc.slice(0, idx)
     ref: doc.slice(idx)
       .replace(SPLITTER, '').replace(SPAN_START, '')
       .replace(SPAN_END, '').replace(CLASS, '').trim()
+
+#
+# Find table and extract rows and columns.
+#
+.factory
