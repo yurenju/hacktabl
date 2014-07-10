@@ -44,24 +44,25 @@ html(ng-app="app")
 
             .toolbox-btn-group.btn-group
               button.btn(
-                tooltip="開／關爭議標記"
+                tooltip="開／關爭議標記與出處"
                 tooltip-placement="bottom" tooltip-append-to-body="true"
               )
                 span.glyphicon.glyphicon-tags
 
-              button.btn(
-                tooltip="開／關資料來源"
-                tooltip-placement="bottom" tooltip-append-to-body="true"
-              )
-                span.glyphicon.glyphicon-book
-
             .toolbox-btn-group.btn-group
               button.btn(
-                ng-click="Header.openSubscribeModal()"
-                tooltip="表格更新時告訴我"
+                ng-click="App.openEditModal($event)"
+                tooltip="編輯表格"
                 tooltip-placement="bottom" tooltip-append-to-body="true"
               )
-                span.glyphicon.glyphicon-star
+                span.glyphicon.glyphicon-pencil
+
+              button.btn(
+                ng-click="Header.openSubscribeModal()"
+                tooltip="表格更新時寄信給我"
+                tooltip-placement="bottom" tooltip-append-to-body="true"
+              )
+                span.glyphicon.glyphicon-envelope
 
         .header-left.pull-left
           span.glyphicon.glyphicon-ok-sign
