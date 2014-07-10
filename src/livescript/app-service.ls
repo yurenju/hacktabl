@@ -72,7 +72,8 @@ angular.module \app.service, []
   # The first enumerated value of each state is the default state value.
   #
   @enum =
-    titlebar: <[title toolbox]>
+    titlebar: <[title toolbox]> # Show title or toolbox in header
+    labels: [true, false]        # Whether the labels in content to be shown
 
   ->
     # Set the states to the instance

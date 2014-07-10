@@ -44,8 +44,10 @@ html(ng-app="app")
 
             .toolbox-btn-group.btn-group
               button.btn(
-                tooltip="開／關爭議標記與出處"
+                tooltip="{{ Header.labelAction }}爭議標記"
                 tooltip-placement="bottom" tooltip-append-to-body="true"
+                ng-class="{active: App.State.labels}"
+                ng-click="Header.toggleLabels()"
               )
                 span.glyphicon.glyphicon-tags
 

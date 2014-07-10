@@ -34,7 +34,7 @@ angular.module \app.controller, <[app.constant app.service ui.bootstrap.selected
 
   # Show 'title' in titlebar when scrollspy changes
   $scope.$watch (-> Spy.current), ->
-    State.titlebar = 'title'
+    State.titlebar = \title
 
   @openInfoModal = !->
     $modal.open do
@@ -45,8 +45,20 @@ angular.module \app.controller, <[app.constant app.service ui.bootstrap.selected
     $modal.open do
       templateUrl: 'public/templates/subscribe-modal.html'
       controller: 'ModalCtrl as Modal'
-      size: 'sm'
+      size: \sm
 
+  # Setup @labelAction
+  do ~!function write-label-action
+    @label-action =
+      if State.labels # label is "on" now.
+        "按一下關閉"
+      else
+        "按一下開啟"
+
+  # Toggle the label state on / off
+  @toggle-labels = ->
+    State.$cycle \labels
+    write-label-action!
 
 .controller \ModalCtrl, <[
        EDIT_URL  RULE_URL
