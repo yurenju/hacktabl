@@ -102,7 +102,7 @@ html(ng-app="app")
       #edit.row: .col-lg-4.col-lg-offset-4.col-xs-8.col-xs-offset-2
         a.btn.btn-primary.btn-lg.btn-block(
           ng-click="App.openEditModal($event)"
-          ng-href="{{App.EDIT_URL}}")
+          ng-href="{{::App.EDIT_URL}}")
           | 編輯表格
 
     != javascriptIncludeTag('app', {assetsPath: 'public/javascripts/'})

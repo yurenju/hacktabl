@@ -17,6 +17,7 @@ angular.module \app.controller, <[app.constant app.service ui.bootstrap.selected
     evt.prevent-default!
     $modal.open do
       templateUrl: 'public/templates/edit.html'
+      controller: 'ModalCtrl as Modal'
 
 
 .controller \HeaderCtrl, <[
@@ -38,8 +39,18 @@ angular.module \app.controller, <[app.constant app.service ui.bootstrap.selected
   @openInfoModal = !->
     $modal.open do
       templateUrl: 'public/templates/info.html'
+      controller: 'ModalCtrl as Modal'
 
   @openSubscribeModal = !->
     $modal.open do
       templateUrl: 'public/templates/subscribe-modal.html'
+      controller: 'ModalCtrl as Modal'
       size: 'sm'
+
+
+.controller \ModalCtrl, <[
+       EDIT_URL  RULE_URL
+]> ++ (EDIT_URL, RULE_URL) !->
+  @EDIT_URL = EDIT_URL
+  @RULE_URL = RULE_URL
+

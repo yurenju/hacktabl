@@ -4,7 +4,7 @@
 
 .modal-body
 
-  p.lead 歡迎大家編輯，品質 blahblah 所以請大家遵守<a href="https://compatable.hackpad.com/GinYVZGLviX">編輯規則</a>，概述如下。
+  p.lead 歡迎大家編輯，品質 blahblah 這 modal 內容還沒寫好呀，所以請大家遵守<a ng-href="{{::Modal.RULE_URL}}">編輯規則</a>，概述如下。
 
   ul
     li 目前是匿名，是情況更改（實驗說明）
@@ -12,5 +12,5 @@
     li 大家可以在 google doc
 
 .modal-footer
-  a.btn.btn-lg.btn-primary(href="{{::App.EDIT_URL}}") 前往編輯表格
-  a.btn.btn-lg.btn-link(href="") 編輯規則與 Q &amp; A
+  a.btn.btn-lg.btn-primary(ng-href="{{::Modal.EDIT_URL}}") 前往編輯表格
+  a.btn.btn-lg.btn-link(ng-href="{{::Modal.RULE_URL}}") 編輯規則與 Q &amp; A
