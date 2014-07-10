@@ -255,11 +255,12 @@ angular.module \app.service, []
 # Split a <li> content into content and its reference
 #
 .factory \ItemSplitter, ->
-  const SPLITTER = /<span class="[^"]+">\s*\[\s*出處\s*/gm
+  const SPLITTER   = /<span class="[^"]+">\s*\[\s*出處\s*/gm
   const SPAN_START = /<span class="[^"]+">/gim
   const SPAN_END   = /]?\s*<\/span>*/gim
-  const CLASS = /\s+class="[^"]+"/gim
+  const CLASS      = /\s+class="[^"]+"/gim
 
+  # Returned function
   (doc) ->
     idx = doc.search SPLITTER
 
