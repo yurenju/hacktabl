@@ -24,5 +24,11 @@
     "angular-bootstrap": "https://github.com/angular-ui/bootstrap.git#master",
     "ui-bootstrap-modal": "https://raw.githubusercontent.com/MrOrz/bootstrap/modal-scrollbar/src/modal/modal.js"
   },
-  "directory": "vendor/bower_components"
+  "directory": "vendor/bower_components",
+  "resolutions": {
+    "angular": "1.3.0-beta.14"
+  },
+  "devDependencies": {
+    "angular-mocks": "~1.2.19"
+  }
 }
