@@ -21,15 +21,8 @@
     "angular": "1.3.0-beta.14",
     "angular-animate": "1.3.0-beta.14",
     "angular-resource": "1.3.0-beta.14",
-
-    /*
-    Directly include angular bootstrap master branch for individual components,
-    instead of one bundled tmpl.bootstrap.min.js.
-    */
     "angular-bootstrap": "https://github.com/angular-ui/bootstrap.git#master",
-
-    /* https://github.com/angular-ui/bootstrap/pull/2425 */
-    "ui-bootstrap-modal": "https://raw.githubusercontent.com/MrOrz/bootstrap/modal-scrollbar/src/modal/modal.js",
+    "ui-bootstrap-modal": "https://raw.githubusercontent.com/MrOrz/bootstrap/modal-scrollbar/src/modal/modal.js"
   },
   "directory": "vendor/bower_components"
 }
