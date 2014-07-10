@@ -222,7 +222,7 @@ angular.module \app.service, []
   const COMMENT = /<span class="[^"]+">([^<]+)<\/span>((?:<sup>.+?<\/sup>)+)/gim
   const EXTRACT_ID = /#cmnt(\d+)/g
   const GARBAGE_LEN = '#cmnt'.length
-  const SPAN_START = /<span class="c\d+">/gim
+  const SPAN_START = /<span class="[^"]+">/gim
   const SPAN_END   = /<\/span>/gim
   const SPAN_PLACEHOLDER_STR = 'xx-span-xx'
   const SPAN_PLACEHOLDER = new RegExp SPAN_PLACEHOLDER_STR, 'gm'
@@ -255,7 +255,19 @@ angular.module \app.service, []
 # Split a <li> content into an argument and its reference
 #
 .factory \ItemSplitter, ->
-  (doc) ->
-    argument: 'a'
-    ref: 'b'
+  const SPLITTER = /<span class="[^"]+">\s*\[\s*出處\s*/gm
+  const SPAN_START = /<span class="[^"]+">/gim
+  const SPAN_END   = /]?\s*<\/span>*/gim
+  const CLASS = /\s+class="[^"]+"/gim
 
+  (doc) ->
+    idx = doc.search SPLITTER
+
+    # If splitter is not found, set to the end of the string
+    idx = doc.length if idx is -1
+
+    # Returned object
+    argument: doc.slice(0, idx)
+    ref: doc.slice(idx)
+      .replace(SPLITTER, '').replace(SPAN_START, '')
+      .replace(SPAN_END, '').replace(CLASS, '').trim()
