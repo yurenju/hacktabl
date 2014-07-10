@@ -25,6 +25,7 @@ describe \ArgumentParser (...) !->
     comment  = ($interpolate ArgumentParser.COMMENT_TEMPLATE) do
       content: '去年的法令修改與鬆綁，必須要自經區條例通過後才會生效'
       id: '6'
+      tag-name: 'span'
     expected = "#{comment}，並且受立法院監看；若自經區沒過，那法規鬆綁就不會生效。"
 
     expect ArgumentParser(input) .toEqual expected
@@ -34,7 +35,28 @@ describe \ArgumentParser (...) !->
     comment  = ($interpolate ArgumentParser.COMMENT_TEMPLATE) do
       content: '去年的法令修改與鬆綁，必須要自經區條例通過後才會生效'
       id: '6,7,8'
+      tag-name: 'span'
     expected = "#{comment}，並且受立法院監看；若自經區沒過，那法規鬆綁就不會生效。"
+
+    expect ArgumentParser(input) .toEqual expected
+
+  it 'should parse multiple separated comments', inject (ArgumentParser, $interpolate) !->
+    input    = '<span class="c4">2012年政府民調顯示</span><sup><a href="#cmnt4" name="cmnt_ref4">[d]</a></sup><span class="c4">，超過</span><span class="c4">&nbsp;6 成民意</span><sup><a href="#cmnt5" name="cmnt_ref5">[e]</a></sup><span class="c4">支持台灣</span><sup><a href="#cmnt6" name="cmnt_ref6">[f]</a></sup><span class="c4">加入區域經濟整合，包含 TPP。</span>'
+    expr = $interpolate ArgumentParser.COMMENT_TEMPLATE
+    content1 = expr do
+      content: '2012年政府民調顯示'
+      id: 4
+      tag-name: \span
+    content2 = expr do
+      content: '&nbsp;6 成民意'
+      id: 5
+      tag-name: \span
+    content3 = expr do
+      content: '支持台灣'
+      id: 6
+      tag-name: \span
+
+    expected = "#{content1}，超過#{content2}#{content3}加入區域經濟整合，包含 TPP。"
 
     expect ArgumentParser(input) .toEqual expected
 

@@ -210,13 +210,44 @@ angular.module \app.service, []
 #
 # Parses arguments (論述)
 #
-.factory \ArgumentParser, ->
-  parser = (doc) -> doc
+.factory \ArgumentParser, <[
+       $interpolate
+]> ++ ($interpolate) ->
 
-  parser.COMMENT_TEMPLATE = '
-    <span comment="{{id}}" comment-placement="top" comment-trigger="click"
-     comment-append-to-body="true">{{content}}</span>
+  const COMMENT_TEMPLATE = '
+    <{{tagName}} comment="{{id}}" comment-placement="top" comment-trigger="click" 
+     comment-append-to-body="true">{{content}}</{{tagName}}>
     '
+
+  const COMMENT = /<span class="[^"]+">([^<]+)<\/span>((?:<sup>.+?<\/sup>)+)/gim
+  const EXTRACT_ID = /#cmnt(\d+)/g
+  const GARBAGE_LEN = '#cmnt'.length
+  const SPAN_START = /<span class="c\d+">/gim
+  const SPAN_END   = /<\/span>/gim
+  const SPAN_PLACEHOLDER_STR = 'xx-span-xx'
+  const SPAN_PLACEHOLDER = new RegExp SPAN_PLACEHOLDER_STR, 'gm'
+
+  parser = (doc) ->
+    # Construct the comments
+    return doc.replace COMMENT, (m, content, sups) ->
+      # sups should look like:
+      # <sup>....</sup><sup>....</sup><sup>....</sup>...
+      #
+      # We now track the ids from those <sup>s
+      #
+      ids = sups.match EXTRACT_ID .map (.slice(GARBAGE_LEN))
+
+      return ($interpolate COMMENT_TEMPLATE) do
+        id: ids * \,
+        content: content
+        tag-name: SPAN_PLACEHOLDER_STR
+
+    .replace SPAN_START, ''
+    .replace SPAN_END, ''
+    .replace SPAN_PLACEHOLDER, 'span'
+
+
+  parser.COMMENT_TEMPLATE = COMMENT_TEMPLATE
 
   return parser
 
