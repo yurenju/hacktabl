@@ -4,8 +4,8 @@
 
 angular.module \app.controller, <[app.constant app.service ui.bootstrap.selected]>
 .controller \AppCtrl, <[
-       EDIT_URL  MockData Spy  State  $modal
-]> ++ (EDIT_URL, data,    Spy, State, $modal)!->
+       EDIT_URL  TableData Spy  State  $modal
+]> ++ (EDIT_URL, data,     Spy, State, $modal)!->
   @EDIT_URL = EDIT_URL
 
   data.then (d) ~>

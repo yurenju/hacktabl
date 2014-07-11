@@ -361,3 +361,14 @@ angular.module \app.service, <[ngSanitize]>
 
     # Returned object
     {position-title, perspectives}
+
+
+.factory \TableData, <[
+       TableParser  $http  DATA_URL  $q
+]> ++ (TableParser, $http, DATA_URL, $q) ->
+  deferred = $q.defer!
+
+  $http.get DATA_URL .success (data) !->
+    deferred.resolve TableParser(data)
+
+  return deferred.promise
