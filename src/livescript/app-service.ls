@@ -345,7 +345,7 @@ angular.module \app.service, <[ngSanitize]>
       # 3 For each td, Scan trough each <li>
       #
       positions = for td in tds
-        lis = td.match LI_EXTRACTOR
+        lis = (td.match LI_EXTRACTOR) || []
 
         debate-arguments = for li in lis
           argument = ItemSplitter cleanup-li(li)

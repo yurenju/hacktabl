@@ -30,13 +30,12 @@
           {
             "ref": "SRC",
             "content": "Argument 4"
-          }
-        ],[
+          },
           {
             "ref": "",
             "content": "Argument 5"
           }
-        ],[
+        ],[],[
           {
             "ref": "",
             "content": "Argument 6"
