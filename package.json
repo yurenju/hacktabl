@@ -20,7 +20,8 @@
     "gulp-livereload": "*",
     "connect": "~2.21.1",
     "gulp-angular-templatecache": "~1.2.1",
-    "q": "~1.0.1"
+    "q": "~1.0.1",
+    "karma-html2js-preprocessor": "~0.1.0"
   },
   "dependencies": {
     "sprocket": "git+https://github.com/MrOrz/sprocket.git#emit-error-to-stream-when-require-failed"
