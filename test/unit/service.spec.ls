@@ -104,6 +104,9 @@ describe \TableParser (...) !->
   it 'should parse as many positions, perspectives and arguments as needed', inject (TableParser) !->
     expect-from-fixture 'table-parser-positions'
 
+  it 'should through out all strange tags on title and perspective title', inject (TableParser) !->
+    expect-from-fixture 'table-parser-tags'
+
   # (Trivial)
   # it 'should parse as many perspectives as needed', inject (TableParser) !->
 

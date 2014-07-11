@@ -297,8 +297,7 @@ angular.module \app.service, <[ngSanitize]>
 
   const TR_EXTRACTOR = /<tr[^>]*>(.+?)<\/tr>/gim
   const TD_EXTRACTOR = /<td[^>]*>(.*?)<\/td>/gim
-  const TD_START = /<td[^>]*>/gim
-  const TD_END = /<\/td>/gim
+  const TAGS = /<\/?[^>]*>/gim
 
   const LI_EXTRACTOR = /<li[^>]*>(.+?)<\/li>/gim
   const LI_START = /<li[^>]*>/
@@ -307,8 +306,8 @@ angular.module \app.service, <[ngSanitize]>
   # Helper function that cleans up tag matches
   # to include only the textual content inside the tag
   #
-  function cleanup-td matched-string
-    matched-string.replace TD_START, '' .replace TD_END, '' .trim!
+  function cleanup-tags matched-string
+    matched-string.replace TAGS, '' .trim!
 
   function cleanup-li matched-string
     matched-string.replace LI_START, '' .replace LI_END, '' .trim!
@@ -325,7 +324,7 @@ angular.module \app.service, <[ngSanitize]>
     tds = (trs[0].match(TD_EXTRACTOR)?.slice 1) || []
 
     # Each td is a title of position.
-    position-title = [cleanup-td td for td in tds]
+    position-title = [cleanup-tags td for td in tds]
 
     # Remove first row
     trs.shift!
@@ -336,8 +335,8 @@ angular.module \app.service, <[ngSanitize]>
       tds = tr.match TD_EXTRACTOR
 
       # First column should be the perspective title
-      full-title = cleanup-td tds[0]
-      title = full-title.split '與'
+      full-title = cleanup-tags tds[0]
+      title = full-title.split '&#33287;' # 「與」
 
       # Remove first column
       tds.shift!
