@@ -21,7 +21,11 @@ module.exports = function(config) {
       'vendor/bower_components/angular-bootstrap/src/*/*.js',
       'vendor/bower_components/angular-mocks/angular-mocks.js',
       'src/livescript/**/*.ls',
-      'test/unit/**/*.spec.ls'
+      'test/unit/**/*.spec.ls',
+
+      // Fixtures
+      'test/unit/fixtures/*.html',
+      'test/unit/fixtures/*.json'
     ],
 
 
@@ -34,7 +38,9 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      '**/*.ls': ['live']
+      '**/*.ls': ['live'],
+      '**/*.html':['html2js'],
+      '**/*.json':['html2js']
     },
 
 

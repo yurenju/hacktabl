@@ -86,10 +86,29 @@ describe \ItemSplitter (...) !->
       ref       : '<a href="BBBB">沃草自經爭議書</a>、<a href="AAAA">自經區草案 §19</a>'
 
 describe \TableParser (...) !->
+
+  expect-from-fixture = (basename) ->
+    input = __html__["test/unit/fixtures/#{basename}.html"]
+    expected = JSON.parse __html__["test/unit/fixtures/#{basename}.json"]
+    inject (TableParser) ->
+      expect TableParser(input) .toEqual expected
+
   it 'should be a function', inject (TableParser) !->
     expect(typeof TableParser).toBe 'function'
 
   it 'should return valid object, given a string without reference', inject (TableParser) !->
     expect TableParser('arbitary string') .toEqual do
-      position-title : ''
+      position-title : []
       perspectives   : []
+
+  it 'should parse as many positions, perspectives and arguments as needed', inject (TableParser) !->
+    expect-from-fixture 'table-parser-positions'
+
+  # (Trivial)
+  # it 'should parse as many perspectives as needed', inject (TableParser) !->
+
+  # (Trivial)
+  # it 'should parse as many arguments as needed', inject (TableParser) !->
+
+  it 'should pass the output through $sanitize', inject (TableParser) !->
+    expect-from-fixture 'table-parser-sanitize'

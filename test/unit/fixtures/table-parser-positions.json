@@ -1,0 +1,51 @@
+{
+  "positionTitle": ["Position A", "Position B", "Position C"],
+  "perspectives": [
+    {
+      "title": ["Perspective A"],
+      "fullTitle": "Perspective A",
+      "positions": [
+        [
+          {
+            "ref": "",
+            "content": "Argument 1"
+          }
+        ],[
+          {
+            "ref": "",
+            "content": "Argument 2"
+          }
+        ],[
+          {
+            "ref": "",
+            "content": "Argument 3"
+          }
+        ]
+      ]
+    }, {
+      "title": ["Perspective B"],
+      "fullTitle": "Perspective B",
+      "positions": [
+        [
+          {
+            "ref": "SRC",
+            "content": "Argument 4"
+          }
+        ],[
+          {
+            "ref": "",
+            "content": "Argument 5"
+          }
+        ],[
+          {
+            "ref": "",
+            "content": "Argument 6"
+          }, {
+            "ref": "",
+            "content": "Argument 7"
+          }
+        ]
+      ]
+    }
+  ]
+}
