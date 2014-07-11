@@ -1,4 +1,6 @@
-angular.module \app.service, []
+#= require angular-sanitize/angular-sanitize.min.js
+
+angular.module \app.service, <[ngSanitize]>
 #
 # Debounced window scroll event listener, built to avoid layout threshing
 #
@@ -244,6 +246,7 @@ angular.module \app.service, []
 
     .replace SPAN_START, ''
     .replace SPAN_END, ''
+    .trim!
     .replace SPAN_PLACEHOLDER, 'span'
 
 
@@ -287,11 +290,74 @@ angular.module \app.service, []
 #   ]
 #
 #
-.factory \TableParser, ->
+.factory \TableParser, <[
+       ItemSplitter  ArgumentParser  $sanitize
+]> ++ (ItemSplitter, ArgumentParser, $sanitize)->
+
+  const TR_EXTRACTOR = /<tr[^>]*>(.+?)<\/tr>/gim
+  const TD_EXTRACTOR = /<td[^>]*>(.*?)<\/td>/gim
+  const TD_START = /<td[^>]*>/gim
+  const TD_END = /<\/td>/gim
+
+  const LI_EXTRACTOR = /<li[^>]*>(.+?)<\/li>/gim
+  const LI_START = /<li[^>]*>/
+  const LI_END = /<\/li>/
+
+  # Helper function that cleans up tag matches
+  # to include only the textual content inside the tag
+  #
+  function cleanup-td matched-string
+    matched-string.replace TD_START, '' .replace TD_END, '' .trim!
+
+  function cleanup-li matched-string
+    matched-string.replace LI_START, '' .replace LI_END, '' .trim!
 
   # Returned function
   (doc) ->
 
+    # 1. Scan through each <tr>
+    #
+    trs = doc.replace(/\n/gm, '').match(TR_EXTRACTOR) || ['']
+
+    # Process the first row,
+    # ignore the first column because it's empty
+    tds = (trs[0].match(TD_EXTRACTOR)?.slice 1) || []
+
+    # Each td is a title of position.
+    position-title = [cleanup-td td for td in tds]
+
+    # Remove first row
+    trs.shift!
+
+    # 2 For each <tr>, scan through each <td>
+    #
+    perspectives = for tr in trs
+      tds = tr.match TD_EXTRACTOR
+
+      # First column should be the perspective title
+      full-title = cleanup-td tds[0]
+      title = full-title.split '與'
+
+      # Remove first column
+      tds.shift!
+
+      # 3 For each td, Scan trough each <li>
+      #
+      positions = for td in tds
+        lis = td.match LI_EXTRACTOR
+
+        debate-arguments = for li in lis
+          argument = ItemSplitter cleanup-li(li)
+          argument.content = ArgumentParser $sanitize(argument.content)
+
+          # Return the argument for the iteration
+          argument
+
+        # Return all arguments of a position for the iteration
+        debate-arguments
+
+      # Return the perspective object for this iteration of the for-loop
+      {title, full-title, positions}
+
     # Returned object
-    position-title: ''
-    perspectives: []
+    {position-title, perspectives}
