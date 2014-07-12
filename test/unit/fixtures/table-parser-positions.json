@@ -2,8 +2,7 @@
   "positionTitle": ["Position A", "Position B", "Position C"],
   "perspectives": [
     {
-      "title": ["Perspective A"],
-      "fullTitle": "Perspective A",
+      "title": "Perspective A",
       "positions": [
         [
           {
@@ -23,8 +22,7 @@
         ]
       ]
     }, {
-      "title": ["Perspective B"],
-      "fullTitle": "Perspective B",
+      "title": "Perspective B",
       "positions": [
         [
           {

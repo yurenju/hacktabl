@@ -283,8 +283,7 @@ angular.module \app.service, <[ngSanitize]>
 #   positionTitle: [],
 #   perspectives: [ // 面向
 #     {
-#       title: [a, b],
-#       fullTitle: "a&b",
+#       title: "a * b",
 #       positions: [[{ref, content}, ...], [...]] // 立場發言
 #     }
 #     ...
@@ -335,8 +334,7 @@ angular.module \app.service, <[ngSanitize]>
       tds = tr.match TD_EXTRACTOR
 
       # First column should be the perspective title
-      full-title = cleanup-tags tds[0]
-      title = full-title.split '&#33287;' # 「與」
+      title = cleanup-tags tds[0]
 
       # Remove first column
       tds.shift!
@@ -357,7 +355,7 @@ angular.module \app.service, <[ngSanitize]>
         debate-arguments
 
       # Return the perspective object for this iteration of the for-loop
-      {title, full-title, positions}
+      {title, positions}
 
     # Returned object
     {position-title, perspectives}

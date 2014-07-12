@@ -84,12 +84,12 @@ html(ng-app="app")
     div.container(ng-click="App.State.titlebar='title'")
       main#main
         .row.l-row(ng-repeat="row in ::App.data.perspectives")
-          a.scroll-anchor(id="{{::row.fullTitle}}" vu-spy="row.fullTitle")
+          a.scroll-anchor(id="{{::row.title}}" vu-spy="row.fullTitle")
           .row-center.col-sm-2.col-sm-push-5.col-xs-12.text-center
             h2
-              | {{::row.title[0]}}
+              span(ng-bind-html="::row.title.split('&#33287;')[0]")
               span.ampersand &amp;
-              | {{::row.title[1]}}
+              span(ng-bind-html="::row.title.split('&#33287;')[1]")
 
           .row-left.col-sm-5.col-sm-pull-2.col-xs-6(ng-switch="::row.positions[0].length")
             ul(ng-switch-default)

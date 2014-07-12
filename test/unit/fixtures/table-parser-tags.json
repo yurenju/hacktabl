@@ -2,8 +2,7 @@
   "positionTitle": ["Position A"],
   "perspectives": [
     {
-      "title": ["Perspective A"],
-      "fullTitle": "Perspective A",
+      "title": "Perspective A",
       "positions": [[]]
     }
   ]
