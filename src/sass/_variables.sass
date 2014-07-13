@@ -20,8 +20,8 @@
 $gray:                   #E0EFF1
 $gray-darker:            darken($gray, 30%)
 $gray-dark:              darken($gray, 10%)
-$gray-light:             lighten($gray, 10%)
-$gray-lighter:           lighten($gray, 20%)
+$gray-light:             lighten($gray, 6%)
+$gray-lighter:           lighten($gray, 8%)
 
 $brand-primary:         #7DB4B5
 $brand-success:         #680148
@@ -469,9 +469,9 @@ $jumbotron-bg:                   $gray-lighter
 // $state-success-bg:               #dff0d8
 // $state-success-border:           darken(adjust-hue($state-success-bg, -10), 5%)
 
-// $state-info-text:                #31708f
-// $state-info-bg:                  #d9edf7
-// $state-info-border:              darken(adjust-hue($state-info-bg, -10), 7%)
+$state-info-text:                $gray-darker
+$state-info-bg:                  $gray-light
+$state-info-border:              $gray-light
 
 // $state-warning-text:             #8a6d3b
 // $state-warning-bg:               #fcf8e3
@@ -584,17 +584,17 @@ $modal-footer-border-color:   $modal-header-border-color
 //
 //## Define alert colors, border radius, and padding.
 
-// $alert-padding:               15px
-// $alert-border-radius:         $border-radius-base
-// $alert-link-font-weight:      bold
+$alert-padding:               $line-height
+$alert-border-radius:         $border-radius-base
+$alert-link-font-weight:      bold
 
 // $alert-success-bg:            $state-success-bg
 // $alert-success-text:          $state-success-text
 // $alert-success-border:        $state-success-border
 
-// $alert-info-bg:               $state-info-bg
-// $alert-info-text:             $state-info-text
-// $alert-info-border:           $state-info-border
+$alert-info-bg:               $state-info-bg
+$alert-info-text:             $state-info-text
+$alert-info-border:           $state-info-border
 
 // $alert-warning-bg:            $state-warning-bg
 // $alert-warning-text:          $state-warning-text

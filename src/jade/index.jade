@@ -82,6 +82,7 @@ html(ng-app="app")
 
     div.container(ng-click="App.State.titlebar='title'")
       main#main
+        div.main-loading.alert.alert-info.text-center(ng-hide="::App.data") Loading
         .row.l-row(ng-repeat="row in ::App.data.perspectives")
           a.scroll-anchor(id="{{::row.title}}" vu-spy="row.title")
           .row-center.col-sm-2.col-sm-push-5.col-xs-12.text-center
