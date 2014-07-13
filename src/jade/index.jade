@@ -19,8 +19,7 @@ html(ng-app="app")
               //- The title that reflects the currently spied perspective title
               span.title(
                 ng-repeat="title in Header.Spy.spies track by $index"
-                ng-class="{'is-prev': Header.Spy.current > $index, 'is-next': Header.Spy.current < $index}")
-                | {{title}}
+                ng-class="{'is-prev': Header.Spy.current > $index, 'is-next': Header.Spy.current < $index}" ng-bind-html="::title")
           aside.titlebar.toolbox(ng-switch-when="toolbox")
             .toolbox-btn-group.btn-group(dropdown)
 
@@ -40,7 +39,7 @@ html(ng-app="app")
 
               ul.dropdown-menu.menu-perspective(role="menu")
                 li(ng-repeat="title in Header.Spy.spies track by $index")
-                  a(ng-href="#{{title}}" ng-click="Header.scrollTo($event, title)") {{::title}}
+                  a(ng-href="#{{title}}" ng-click="Header.scrollTo($event, title)" ng-bind-html="::title")
 
             .toolbox-btn-group.btn-group
               button.btn(
@@ -84,7 +83,7 @@ html(ng-app="app")
     div.container(ng-click="App.State.titlebar='title'")
       main#main
         .row.l-row(ng-repeat="row in ::App.data.perspectives")
-          a.scroll-anchor(id="{{::row.title}}" vu-spy="row.fullTitle")
+          a.scroll-anchor(id="{{::row.title}}" vu-spy="row.title")
           .row-center.col-sm-2.col-sm-push-5.col-xs-12.text-center
             h2
               span(ng-bind-html="::row.title.split('&#33287;')[0]")
