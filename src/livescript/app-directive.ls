@@ -112,3 +112,15 @@ angular.module \app.directive, <[app.service ngAnimate ngSanitize ui.bootstrap.s
   (scope, elem) ->
     # console.log 'no ng-animate on element', elem
     $animate.enabled false, elem
+
+#
+# Compile given content and put into element
+#
+.directive \vuCompile, <[
+       $compile
+]> ++ ($compile) ->
+  (scope, elem, attrs) ->
+    html = scope.$eval attrs.vuCompile
+    dom = ($compile "<div>#{html}</div>") scope
+
+    elem.html '' .append dom

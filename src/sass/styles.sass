@@ -172,14 +172,16 @@ body
       font-style: italic
       position: absolute
       +stretch(100%, 0, -$line-height, 0)
-      +ellipsis
       height: $line-height
       opacity: 0
       +transition(opacity 0.2s ease-in-out)
       +transition-delay(0)
       color: $gray-dark
 
-      &:before
+      // Insert the two word into the compiled content
+      > div :before
+        +ellipsis
+        height: $line-height
         content: '來源：'
 
     // The white card with box shadow when hover
