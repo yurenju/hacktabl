@@ -7,42 +7,42 @@ describe \MockData (...) !->
     MockData.then (data) !->
       expect data.perspectives .toBeDefined!
 
-describe \ArgumentParser (...) !->
-  it 'should be a function', inject (ArgumentParser) !->
-    expect(typeof ArgumentParser).toBe 'function'
+describe \HighlightParser (...) !->
+  it 'should be a function', inject (HighlightParser) !->
+    expect(typeof HighlightParser).toBe 'function'
 
-  it 'should return a string, given a string', inject (ArgumentParser) !->
-    expect(typeof ArgumentParser('arbitary string')).toBe 'string'
+  it 'should return a string, given a string', inject (HighlightParser) !->
+    expect(typeof HighlightParser('arbitary string')).toBe 'string'
 
-  it 'should strip useless <span>s', inject (ArgumentParser) !->
+  it 'should strip useless <span>s', inject (HighlightParser) !->
     input    = '<span class="c14">示範區面對的「外國」，依國內法制，不包含中國。示範區對中國大陸另有限制。</span>'
     expected = '示範區面對的「外國」，依國內法制，不包含中國。示範區對中國大陸另有限制。'
 
-    expect ArgumentParser(input) .toEqual expected
+    expect HighlightParser(input) .toEqual expected
 
-  it 'should parse one comment', inject (ArgumentParser, $interpolate) !->
+  it 'should parse one comment', inject (HighlightParser, $interpolate) !->
     input    = '<span class="c14">去年的法令修改與鬆綁，必須要自經區條例通過後才會生效</span><sup><a href="#cmnt6" name="cmnt_ref6">[f]</a></sup><span class="c14">，並且受立法院監看；若自經區沒過，那法規鬆綁就不會生效。</span>'
-    comment  = ($interpolate ArgumentParser.COMMENT_TEMPLATE) do
+    comment  = ($interpolate HighlightParser.COMMENT_TEMPLATE) do
       content: '去年的法令修改與鬆綁，必須要自經區條例通過後才會生效'
       id: '6'
       tag-name: 'span'
     expected = "#{comment}，並且受立法院監看；若自經區沒過，那法規鬆綁就不會生效。"
 
-    expect ArgumentParser(input) .toEqual expected
+    expect HighlightParser(input) .toEqual expected
 
-  it 'should parse comments and its replies', inject (ArgumentParser, $interpolate) !->
+  it 'should parse comments and its replies', inject (HighlightParser, $interpolate) !->
     input    = '<span class="c5">去年的法令修改與鬆綁，必須要自經區條例通過後才會生效</span><sup><a href="#cmnt6" name="cmnt_ref6">[f]</a></sup><sup><a href="#cmnt7" name="cmnt_ref7">[g]</a></sup><sup><a href="#cmnt8" name="cmnt_ref8">[h]</a></sup><span class="c5">，並且受立法院監看；若自經區沒過，那法規鬆綁就不會生效。</span>'
-    comment  = ($interpolate ArgumentParser.COMMENT_TEMPLATE) do
+    comment  = ($interpolate HighlightParser.COMMENT_TEMPLATE) do
       content: '去年的法令修改與鬆綁，必須要自經區條例通過後才會生效'
       id: '6,7,8'
       tag-name: 'span'
     expected = "#{comment}，並且受立法院監看；若自經區沒過，那法規鬆綁就不會生效。"
 
-    expect ArgumentParser(input) .toEqual expected
+    expect HighlightParser(input) .toEqual expected
 
-  it 'should parse multiple separated comments', inject (ArgumentParser, $interpolate) !->
+  it 'should parse multiple separated comments', inject (HighlightParser, $interpolate) !->
     input    = '<span class="c4">2012年政府民調顯示</span><sup><a href="#cmnt4" name="cmnt_ref4">[d]</a></sup><span class="c4">，超過</span><span class="c4">&nbsp;6 成民意</span><sup><a href="#cmnt5" name="cmnt_ref5">[e]</a></sup><span class="c4">支持台灣</span><sup><a href="#cmnt6" name="cmnt_ref6">[f]</a></sup><span class="c4">加入區域經濟整合，包含 TPP。</span>'
-    expr = $interpolate ArgumentParser.COMMENT_TEMPLATE
+    expr = $interpolate HighlightParser.COMMENT_TEMPLATE
     content1 = expr do
       content: '2012年政府民調顯示'
       id: 4
@@ -58,8 +58,19 @@ describe \ArgumentParser (...) !->
 
     expected = "#{content1}，超過#{content2}#{content3}加入區域經濟整合，包含 TPP。"
 
-    expect ArgumentParser(input) .toEqual expected
+    expect HighlightParser(input) .toEqual expected
 
+  it 'should deal with reference section as well', inject (HighlightParser, $interpolate) !->
+    input = '</span><span class="c4">&#27492;&#21477;&#26159;&#21738;&#35041;&#30475;&#21040;&#30340;&#65292;&#38468;&#36229;&#36899;&#32080;&#30340;&#36899;&#32080;&#12290;&#35519;&#25104; 8pt &#28784;&#33394;&#65292;&#26371;&#35731;&#27491;&#25991;&#27604;&#36611;&#26126;&#39023;&#12290;</span><sup><a href="#cmnt2" name="cmnt_ref2">[b]</a></sup><sup><a href="#cmnt3" name="cmnt_ref3">[c]</a></sup>'
+    expr = $interpolate HighlightParser.COMMENT_TEMPLATE
+    content = expr do
+      content: '&#27492;&#21477;&#26159;&#21738;&#35041;&#30475;&#21040;&#30340;&#65292;&#38468;&#36229;&#36899;&#32080;&#30340;&#36899;&#32080;&#12290;&#35519;&#25104; 8pt &#28784;&#33394;&#65292;&#26371;&#35731;&#27491;&#25991;&#27604;&#36611;&#26126;&#39023;&#12290;'
+      id: '2,3'
+      tag-name: \span
+
+    expected = content
+
+    expect HighlightParser(input) .toEqual expected
 
 describe \ItemSplitter (...) !->
   it 'should be a function', inject (ItemSplitter) !->
@@ -76,14 +87,14 @@ describe \ItemSplitter (...) !->
 
     expect ItemSplitter(input) .toEqual do
       content : '<span class="c5">國外對示範區內的實質投資免稅。</span><span class="c9">'
-      ref      : '<a href="AAAA">自經區草案§31</a>'
+      ref      : '</span><span class="c9 c18"><a class="c3" href="AAAA">自經區草案§31</a></span>'
 
   it 'should extract reference with multiple <a>', inject (ItemSplitter) !->
     input       = '<span class="c5">公有不動產（如政府土地）可以逕行讓售，不受</span><span class="c5">民意機關同意與行政院核准</span><sup><a href="#cmnt11" name="cmnt_ref11">[k]</a></sup><span class="c5">，公有地可不經民意監督私相讓售。</span><span class="c9">[&#20986;&#34389; </span><span class="c9 c18"><a class="c3" href="BBBB">沃草自經爭議書</a></span><span class="c9">、</span><span class="c9 c18"><a class="c3" href="AAAA">自經區草案 §19</a></span><span class="c9 c21">]</span>'
 
     expect ItemSplitter(input) .toEqual do
       content  : '<span class="c5">公有不動產（如政府土地）可以逕行讓售，不受</span><span class="c5">民意機關同意與行政院核准</span><sup><a href="#cmnt11" name="cmnt_ref11">[k]</a></sup><span class="c5">，公有地可不經民意監督私相讓售。</span><span class="c9">'
-      ref       : '<a href="BBBB">沃草自經爭議書</a>、<a href="AAAA">自經區草案 §19</a>'
+      ref       : '</span><span class="c9 c18"><a class="c3" href="BBBB">沃草自經爭議書</a></span><span class="c9">、</span><span class="c9 c18"><a class="c3" href="AAAA">自經區草案 §19</a></span>'
 
 describe \TableParser (...) !->
 

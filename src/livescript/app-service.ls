@@ -210,9 +210,9 @@ angular.module \app.service, <[ngSanitize]>
     !storage.isBackedout
 
 #
-# Parses arguments (論述)
+# Attach comment to highlighted content.
 #
-.factory \ArgumentParser, <[
+.factory \HighlightParser, <[
        $interpolate
 ]> ++ ($interpolate) ->
 
@@ -228,6 +228,7 @@ angular.module \app.service, <[ngSanitize]>
   const SPAN_END   = /<\/span>/gim
   const SPAN_PLACEHOLDER_STR = 'xx-span-xx'
   const SPAN_PLACEHOLDER = new RegExp SPAN_PLACEHOLDER_STR, 'gm'
+  const CLASS      = /\s+class="[^"]+"/gim
 
   parser = (doc) ->
     # Construct the comments
@@ -246,6 +247,7 @@ angular.module \app.service, <[ngSanitize]>
 
     .replace SPAN_START, ''
     .replace SPAN_END, ''
+    .replace CLASS, ''
     .trim!
     .replace SPAN_PLACEHOLDER, 'span'
 
@@ -261,9 +263,8 @@ angular.module \app.service, <[ngSanitize]>
 #
 .factory \ItemSplitter, ->
   const SPLITTER   = /\[\s*&#20986;&#34389;\s*(?:&#160;)*/gm
-  const SPAN_START = /<span class="[^"]+">/gim
-  const SPAN_END   = /]?\s*<\/span>*/gim
-  const CLASS      = /\s+class="[^"]+"/gim
+  const REF_END = /]/gim
+  const EMPTY_SPAN = /<span\s*[^>]*><\/span>/gim
 
   # Returned function
   (doc) ->
@@ -275,8 +276,12 @@ angular.module \app.service, <[ngSanitize]>
     # Returned object
     content: doc.slice(0, idx)
     ref: doc.slice(idx)
-      .replace(SPLITTER, '').replace(SPAN_START, '')
-      .replace(SPAN_END, '').replace(CLASS, '').trim()
+            .replace(SPLITTER, '').replace(REF_END, '')
+
+            # Removal of the above two may cause empty spans.
+            .replace(EMPTY_SPAN, '')
+
+            .trim!
 
 #
 # Find table and extract data into the following format:
@@ -292,8 +297,8 @@ angular.module \app.service, <[ngSanitize]>
 #
 #
 .factory \TableParser, <[
-       ItemSplitter  ArgumentParser  $sanitize
-]> ++ (ItemSplitter, ArgumentParser, $sanitize)->
+       ItemSplitter  HighlightParser  $sanitize
+]> ++ (ItemSplitter, HighlightParser, $sanitize)->
 
   const TR_EXTRACTOR = /<tr[^>]*>(.+?)<\/tr>/gim
   const TD_EXTRACTOR = /<td[^>]*>(.*?)<\/td>/gim
@@ -347,7 +352,8 @@ angular.module \app.service, <[ngSanitize]>
 
         debate-arguments = for li in lis
           argument = ItemSplitter cleanup-li(li)
-          argument.content = ArgumentParser $sanitize(argument.content)
+          argument.content = HighlightParser $sanitize(argument.content)
+          argument.ref = HighlightParser $sanitize(argument.ref)
 
           # Return the argument for the iteration
           argument
