@@ -119,8 +119,10 @@ angular.module \app.directive, <[app.service ngAnimate ngSanitize ui.bootstrap.s
 .directive \vuCompile, <[
        $compile
 ]> ++ ($compile) ->
-  (scope, elem, attrs) ->
-    html = scope.$eval attrs.vuCompile
+  # Config object
+  restrict: 'EA'
+  link: (scope, elem, attrs) ->
+    html = scope.$eval attrs.tmpl
     dom = ($compile "<div>#{html}</div>") scope
 
     elem.html '' .append dom
