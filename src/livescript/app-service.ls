@@ -256,10 +256,11 @@ angular.module \app.service, <[ngSanitize]>
 
 #
 # Split a <li> content into content and its reference
-# &#20358;&#28304; = 出處
+# &#20986;&#34389; = 出處
+# &#160; = &nbsp; = space
 #
 .factory \ItemSplitter, ->
-  const SPLITTER   = /<span class="[^"]+">\s*\[\s*&#20358;&#28304;\s*/gm
+  const SPLITTER   = /\[\s*&#20986;&#34389;\s*(?:&#160;)*/gm
   const SPAN_START = /<span class="[^"]+">/gim
   const SPAN_END   = /]?\s*<\/span>*/gim
   const CLASS      = /\s+class="[^"]+"/gim
