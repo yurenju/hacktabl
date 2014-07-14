@@ -1,5 +1,10 @@
 (...) <-! describe \service, _
 
+expect-from-fixture = (parser, basename) ->
+  input = __html__["test/unit/fixtures/#{basename}.html"]
+  expected = JSON.parse __html__["test/unit/fixtures/#{basename}.json"]
+  expect parser(input) .toEqual expected
+
 beforeEach module('app.service')
 
 # describe \MockData (...) !->
@@ -98,12 +103,6 @@ describe \ItemSplitter (...) !->
 
 describe \TableParser (...) !->
 
-  expect-from-fixture = (basename) ->
-    input = __html__["test/unit/fixtures/#{basename}.html"]
-    expected = JSON.parse __html__["test/unit/fixtures/#{basename}.json"]
-    inject (TableParser) ->
-      expect TableParser(input) .toEqual expected
-
   it 'should be a function', inject (TableParser) !->
     expect(typeof TableParser).toBe 'function'
 
@@ -113,10 +112,10 @@ describe \TableParser (...) !->
       perspectives   : []
 
   it 'should parse as many positions, perspectives and arguments as needed', inject (TableParser) !->
-    expect-from-fixture 'table-parser-positions'
+    expect-from-fixture TableParser, 'table-parser-positions'
 
   it 'should through out all strange tags on title and perspective title', inject (TableParser) !->
-    expect-from-fixture 'table-parser-tags'
+    expect-from-fixture TableParser, 'table-parser-tags'
 
   # (Trivial)
   # it 'should parse as many perspectives as needed', inject (TableParser) !->
