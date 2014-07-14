@@ -2,10 +2,10 @@
 
 beforeEach module('app.service')
 
-describe \MockData (...) !->
-  it 'should return object asynchronously', inject (MockData) !->
-    MockData.then (data) !->
-      expect data.perspectives .toBeDefined!
+# describe \MockData (...) !->
+#   it 'should return object asynchronously', inject (MockData) !->
+#     MockData.then (data) !->
+#       expect data.perspectives .toBeDefined!
 
 describe \HighlightParser (...) !->
   it 'should be a function', inject (HighlightParser) !->
