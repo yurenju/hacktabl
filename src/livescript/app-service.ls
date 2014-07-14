@@ -377,3 +377,33 @@ angular.module \app.service, <[ngSanitize]>
     deferred.resolve TableParser(data)
 
   return deferred.promise
+
+#
+# Find comments and return in the following format:
+#
+# {
+#   commentId: {
+#     content: HTMLS tring
+#     type: one of REF_MISSING, REF_CONTROVERSIAL, NOTE
+#   }, ...
+# }
+#
+.factory \CommentParser, <[
+       $sanitize
+]> ++ ($sanitize) ->
+
+  const REF_MISSING = \REF_MISSING
+  const REF_CONTROVERSIAL = \REF_CONTROVERSIAL
+  const NOTE = \NOTE
+  const SECOND = \SECOND # 附議
+  const OTHER = \OTHER
+
+  # The exposed parser function
+  parser = (doc) ->
+    # Returned object
+    {}
+
+  # Expose the type constants
+  parser.types = {REF_MISSING, REF_CONTROVERSIAL, NOTE, SECOND, OTHER}
+
+  return parser

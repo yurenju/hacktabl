@@ -124,4 +124,18 @@ describe \TableParser (...) !->
   # it 'should parse as many arguments as needed', inject (TableParser) !->
 
   it 'should pass the output through $sanitize', inject (TableParser) !->
-    expect-from-fixture 'table-parser-sanitize'
+    expect-from-fixture TableParser, 'table-parser-sanitize'
+
+describe \CommentParser (...) !->
+
+  it 'should be a function', inject (CommentParser) !->
+    expect(typeof CommentParser).toBe 'function'
+
+  it 'should return a object, given a string', inject (CommentParser) !->
+    expect(typeof CommentParser('arbitary string')).toBe 'object'
+
+  it 'strips <span>s, add links to URLs and process types', inject (CommentParser) !->
+    expect-from-fixture CommentParser, 'comment-parser-single'
+
+  it 'parses multiple comments correctly', inject (CommentParser) !->
+    expect-from-fixture CommentParser, 'comment-parser-multiple'
