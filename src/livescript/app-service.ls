@@ -431,7 +431,7 @@ angular.module \app.service, <[ngSanitize]>
       # Prepend the missing starting <p> tag and apply linky.
       content = linky "<p>" + content
 
-      comments <<<< "#{id}" : {type, content}
+      comments[id] = {type, content}
 
     # Returned object
     comments
