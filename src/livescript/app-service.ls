@@ -389,8 +389,8 @@ angular.module \app.service, <[ngSanitize]>
 # }
 #
 .factory \CommentParser, <[
-       $sanitize
-]> ++ ($sanitize) ->
+       linky
+]> ++ (linky) ->
 
   const REF_MISSING = \REF_MISSING
   const REF_CONTROVERSIAL = \REF_CONTROVERSIAL
@@ -398,12 +398,88 @@ angular.module \app.service, <[ngSanitize]>
   const SECOND = \SECOND # 附議
   const OTHER = \OTHER
 
+  const COMMENT_DIV_EXTRACTOR = /<div[^>]*><p[^>]*><a[^>]+name="cmnt(\d+)">[^>]+<\/a>(.+?)<\/div>/gim
+  const TYPE_EXTRACTOR = /^\[([^\]]+)\]\s*/
+  const SECOND_MATCHER = /^\+1/
+  const SPAN_START = /<span class="[^"]+">/gim
+  const SPAN_END   = /<\/span>/gim
+  const CLASS      = /\s+class="[^"]+"/gim
+
   # The exposed parser function
   parser = (doc) ->
+    comments = {}
+    while matched = COMMENT_DIV_EXTRACTOR.exec doc
+      id = matched.1
+      raw-content = matched.2.replace(SPAN_START, '').replace(SPAN_END, '')
+                           .replace(CLASS, '').trim!
+
+      # Process [] tags
+      raw-type = raw-content.match(TYPE_EXTRACTOR)?1
+
+      type = switch raw-type
+      | "&#35036;&#20805;&#35498;&#26126;" => NOTE
+      | "&#20358;&#28304;&#35531;&#27714;" => REF_MISSING
+      | "&#20358;&#28304;&#29229;&#35696;" => REF_CONTROVERSIAL
+      | _  => OTHER
+
+      # Remove []
+      content = raw-content.replace TYPE_EXTRACTOR, '' .trim!
+
+      # If the user is seconding other, change its type
+      type = SECOND if content.match SECOND_MATCHER
+
+      # Prepend the missing starting <p> tag and apply linky.
+      content = linky "<p>" + content
+
+      comments <<<< "#{id}" : {type, content}
+
     # Returned object
-    {}
+    comments
 
   # Expose the type constants
   parser.types = {REF_MISSING, REF_CONTROVERSIAL, NOTE, SECOND, OTHER}
 
   return parser
+
+#
+# "linkyUnsanitized" implementation
+# http://stackoverflow.com/questions/14692640/angularjs-directive-to-replace-text/24291287#24291287
+#
+.factory \linky, ->
+  LINKY_URL_REGEXP =
+    /((ftp|https?):\/\/|(mailto:)?[A-Za-z0-9._%+-]+@)[^\s<>]*[^\s.;,(){}<>]/
+  MAILTO_REGEXP = /^mailto:/
+
+  return (text, target) ->
+    return text if !text
+    raw = text
+    html = []
+
+    while m = raw.match(LINKY_URL_REGEXP)
+      # We can not end in these as they are sometimes found at the end of the sentence
+      url = m.0
+      # if we did not match ftp/http/mailto then assume mailto
+      url = "mailto:#{url}" if m.2 is m.3
+      i = m.index
+      addText raw.substr(0, i)
+      addLink url, m[0].replace(MAILTO_REGEXP, '')
+      raw = raw.substring(i + m[0].length)
+
+    addText(raw)
+    return html.join ''
+
+    function addText text
+      return if !text
+      html.push text
+
+    function addLink url, text
+      html.push '<a '
+      if angular.isDefined target
+        html.push 'target="'
+        html.push target
+        html.push '" '
+      html.push 'href="'
+      html.push url
+      html.push '">'
+      addText text
+      html.push '</a>'
