@@ -369,12 +369,14 @@ angular.module \app.service, <[ngSanitize]>
 
 
 .factory \TableData, <[
-       TableParser  $http  DATA_URL  $q
-]> ++ (TableParser, $http, DATA_URL, $q) ->
+       TableParser  CommentParser  $http  DATA_URL  $q
+]> ++ (TableParser, CommentParser, $http, DATA_URL, $q) ->
   deferred = $q.defer!
 
   $http.get DATA_URL .success (data) !->
-    deferred.resolve TableParser(data)
+    result = TableParser(data)
+    result.comments = CommentParser(data)
+    deferred.resolve result
 
   return deferred.promise
 
