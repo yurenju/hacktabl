@@ -217,7 +217,7 @@ angular.module \app.service, <[ngSanitize]>
 ]> ++ ($interpolate) ->
 
   const COMMENT_TEMPLATE = '
-    <{{tagName}} comment="{{id}}" comment-placement="top" comment-trigger="click" 
+    <{{tagName}} comment="{{id}}" comment-placement="top" 
      comment-append-to-body="true">{{content}}</{{tagName}}>
     '
 

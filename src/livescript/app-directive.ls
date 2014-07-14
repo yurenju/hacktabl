@@ -126,3 +126,31 @@ angular.module \app.directive, <[app.service ngAnimate ngSanitize ui.bootstrap.s
     dom = ($compile "<div>#{html}</div>") scope
 
     elem.html '' .append dom
+
+
+#
+# Comment popup, reference: https://github.com/angular-ui/bootstrap/blob/master/src/tooltip/tooltip.js
+#
+.directive \commentPopup, <[
+       TableData
+]> ++ (TableData)->
+
+  # Returned config object
+  restrict: \EA
+  replace: true
+  scope:
+    content: \@
+    placement: \@
+    animation: \&
+    isOpen: \&
+  templateUrl: 'public/templates/comment-popup.html'
+  link: (scope, elem, attrs) ->
+    TableData.then (data) ->
+      scope.comments = for id in scope.content.split(',')
+        data.comments[id]
+
+.directive \comment, <[
+       $tooltip
+]> ++ ($tooltip) ->
+  $tooltip \comment, \comment, \click
+

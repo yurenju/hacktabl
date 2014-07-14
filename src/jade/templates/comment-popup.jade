@@ -1,0 +1,6 @@
+div(class="tooltip {{placement}}" ng-class="{ in: isOpen(), fade: animation() }")
+  div.tooltip-arrow
+  div.tooltip-inner
+    div(ng-repeat="comment in comments track by $index")
+      | {{comment.type}}
+      div(ng-bind-html="comment.content")
