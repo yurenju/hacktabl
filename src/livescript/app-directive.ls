@@ -155,3 +155,19 @@ angular.module \app.directive, <[app.service ngAnimate ngSanitize ui.bootstrap.s
 ]> ++ ($tooltip) ->
   $tooltip \comment, \comment, \click
 
+#
+# Send item-specific mouse events to Google analytics
+#
+# Usage: <ITEM vu-track="{perspective, position, content, label, category}">
+#
+# If the settings has "content" then we set event category = 'item', label = 'card'.
+# If the "category" nor "content" does not exist in settings, we set category = 'button'.
+#
+.directive \vuTrack, <[
+       ga
+]> ++ (ga) ->
+  # Returned link function
+  (scope, elem, attrs) !->
+    raw-settings = scope.$eval attrs.vuTrack
+    console.log raw-settings
+
