@@ -2,8 +2,9 @@
 #= require angular-animate/angular-animate.min.js
 #= require angular-sanitize/angular-sanitize.min.js
 #= require ui-bootstrap-selected.js
+#= require angular-ga/ga.js
 
-angular.module \app.directive, <[app.service ngAnimate ngSanitize ui.bootstrap.selected]>
+angular.module \app.directive, <[app.service ngAnimate ngSanitize ui.bootstrap.selected ga]>
 
 # Scroll spy
 #
