@@ -18,6 +18,7 @@ module.exports = function(config) {
       'vendor/bower_components/angular/angular.min.js',
       'vendor/bower_components/angular-animate/angular-animate.min.js',
       'vendor/bower_components/angular-sanitize/angular-sanitize.min.js',
+      'vendor/bower_components/angular-ga/ga.js',
       'vendor/bower_components/angular-bootstrap/src/*/*.js',
       'vendor/bower_components/angular-mocks/angular-mocks.js',
       'src/livescript/**/*.ls',
