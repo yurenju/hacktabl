@@ -1,6 +1,7 @@
 #= require angular-sanitize/angular-sanitize.min.js
+#= require angular-ga/ga.js
 
-angular.module \app.service, <[ngSanitize]>
+angular.module \app.service, <[ngSanitize ga]>
 #
 # Debounced window scroll event listener, built to avoid layout threshing
 #
@@ -195,7 +196,13 @@ angular.module \app.service, <[ngSanitize]>
     $window
   ]>
   ( $window ) ->
-    storage := $window.localStorage # Populate the storage reference
+    # Populate the storage reference
+    storage := $window.localStorage
+
+    # Set user if we can send data to google analytics
+    if @can-send-data!
+      uid = storage.userId = storage.userId || "" + Math.random()
+      ga \set, \dimension1, uid
 
   subscribe: (email) !->
     storage.email := email
