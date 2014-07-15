@@ -223,15 +223,13 @@ angular.module \app.service, <[ngSanitize ga]>
 #
 # Should only take 5ms to do the entire google doc.
 #
-.factory \HtmlDecoder, <[
-       $document
-]> ++ ($document) ->
+.factory \HtmlDecoder, ->
+  textarea = angular.element('<textarea></textarea>')[0]
 
   # Decoder function
   (encoded) ->
-    txt = $document[0].createElement \textarea
-    txt.innerHTML = encoded
-    return txt.value
+    textarea.innerHTML = encoded
+    return textarea.value
 
 #
 # Attach comment to highlighted content.
