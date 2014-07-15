@@ -27,6 +27,7 @@ html(ng-app="app")
                 ng-click="Header.openInfoModal()"
                 tooltip="關於比較表"
                 tooltip-placement="bottom" tooltip-append-to-body="true"
+                ga ga-label="toolbox.info"
               )
                 span.glyphicon.glyphicon-info-sign
 
@@ -34,6 +35,7 @@ html(ng-app="app")
                 dropdown-toggle
                 tooltip="面相／主題"
                 tooltip-placement="bottom" tooltip-append-to-body="true"
+                ga ga-label="toolbox.perspectives"
               )
                 span.glyphicon.glyphicon-th-list
 
@@ -47,6 +49,7 @@ html(ng-app="app")
                 tooltip-placement="bottom" tooltip-append-to-body="true"
                 ng-class="{active: App.State.labels}"
                 ng-click="Header.toggleLabels()"
+                ga ga-label="toolbox.toggle"
               )
                 span.glyphicon.glyphicon-tags
 
@@ -55,6 +58,7 @@ html(ng-app="app")
                 ng-click="App.openEditModal($event)"
                 tooltip="編輯表格"
                 tooltip-placement="bottom" tooltip-append-to-body="true"
+                ga ga-label="toolbox.edit"
               )
                 span.glyphicon.glyphicon-pencil
 
@@ -62,6 +66,7 @@ html(ng-app="app")
                 ng-click="Header.openSubscribeModal()"
                 tooltip="表格更新時寄信給我"
                 tooltip-placement="bottom" tooltip-append-to-body="true"
+                ga ga-label="toolbox.subscribe"
               )
                 span.glyphicon.glyphicon-envelope
 
@@ -95,29 +100,30 @@ html(ng-app="app")
           .row-left.col-sm-5.col-sm-pull-2.col-xs-6(ng-switch="::row.positions[0].length")
             div(ng-switch-default)
               ul
-                li(ng-repeat="argument in ::row.positions[0]")
+                li(ng-repeat="argument in ::row.positions[0]" vu-track="{perspective: row.title, position: 0, content: argument.content}")
                   div(vu-compile tmpl="::argument.content")
                   div.ref(vu-compile tmpl="::argument.ref")
-              p.add-more: a(ng-href="{{App.EDIT_URL}}" ng-click="App.openEditModal($event)")
+              p.add-more: a(ng-href="{{App.EDIT_URL}}" ng-click="App.openEditModal($event)" vu-track="{label: 'item.edit', perspective: row.title, position: 0}")
                 span.glyphicon.glyphicon-pencil
                 | 我要補充……
-            div(ng-switch-when="0"): .column-empty(ng-include="'public/templates/empty.html'")
+            div(ng-switch-when="0"): .column-empty(ng-include="'public/templates/empty.html'" vu-track="{label: 'item.edit', perspective: row.title, position: 0}")
 
           .row-right.col-sm-5.col-xs-6(ng-switch="::row.positions[1].length")
             div(ng-switch-default)
               ul
-                li(ng-repeat="argument in ::row.positions[1]")
+                li(ng-repeat="argument in ::row.positions[1]" vu-track="{perspective: row.title, position: 1, content: argument.content}")
                   div(vu-compile tmpl="::argument.content")
                   div.ref(vu-compile tmpl="::argument.ref")
-              p.add-more: a(ng-href="{{App.EDIT_URL}}" ng-click="App.openEditModal($event)")
+              p.add-more: a(ng-href="{{App.EDIT_URL}}" ng-click="App.openEditModal($event)" vu-track="{label: 'item.edit', perspective: row.title, position: 1}")
                 span.glyphicon.glyphicon-pencil
                 | 我要補充……
-            div(ng-switch-when="0"): .column-empty(ng-include="'public/templates/empty.html'")
+            div(ng-switch-when="0"): .column-empty(ng-include="'public/templates/empty.html'" vu-track="{label: 'item.edit', perspective: row.title, position: 1}")
 
       #edit.row: .col-lg-4.col-lg-offset-4.col-xs-8.col-xs-offset-2
         a.btn.btn-primary.btn-lg.btn-block(
           ng-click="App.openEditModal($event)"
-          ng-href="{{::App.EDIT_URL}}")
+          ng-href="{{::App.EDIT_URL}}"
+          ga ga-label="bottom.edit")
           | 編輯表格
 
     != javascriptIncludeTag('app', {assetsPath: 'public/javascripts/'})
