@@ -243,7 +243,7 @@ angular.module \app.service, <[ngSanitize ga]>
      comment-append-to-body="true">{{content}}</{{tagName}}>
     '
 
-  const COMMENT = /<span class="[^"]+">([^<]+)<\/span>((?:<sup>.+?<\/sup>)+)/gim
+  const COMMENT = /<span[^>]*>([^<]+)<\/span>((?:<sup>.+?<\/sup>)+)/gim
   const EXTRACT_ID = /#cmnt(\d+)/g
   const GARBAGE_LEN = '#cmnt'.length
   const SPAN_START = /<span[^>]*>/gim
