@@ -160,14 +160,59 @@ angular.module \app.directive, <[app.service ngAnimate ngSanitize ui.bootstrap.s
 #
 # Usage: <ITEM vu-track="{perspective, position, content, label, category}">
 #
-# If the settings has "content" then we set event category = 'item', label = 'card'.
+# If the settings has "content" then we set event category = 'item', label = content.
 # If the "category" nor "content" does not exist in settings, we set category = 'button'.
 #
 .directive \vuTrack, <[
-       ga
-]> ++ (ga) ->
+       ga  HtmlDecoder  DIMENSIONS $timeout
+]> ++ (ga, HtmlDecoder, DIM,       $timeout) ->
   # Returned link function
   (scope, elem, attrs) !->
-    raw-settings = scope.$eval attrs.vuTrack
-    console.log raw-settings
+    settings = scope.$eval attrs.vuTrack
+    settings.perspective = HtmlDecoder settings.perspective if settings.perspective?
+    settings.content = HtmlDecoder settings.content if settings.content?
 
+    event-option =
+      hitType: \event
+      eventCategory: settings.category || \button
+      eventLabel: settings.label
+      eventValue: 1
+      "#{DIM.PERSPECTIVE}": settings.perspective
+      "#{DIM.POSITION}": settings.position
+
+    if settings.content?
+      # Tracking a specific item.
+      # Set event category to 'item' and label to its content.
+      # Since label are different, they will be counted as non-repeative events.
+
+      event-option <<<
+        eventCategory: \item
+        eventLabel: settings.content
+
+    click-option = angular.extend {}, event-option, eventAction: \click
+    hover-option = angular.extend {}, event-option, eventAction: \hover
+
+    elem.on \click, ->
+      ga \send, click-option
+
+    # 500ms hover detection & timing
+    promise = null
+    entered = null
+
+    elem.on \mouseleave, ->
+      $timeout.cancel promise if promise
+      timing-val = Date.now! - entered
+      ga \send, \timing, event-option.category, \hover, timing-val
+
+      promise := null
+      entered := null
+
+    elem.on \mouseenter, ->
+      entered := Date.now!
+      promise := $timeout do
+        !->
+          ga \send, hover-option
+          promise := null
+        500
+
+    # TODO: selections

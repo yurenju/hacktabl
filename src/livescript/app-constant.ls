@@ -9,4 +9,4 @@ angular.module \app.constant, <[]>
   USER_ID: \dimension1
   PERSPECTIVE: \dimension2
   POSITION: \dimension3
-  ITEM_CONTENT: \dimension4
+  ITEM_CONTENT: \dimension4 # For selections

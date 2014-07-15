@@ -27,7 +27,7 @@ html(ng-app="app")
                 ng-click="Header.openInfoModal()"
                 tooltip="關於比較表"
                 tooltip-placement="bottom" tooltip-append-to-body="true"
-                ga ga-label="toolbox.info"
+                ga ga-label="'toolbox.info'"
               )
                 span.glyphicon.glyphicon-info-sign
 
@@ -35,7 +35,7 @@ html(ng-app="app")
                 dropdown-toggle
                 tooltip="面相／主題"
                 tooltip-placement="bottom" tooltip-append-to-body="true"
-                ga ga-label="toolbox.perspectives"
+                ga ga-label="'toolbox.perspectives'"
               )
                 span.glyphicon.glyphicon-th-list
 
@@ -49,7 +49,7 @@ html(ng-app="app")
                 tooltip-placement="bottom" tooltip-append-to-body="true"
                 ng-class="{active: App.State.labels}"
                 ng-click="Header.toggleLabels()"
-                ga ga-label="toolbox.toggle"
+                ga ga-label="'toolbox.toggle'"
               )
                 span.glyphicon.glyphicon-tags
 
@@ -58,7 +58,7 @@ html(ng-app="app")
                 ng-click="App.openEditModal($event)"
                 tooltip="編輯表格"
                 tooltip-placement="bottom" tooltip-append-to-body="true"
-                ga ga-label="toolbox.edit"
+                ga ga-label="'toolbox.edit'"
               )
                 span.glyphicon.glyphicon-pencil
 
@@ -66,7 +66,7 @@ html(ng-app="app")
                 ng-click="Header.openSubscribeModal()"
                 tooltip="表格更新時寄信給我"
                 tooltip-placement="bottom" tooltip-append-to-body="true"
-                ga ga-label="toolbox.subscribe"
+                ga ga-label="'toolbox.subscribe'"
               )
                 span.glyphicon.glyphicon-envelope
 
@@ -123,7 +123,7 @@ html(ng-app="app")
         a.btn.btn-primary.btn-lg.btn-block(
           ng-click="App.openEditModal($event)"
           ng-href="{{::App.EDIT_URL}}"
-          ga ga-label="bottom.edit")
+          ga ga-label="'bottom.edit'")
           | 編輯表格
 
     != javascriptIncludeTag('app', {assetsPath: 'public/javascripts/'})
