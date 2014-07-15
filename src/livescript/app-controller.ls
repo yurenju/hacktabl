@@ -61,10 +61,11 @@ angular.module \app.controller, <[app.constant app.service ui.bootstrap.selected
     write-label-action!
 
 .controller \ModalCtrl, <[
-       EDIT_URL  RULE_URL
-]> ++ (EDIT_URL, RULE_URL) !->
+       EDIT_URL  RULE_URL  DISCUSS_URL
+]> ++ (EDIT_URL, RULE_URL, DISCUSS_URL) !->
   @EDIT_URL = EDIT_URL
   @RULE_URL = RULE_URL
+  @DISCUSS_URL = DISCUSS_URL
 
 
 .controller \SubscriptionCtrl, <[
