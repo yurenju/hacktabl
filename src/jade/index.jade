@@ -92,17 +92,25 @@ html(ng-app="app")
               span(ng-bind-html="::row.title.split('&#33287;')[1]")
 
           .row-left.col-sm-5.col-sm-pull-2.col-xs-6(ng-switch="::row.positions[0].length")
-            ul(ng-switch-default)
-              li(ng-repeat="argument in ::row.positions[0]")
-                div(vu-compile tmpl="::argument.content")
-                div.ref(vu-compile tmpl="::argument.ref")
+            div(ng-switch-default)
+              ul
+                li(ng-repeat="argument in ::row.positions[0]")
+                  div(vu-compile tmpl="::argument.content")
+                  div.ref(vu-compile tmpl="::argument.ref")
+              p.add-more: a(ng-href="{{App.EDIT_URL}}" ng-click="App.openEditModal($event)")
+                span.glyphicon.glyphicon-pencil
+                | 我要補充……
             div(ng-switch-when="0"): .column-empty(ng-include="'public/templates/empty.html'")
 
           .row-right.col-sm-5.col-xs-6(ng-switch="::row.positions[1].length")
-            ul(ng-switch-default="")
-              li(ng-repeat="argument in ::row.positions[1]")
-                div(vu-compile tmpl="::argument.content")
-                div.ref(vu-compile tmpl="::argument.ref")
+            div(ng-switch-default)
+              ul
+                li(ng-repeat="argument in ::row.positions[1]")
+                  div(vu-compile tmpl="::argument.content")
+                  div.ref(vu-compile tmpl="::argument.ref")
+              p.add-more: a(ng-href="{{App.EDIT_URL}}" ng-click="App.openEditModal($event)")
+                span.glyphicon.glyphicon-pencil
+                | 我要補充……
             div(ng-switch-when="0"): .column-empty(ng-include="'public/templates/empty.html'")
 
       #edit.row: .col-lg-4.col-lg-offset-4.col-xs-8.col-xs-offset-2
