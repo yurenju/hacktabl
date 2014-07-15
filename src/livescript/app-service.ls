@@ -231,7 +231,7 @@ angular.module \app.service, <[ngSanitize ga]>
   const COMMENT = /<span class="[^"]+">([^<]+)<\/span>((?:<sup>.+?<\/sup>)+)/gim
   const EXTRACT_ID = /#cmnt(\d+)/g
   const GARBAGE_LEN = '#cmnt'.length
-  const SPAN_START = /<span class="[^"]+">/gim
+  const SPAN_START = /<span[^>]*>/gim
   const SPAN_END   = /<\/span>/gim
   const SPAN_PLACEHOLDER_STR = 'xx-span-xx'
   const SPAN_PLACEHOLDER = new RegExp SPAN_PLACEHOLDER_STR, 'gm'
