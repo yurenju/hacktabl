@@ -148,21 +148,25 @@ body
 .main-loading
   margin: $line-height 0
 
+// The anchor for scrolling & spy
+.scroll-anchor-container
+  position: relative // containing block of scroll-anchor
+
+.scroll-anchor
+  +stretch
+  top: -2 * $line-height + rem-calc(1px) // Height of the fixed header, minus 1px space
+  bottom: 2 * $line-height
+  z-index: -1 // Do not block input
+
+  @media screen and (min-width: $screen-sm-min)
+    top: -3 * $line-height + rem-calc(1px) // Height of the fixed header, minus 1px space
+    bottom: 3 * $line-height
+
 // Table row layout
 //
 .l-row
   padding: $line-height 0 rem-calc($line-height-px - 1px)
   border-bottom: rem-calc(1px) dashed $brand-success
-  position: relative // containing block of scroll-anchor
-
-  // The anchor for scrolling & spy
-  .scroll-anchor
-    +stretch
-    top: -2 * $line-height + rem-calc(1px) // Height of the fixed header, minus 1px space
-    z-index: -1 // Do not block input
-
-    @media screen and (min-width: $screen-sm-min)
-      top: -3 * $line-height + rem-calc(1px) // Height of the fixed header, minus 1px space
 
   ul
     padding-left: 1rem

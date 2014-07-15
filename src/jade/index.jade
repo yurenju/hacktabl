@@ -78,12 +78,13 @@ html(ng-app="app")
           span.glyphicon.glyphicon-exclamation-sign
 
     //- The scroll spy placeholder for the page title
-    div(vu-spy="'自經比一比'" id="自經比一比")
+    div.scroll-anchor-container
+      a.scroll-anchor(vu-spy="'自經比一比'" id="自經比一比")
 
     div.container(ng-click="App.State.titlebar='title'")
       main#main
         div.main-loading.alert.alert-info.text-center(ng-hide="::App.data") Loading
-        .row.l-row(ng-repeat="row in ::App.data.perspectives")
+        .row.l-row.scroll-anchor-container(ng-repeat="row in ::App.data.perspectives")
           a.scroll-anchor(id="{{::row.title}}" vu-spy="row.title")
           .row-center.col-sm-2.col-sm-push-5.col-xs-12.text-center
             h2
