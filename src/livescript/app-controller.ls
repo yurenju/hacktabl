@@ -1,8 +1,10 @@
 #= require app-constant.js
 #= require app-service.js
 #= require ui-bootstrap-selected.js
+#= require ui-bootstrap-selected.js
+#= require angular-ga/ga.js
 
-angular.module \app.controller, <[app.constant app.service ui.bootstrap.selected]>
+angular.module \app.controller, <[app.constant app.service ui.bootstrap.selected ga]>
 .controller \AppCtrl, <[
        EDIT_URL  TableData Spy  State  $modal
 ]> ++ (EDIT_URL, data,     Spy, State, $modal)!->
@@ -21,8 +23,8 @@ angular.module \app.controller, <[app.constant app.service ui.bootstrap.selected
 
 
 .controller \HeaderCtrl, <[
-       Spy  State  $scope  $anchorScroll  $location  $modal
-]> ++ (Spy, State, $scope, $anchorScroll, $location, $modal)!->
+       Spy  State  $scope  $anchorScroll  $location  $modal  ga  DIMENSIONS
+]> ++ (Spy, State, $scope, $anchorScroll, $location, $modal, ga, DIM)!->
 
   @Spy = Spy
 
@@ -32,9 +34,12 @@ angular.module \app.controller, <[app.constant app.service ui.bootstrap.selected
     $location.hash title
     $anchorScroll!
 
-  # Show 'title' in titlebar when scrollspy changes
-  $scope.$watch (-> Spy.current), ->
+  $scope.$watch (-> Spy.current), !->
+    # Switch to title view (hide the buttons) in titlebar when scrollspy changes
     State.titlebar = \title
+
+    # Send pageview event to google analytics
+    ga \send, \pageview, title: Spy.spies[Spy.current] unless Spy.current is null
 
   @openInfoModal = !->
     $modal.open do
