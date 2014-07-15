@@ -23,8 +23,8 @@ angular.module \app.controller, <[app.constant app.service ui.bootstrap.selected
 
 
 .controller \HeaderCtrl, <[
-       Spy  State  $scope  $anchorScroll  $location  $modal  ga  DIMENSIONS
-]> ++ (Spy, State, $scope, $anchorScroll, $location, $modal, ga, DIM)!->
+       Spy  State  $scope  $anchorScroll  $location  $modal  ga  HtmlDecoder
+]> ++ (Spy, State, $scope, $anchorScroll, $location, $modal, ga, HtmlDecoder)!->
 
   @Spy = Spy
 
@@ -39,7 +39,9 @@ angular.module \app.controller, <[app.constant app.service ui.bootstrap.selected
     State.titlebar = \title
 
     # Send pageview event to google analytics
-    ga \send, \pageview, title: Spy.spies[Spy.current] unless Spy.current is null
+    unless Spy.current is null
+      title = HtmlDecoder Spy.spies[Spy.current]
+      ga \send, \pageview, {title}
 
   @openInfoModal = !->
     $modal.open do
