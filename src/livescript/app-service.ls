@@ -217,6 +217,23 @@ angular.module \app.service, <[ngSanitize ga]>
     !storage.isBackedout
 
 #
+# Decodes HTML entities
+#
+# http://stackoverflow.com/questions/7394748/whats-the-right-way-to-decode-a-string-that-has-special-html-entities-in-it
+#
+# Should only take 5ms to do the entire google doc.
+#
+.factory \HtmlDecoder, <[
+       $document
+]> ++ ($document) ->
+
+  # Decoder function
+  (encoded) ->
+    txt = $document[0].createElement \textarea
+    txt.innerHTML = encoded
+    return txt.value
+
+#
 # Attach comment to highlighted content.
 #
 .factory \HighlightParser, <[
