@@ -3,3 +3,10 @@ angular.module \app.constant, <[]>
 .constant \RULE_URL, 'https://compatable.hackpad.com/GinYVZGLviX'
 .constant \DATA_URL, 'https://docs.google.com/feeds/download/documents/export/Export?id=189K9aM7m9wrxoj63De3zoBrK0LDYDF76_BTROXWPR4M&exportFormat=html'
 .constant \DISCUSS_URL, 'https://compatable.hackpad.com/JrYT8wrEq7c'
+
+# Google Analytics custom dimensions
+.constant \DIMENSIONS, do
+  USER_ID: \dimension1
+  PERSPECTIVE: \dimension2
+  POSITION: \dimension3
+  ITEM_CONTENT: \dimension4
