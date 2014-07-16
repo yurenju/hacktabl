@@ -128,6 +128,14 @@ angular.module \app.directive, <[app.service ngAnimate ngSanitize ui.bootstrap.s
 
     elem.html '' .append dom
 
+#
+# Register new event map for comment popup
+#
+.config <[
+       $tooltipProvider
+]> ++ ($tooltip-provider) !->
+  $tooltip-provider.set-triggers do
+    '$comment-on': '$comment-off'
 
 #
 # Comment popup, reference: https://github.com/angular-ui/bootstrap/blob/master/src/tooltip/tooltip.js
@@ -146,14 +154,74 @@ angular.module \app.directive, <[app.service ngAnimate ngSanitize ui.bootstrap.s
     isOpen: \&
   templateUrl: 'public/templates/comment-popup.html'
   link: (scope, elem, attrs) ->
+
     TableData.then (data) ->
       scope.comments = for id in scope.content.split(',')
         data.comments[id]
 
+    # Prevent clicking in popup propagates to $document.
+    #
+    elem.on \click, -> it.stopPropagation!
+
+#
+# Hack around the $tooltip...
+#
 .directive \comment, <[
-       $tooltip
-]> ++ ($tooltip) ->
-  $tooltip \comment, \comment, \click
+       $tooltip  State  $timeout  $document  $rootScope
+]> ++ ($tooltip, State, $timeout, $document, $rootScope) ->
+
+  # Reset all comments when document is clicked or ESC is pressed
+  #
+  reset-comment-state = ->
+    return if State.$is-default \comment
+    $rootScope.$apply ->
+      State.$reset \comment
+
+  $document.on \click, reset-comment-state
+
+  $document.on \keyup, ->
+    reset-comment-state! if it.which is 27 # ESC
+
+  # Get config object
+  config = $tooltip \comment, \comment, \$comment-on
+
+  # Intercept the linking function returned by the original compile function.
+  #
+  original-compile = config.compile
+
+  config.compile = ->
+    original-link = original-compile ...
+
+    # Return our link function
+    return (scope, elem, attrs) !->
+
+      # Invoke the original link function
+      original-link ...
+
+      # Use the first ID as current comment id
+      comment-id = attrs.comment.split \, .0
+
+      # Manually trigger the element when element is hovered
+      set-global-state-to-comment = (e) ->
+        e.stopPropagation!
+        scope.$apply ->
+          State.comment = comment-id
+
+      elem.on \mouseenter, set-global-state-to-comment
+      elem.on \click, set-global-state-to-comment
+
+      # Trigger the open or close of comment using the global state
+      scope.$watch do
+        -> State.comment
+        (val) !->
+          if val is comment-id
+            <- $timeout
+            elem.triggerHandler \$comment-on
+          else
+            <- $timeout
+            elem.triggerHandler \$comment-off
+
+  return config
 
 #
 # Send item-specific mouse events to Google analytics
