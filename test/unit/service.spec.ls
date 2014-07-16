@@ -27,39 +27,33 @@ describe \HighlightParser (...) !->
 
   it 'should parse one comment', inject (HighlightParser, $interpolate) !->
     input    = '<span class="c14">去年的法令修改與鬆綁，必須要自經區條例通過後才會生效</span><sup><a href="#cmnt6" name="cmnt_ref6">[f]</a></sup><span class="c14">，並且受立法院監看；若自經區沒過，那法規鬆綁就不會生效。</span>'
-    comment  = ($interpolate HighlightParser.COMMENT_TEMPLATE) do
+    comment  = HighlightParser.GENERATE_COMMENT do
       content: '去年的法令修改與鬆綁，必須要自經區條例通過後才會生效'
       id: '6'
-      tag-name: 'span'
     expected = "#{comment}，並且受立法院監看；若自經區沒過，那法規鬆綁就不會生效。"
 
     expect HighlightParser(input) .toEqual expected
 
   it 'should parse comments and its replies', inject (HighlightParser, $interpolate) !->
     input    = '<span class="c5">去年的法令修改與鬆綁，必須要自經區條例通過後才會生效</span><sup><a href="#cmnt6" name="cmnt_ref6">[f]</a></sup><sup><a href="#cmnt7" name="cmnt_ref7">[g]</a></sup><sup><a href="#cmnt8" name="cmnt_ref8">[h]</a></sup><span class="c5">，並且受立法院監看；若自經區沒過，那法規鬆綁就不會生效。</span>'
-    comment  = ($interpolate HighlightParser.COMMENT_TEMPLATE) do
+    comment  = HighlightParser.GENERATE_COMMENT do
       content: '去年的法令修改與鬆綁，必須要自經區條例通過後才會生效'
       id: '6,7,8'
-      tag-name: 'span'
     expected = "#{comment}，並且受立法院監看；若自經區沒過，那法規鬆綁就不會生效。"
 
     expect HighlightParser(input) .toEqual expected
 
   it 'should parse multiple separated comments', inject (HighlightParser, $interpolate) !->
     input    = '<span class="c4">2012年政府民調顯示</span><sup><a href="#cmnt4" name="cmnt_ref4">[d]</a></sup><span class="c4">，超過</span><span class="c4">&nbsp;6 成民意</span><sup><a href="#cmnt5" name="cmnt_ref5">[e]</a></sup><span class="c4">支持台灣</span><sup><a href="#cmnt6" name="cmnt_ref6">[f]</a></sup><span class="c4">加入區域經濟整合，包含 TPP。</span>'
-    expr = $interpolate HighlightParser.COMMENT_TEMPLATE
-    content1 = expr do
+    content1 = HighlightParser.GENERATE_COMMENT do
       content: '2012年政府民調顯示'
       id: 4
-      tag-name: \span
-    content2 = expr do
+    content2 = HighlightParser.GENERATE_COMMENT do
       content: '&nbsp;6 成民意'
       id: 5
-      tag-name: \span
-    content3 = expr do
+    content3 = HighlightParser.GENERATE_COMMENT do
       content: '支持台灣'
       id: 6
-      tag-name: \span
 
     expected = "#{content1}，超過#{content2}#{content3}加入區域經濟整合，包含 TPP。"
 
@@ -67,11 +61,9 @@ describe \HighlightParser (...) !->
 
   it 'should deal with reference section as well', inject (HighlightParser, $interpolate) !->
     input = '</span><span class="c4">&#27492;&#21477;&#26159;&#21738;&#35041;&#30475;&#21040;&#30340;&#65292;&#38468;&#36229;&#36899;&#32080;&#30340;&#36899;&#32080;&#12290;&#35519;&#25104; 8pt &#28784;&#33394;&#65292;&#26371;&#35731;&#27491;&#25991;&#27604;&#36611;&#26126;&#39023;&#12290;</span><sup><a href="#cmnt2" name="cmnt_ref2">[b]</a></sup><sup><a href="#cmnt3" name="cmnt_ref3">[c]</a></sup>'
-    expr = $interpolate HighlightParser.COMMENT_TEMPLATE
-    content = expr do
+    content = HighlightParser.GENERATE_COMMENT do
       content: '&#27492;&#21477;&#26159;&#21738;&#35041;&#30475;&#21040;&#30340;&#65292;&#38468;&#36229;&#36899;&#32080;&#30340;&#36899;&#32080;&#12290;&#35519;&#25104; 8pt &#28784;&#33394;&#65292;&#26371;&#35731;&#27491;&#25991;&#27604;&#36611;&#26126;&#39023;&#12290;'
       id: '2,3'
-      tag-name: \span
 
     expected = content
 

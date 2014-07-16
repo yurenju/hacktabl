@@ -248,11 +248,6 @@ angular.module \app.service, <[ngSanitize ga]>
        $interpolate
 ]> ++ ($interpolate) ->
 
-  const COMMENT_TEMPLATE = '
-    <{{tagName}} comment="{{id}}" comment-placement="top" 
-     comment-append-to-body="true">{{content}}</{{tagName}}>
-    '
-
   const COMMENT = /<span[^>]*>([^<]+)<\/span>((?:<sup>.+?<\/sup>)+)/gim
   const EXTRACT_ID = /#cmnt(\d+)/g
   const GARBAGE_LEN = '#cmnt'.length
@@ -261,6 +256,15 @@ angular.module \app.service, <[ngSanitize ga]>
   const SPAN_PLACEHOLDER_STR = 'xx-span-xx'
   const SPAN_PLACEHOLDER = new RegExp SPAN_PLACEHOLDER_STR, 'gm'
   const CLASS      = /\s+class="[^"]+"/gim
+
+  const GENERATE_COMMENT = (^^options) ->
+    options.placement = '{{placement}}' # By-pass for the comment directive
+    options.tag-name ||= 'span'
+
+    return $interpolate('
+      <{{tagName}} comment="{{id}}" comment-placement="{{placement}}" 
+       comment-append-to-body="true">{{content}}</{{tagName}}>
+      ') options
 
   parser = (doc) ->
     # Construct the comments
@@ -272,7 +276,7 @@ angular.module \app.service, <[ngSanitize ga]>
       #
       ids = sups.match EXTRACT_ID .map (.slice(GARBAGE_LEN))
 
-      return ($interpolate COMMENT_TEMPLATE) do
+      return GENERATE_COMMENT do
         id: ids * \,
         content: content
         tag-name: SPAN_PLACEHOLDER_STR
@@ -284,7 +288,7 @@ angular.module \app.service, <[ngSanitize ga]>
     .replace SPAN_PLACEHOLDER, 'span'
 
 
-  parser.COMMENT_TEMPLATE = COMMENT_TEMPLATE
+  parser.GENERATE_COMMENT = GENERATE_COMMENT
 
   return parser
 
