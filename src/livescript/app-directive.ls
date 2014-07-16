@@ -164,8 +164,8 @@ angular.module \app.directive, <[app.service ngAnimate ngSanitize ui.bootstrap.s
 # If the "category" nor "content" does not exist in settings, we set category = 'button'.
 #
 .directive \vuTrack, <[
-       ga  HtmlDecoder  DIMENSIONS $timeout
-]> ++ (ga, HtmlDecoder, DIM,       $timeout) ->
+       ga  HtmlDecoder  DIMENSIONS $timeout  $window
+]> ++ (ga, HtmlDecoder, DIM,       $timeout, $window) ->
   # Returned link function
   (scope, elem, attrs) !->
     settings = scope.$eval attrs.vuTrack
@@ -191,6 +191,7 @@ angular.module \app.directive, <[app.service ngAnimate ngSanitize ui.bootstrap.s
 
     click-option = angular.extend {}, event-option, eventAction: \click
     hover-option = angular.extend {}, event-option, eventAction: \hover
+    copy-option = angular.extend {}, event-option, eventAction: \copy
 
     elem.on \click, ->
       ga \send, click-option
@@ -215,4 +216,14 @@ angular.module \app.directive, <[app.service ngAnimate ngSanitize ui.bootstrap.s
           promise := null
         500
 
-    # TODO: selections
+    # TODO: copy events
+    # https://developer.mozilla.org/en-US/docs/Web/Events/copy
+    # http://msdn.microsoft.com/en-us/library/ie/hh772145(v=vs.85).aspx
+    #
+    # https://developer.mozilla.org/en-US/docs/Web/API/ClipboardEvent.clipboardData
+    # http://msdn.microsoft.com/en-us/library/ie/ms535220(v=vs.85).aspx
+
+    elem.on \copy, !->
+      # Fill in the copied text into item-content dimension.
+      copy-option[DIM.ITEM_CONTENT] = $window.getSelection! + ''
+      ga \send, copy-option
