@@ -76,7 +76,8 @@ angular.module \app.service, <[ngSanitize ga]>
   #
   @enum =
     titlebar: <[title toolbox]> # Show title or toolbox in header
-    labels: [true, false]        # Whether the labels in content to be shown
+    labels: [true, false]       # Whether the labels in content to be shown
+    comment: [null]             # The ID of currently shown comment
 
   ->
     # Set the states to the instance
