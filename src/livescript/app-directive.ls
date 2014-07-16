@@ -167,8 +167,8 @@ angular.module \app.directive, <[app.service ngAnimate ngSanitize ui.bootstrap.s
 # Hack around the $tooltip...
 #
 .directive \comment, <[
-       $tooltip  State  $timeout  $document  $rootScope
-]> ++ ($tooltip, State, $timeout, $document, $rootScope) ->
+       $tooltip  State  $timeout  $document  $rootScope  $window
+]> ++ ($tooltip, State, $timeout, $document, $rootScope, $window) ->
 
   # Reset all comments when document is clicked or ESC is pressed
   #
@@ -195,6 +195,8 @@ angular.module \app.directive, <[app.service ngAnimate ngSanitize ui.bootstrap.s
     # Return our link function
     return (scope, elem, attrs) !->
 
+      scope.placement = \top
+
       # Invoke the original link function
       original-link ...
 
@@ -202,13 +204,22 @@ angular.module \app.directive, <[app.service ngAnimate ngSanitize ui.bootstrap.s
       comment-id = attrs.comment.split \, .0
 
       # Manually trigger the element when element is hovered
-      set-global-state-to-comment = (e) ->
+      trigger-comment = (e) ->
         e.stopPropagation!
+
+        # setup tooltip placement
+        #
+        if elem[0].getBoundingClientRect!top < $window.innerHeight / 2
+          # The top of element reaches the top half of the screen
+          scope.placement = \bottom
+        else
+          scope.placement = \top
+
         scope.$apply ->
           State.comment = comment-id
 
-      elem.on \mouseenter, set-global-state-to-comment
-      elem.on \click, set-global-state-to-comment
+      elem.on \mouseenter, trigger-comment
+      elem.on \click, trigger-comment
 
       # Trigger the open or close of comment using the global state
       scope.$watch do
