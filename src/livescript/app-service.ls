@@ -442,8 +442,8 @@ angular.module \app.service, <[ngSanitize ga]>
 
       type = switch raw-type
       | "&#35036;&#20805;&#35498;&#26126;" => NOTE
-      | "&#20358;&#28304;&#35531;&#27714;" => REF_MISSING
-      | "&#20358;&#28304;&#29229;&#35696;" => REF_CONTROVERSIAL
+      | "&#38656;&#35201;&#20986;&#34389;" => REF_MISSING
+      | "&#20986;&#34389;&#29229;&#35696;" => REF_CONTROVERSIAL
       | _  => OTHER
 
       # Remove []

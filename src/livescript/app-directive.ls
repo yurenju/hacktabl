@@ -203,7 +203,7 @@ angular.module \app.directive, <[app.service ngAnimate ngSanitize ui.bootstrap.s
     elem.on \mouseleave, ->
       $timeout.cancel promise if promise
       timing-val = Date.now! - entered
-      ga \send, \timing, event-option.category, \hover, timing-val
+      ga \send, \timing, event-option.eventCategory, \hover, timing-val, event-option.eventLabel
 
       promise := null
       entered := null
