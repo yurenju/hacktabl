@@ -1,7 +1,8 @@
 #= require angular-sanitize/angular-sanitize.min.js
 #= require angular-ga/ga.js
+#= require ui-bootstrap-selected.js
 
-angular.module \app.service, <[ngSanitize ga]>
+angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected]>
 #
 # Debounced window scroll event listener, built to avoid layout threshing
 #
@@ -521,3 +522,32 @@ angular.module \app.service, <[ngSanitize ga]>
       html.push '">'
       addText text
       html.push '</a>'
+
+#
+# Keeps track of all options of modal in this app
+#
+.service \ModalManager, class ModalManager
+
+  const default-options =
+    edit:
+      templateUrl: 'public/templates/edit.html'
+      controller: 'ModalCtrl as Modal'
+    subscribe:
+      templateUrl: 'public/templates/subscribe-modal.html'
+      controller: 'ModalCtrl as Modal'
+      size: \sm
+    info:
+      templateUrl: 'public/templates/info.html'
+      controller: 'ModalCtrl as Modal'
+
+  @$inject = <[
+    $modal
+  ]>
+
+  # Constructor, saves modal instance
+  (@$modal) ->
+
+  open: (name) ->
+
+    # Return the modal instance
+    return @$modal.open default-options[name]

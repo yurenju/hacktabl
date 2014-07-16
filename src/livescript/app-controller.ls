@@ -1,13 +1,11 @@
 #= require app-constant.js
 #= require app-service.js
-#= require ui-bootstrap-selected.js
-#= require ui-bootstrap-selected.js
 #= require angular-ga/ga.js
 
-angular.module \app.controller, <[app.constant app.service ui.bootstrap.selected ga]>
+angular.module \app.controller, <[app.constant app.service ga]>
 .controller \AppCtrl, <[
-       EDIT_URL  TableData Spy  State  $modal
-]> ++ (EDIT_URL, data,     Spy, State, $modal)!->
+       EDIT_URL  TableData Spy  State  ModalManager
+]> ++ (EDIT_URL, data,     Spy, State, ModalManager)!->
   @EDIT_URL = EDIT_URL
 
   data.then (d) ~>
@@ -17,14 +15,12 @@ angular.module \app.controller, <[app.constant app.service ui.bootstrap.selected
 
   @openEditModal = (evt) !->
     evt.prevent-default!
-    $modal.open do
-      templateUrl: 'public/templates/edit.html'
-      controller: 'ModalCtrl as Modal'
+    ModalManager.open \edit
 
 
 .controller \HeaderCtrl, <[
-       Spy  State  $scope  $anchorScroll  $location  $modal  ga  HtmlDecoder
-]> ++ (Spy, State, $scope, $anchorScroll, $location, $modal, ga, HtmlDecoder)!->
+       Spy  State  $scope  $anchorScroll  $location  ModalManager  ga  HtmlDecoder
+]> ++ (Spy, State, $scope, $anchorScroll, $location, ModalManager, ga, HtmlDecoder)!->
 
   @Spy = Spy
 
@@ -44,15 +40,10 @@ angular.module \app.controller, <[app.constant app.service ui.bootstrap.selected
       ga \send, \pageview, {title}
 
   @openInfoModal = !->
-    $modal.open do
-      templateUrl: 'public/templates/info.html'
-      controller: 'ModalCtrl as Modal'
+    ModalManager.open \info
 
   @openSubscribeModal = !->
-    $modal.open do
-      templateUrl: 'public/templates/subscribe-modal.html'
-      controller: 'ModalCtrl as Modal'
-      size: \sm
+    ModalManager.open \subscribe
 
   # Setup @labelAction
   do ~!function write-label-action
