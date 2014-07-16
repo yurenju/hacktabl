@@ -92,6 +92,15 @@ angular.module \app.service, <[ngSanitize ga]>
     console.log(current-index, new-index)
     @[name] = @@enum[name][new-index]
 
+  # Reset the state value to default
+  #
+  $reset: (name) ->
+    @[name] = @@enum[name][0]
+
+  # Return true if the state value is default
+  $is-default: (name) ->
+    @[name] is @@enum[name][0]
+
 #
 # Data mocking the parsed data from Google Doc
 #
