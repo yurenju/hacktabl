@@ -21,6 +21,8 @@ module.exports = function(config) {
       'vendor/bower_components/angular-ga/ga.js',
       'vendor/bower_components/angular-bootstrap/src/*/*.js',
       'vendor/bower_components/angular-mocks/angular-mocks.js',
+      'tmp/javascripts/angular-templates/*',
+      'vendor/javascripts/*.ls',
       'src/livescript/**/*.ls',
       'test/unit/**/*.spec.ls',
 
