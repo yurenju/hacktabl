@@ -86,6 +86,59 @@ html(ng-app="app")
     div.scroll-anchor-container
       a.scroll-anchor(vu-spy="'自經比一比'" id="自經比一比")
 
+      //- Information of the 說明會
+      .meeting-info.well.container(ng-show="App.State.showMeetingInfo")
+        button.close(ng-click="App.State.showMeetingInfo=false") &times;
+        h3
+          | 自經區溝通會 2.0
+          | 
+          span.hidden-xs 問題彙整與時間表
+        p 自經區比較表是目前雙方爭議點的共筆。若要在溝通會上對自經區發問，請到下面這些地方唷！
+        .row
+          .col-md-3.col-xs-6: a(href="http://j.mp/hackfepz1")
+            h4 第一場 總體政策
+            p
+              span.glyphicon.glyphicon-pencil.hidden-xs
+              | 
+              | 提問截止：7/19
+            p
+              span.glyphicon.glyphicon-calendar.hidden-xs
+              | 
+              | 舉辦時間：7/21
+
+          .col-md-3.col-xs-6: a(href="http://j.mp/hackfepz2")
+            h4 第二場 醫療問題
+            p
+              span.glyphicon.glyphicon-pencil.hidden-xs
+              | 
+              | 提問截止：7/22
+            p
+              span.glyphicon.glyphicon-calendar.hidden-xs
+              | 
+              | 舉辦時間：7/24
+
+          .col-md-3.col-xs-6: a(href="http://j.mp/hackfepz3")
+            h4 第三場 農業問題
+            p
+              span.glyphicon.glyphicon-pencil.hidden-xs
+              | 
+              | 提問截止：7/29
+            p
+              span.glyphicon.glyphicon-calendar.hidden-xs
+              | 
+              | 舉辦時間：7/31
+
+          .col-md-3.col-xs-6: a(href="http://j.mp/hackfepz4")
+            h4 第四場 教育問題
+            p
+              span.glyphicon.glyphicon-pencil.hidden-xs
+              | 
+              | 提問截止：8/2
+            p
+              span.glyphicon.glyphicon-calendar.hidden-xs
+              | 
+              | 舉辦時間：8/4
+
     div.container(ng-click="App.State.titlebar='title'")
       main#main
         div.main-loading.alert.alert-info.text-center(ng-hide="::App.data") Loading
