@@ -246,8 +246,8 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected]>
 # Attach comment to highlighted content.
 #
 .factory \HighlightParser, <[
-       $interpolate
-]> ++ ($interpolate) ->
+       $interpolate  CommentParser
+]> ++ ($interpolate, CommentParser) ->
 
   const COMMENT = /<span[^>]*>([^<]+)<\/span>((?:<sup>.+?<\/sup>)+)/gim
   const EXTRACT_ID = /#cmnt(\d+)/g
@@ -261,13 +261,14 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected]>
   const GENERATE_COMMENT = (^^options) ->
     options.placement = '{{placement}}' # By-pass for the comment directive
     options.tag-name ||= 'span'
+    options.classes = JSON.stringify(options.classes || {})
 
     return $interpolate('
       <{{tagName}} comment="{{id}}" comment-placement="{{placement}}" 
-       comment-append-to-body="true">{{content}}</{{tagName}}>
+       comment-append-to-body="true" ng-class=\'{{classes}}\'>{{content}}</{{tagName}}>
       ') options
 
-  parser = (doc) ->
+  parser = (doc, comments = {}) ->
     # Construct the comments
     return doc.replace COMMENT, (m, content, sups) ->
       # sups should look like:
@@ -276,11 +277,19 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected]>
       # We now track the ids from those <sup>s
       #
       ids = sups.match EXTRACT_ID .map (.slice(GARBAGE_LEN))
+      classes = {}
+      for id in ids
+        cls = switch comments[id]?type
+        case CommentParser.types.REF_MISSING, CommentParser.types.REF_CONTROVERSIAL => \is-controversial
+        case CommentParser.types.NOTE => \is-info
+
+        classes[cls] = true if cls
 
       return GENERATE_COMMENT do
         id: ids * \,
         content: content
         tag-name: SPAN_PLACEHOLDER_STR
+        classes: classes
 
     .replace SPAN_START, ''
     .replace SPAN_END, ''
