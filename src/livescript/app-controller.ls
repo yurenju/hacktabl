@@ -78,3 +78,7 @@ angular.module \app.controller, <[app.constant app.service ga]>
 
     # If in modal ($close exists in $scope), close the modal
     $scope.$close && $scope.$close()
+
+.controller \MeetingCtrl, !->
+  @is-due = (date-string) ->
+    new Date > new Date(date-string)

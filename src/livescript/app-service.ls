@@ -79,7 +79,6 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected]>
     titlebar: <[title toolbox]> # Show title or toolbox in header
     labels: [true, false]       # Whether the labels in content to be shown
     comment: [null]             # The ID of currently shown comment
-    showMeetingInfo: [true, false]
 
   ->
     # Set the states to the instance
