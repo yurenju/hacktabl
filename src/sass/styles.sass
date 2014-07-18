@@ -221,31 +221,39 @@ body
         +box-shadow(0 2px 6px 2px rgba(#000, .2))
         +transition-delay($delay)
 
-    [comment]
-      $line-color: desaturate(lighten($brand-success, 60%), 20%)
-      background: $line-color image-url('line.png') repeat-x bottom center
-      cursor: pointer
-      // position: relative // Create containing block for pseudo-elements
-      // z-index: 0 // Create stacking context for pseudo-elements
+  [comment]
+    cursor: pointer
+    border-bottom: 1px dashed $gray-light
 
-      // Beginning and ending of the line
-      // &:before, &:after
-      //   position: absolute
-      //   bottom: 0
-      //   content: ''
-      //   z-index: -1 // Don't cover the text
+  [comment].is-info
+    cursor: help
+    border-bottom-color: $brand-primary
 
-      // &:before
-      //   left: 0
-      //   background: $line-color image-url('line-start.png') no-repeat bottom left
-      //   width: image-width('line-start.png')
-      //   height: image-height('line-start.png')
+  [comment].is-controversial
+    $line-color: desaturate(lighten($brand-success, 60%), 20%)
+    border-bottom: none
+    background: $line-color image-url('line.png') repeat-x bottom center
+    // position: relative // Create containing block for pseudo-elements
+    // z-index: 0 // Create stacking context for pseudo-elements
 
-      // &:after
-      //   right: 0
-      //   background: $line-color image-url('line-end.png') no-repeat bottom left
-      //   width: image-width('line-end.png')
-      //   height: image-height('line-end.png')
+    // Beginning and ending of the line
+    // &:before, &:after
+    //   position: absolute
+    //   bottom: 0
+    //   content: ''
+    //   z-index: -1 // Don't cover the text
+
+    // &:before
+    //   left: 0
+    //   background: $line-color image-url('line-start.png') no-repeat bottom left
+    //   width: image-width('line-start.png')
+    //   height: image-height('line-start.png')
+
+    // &:after
+    //   right: 0
+    //   background: $line-color image-url('line-end.png') no-repeat bottom left
+    //   width: image-width('line-end.png')
+    //   height: image-height('line-end.png')
 
   .add-more
     position: relative
