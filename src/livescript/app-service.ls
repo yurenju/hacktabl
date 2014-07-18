@@ -334,8 +334,8 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected]>
 #
 #
 .factory \TableParser, <[
-       ItemSplitter  HighlightParser  $sanitize
-]> ++ (ItemSplitter, HighlightParser, $sanitize)->
+       ItemSplitter  HighlightParser  $sanitize  CommentParser
+]> ++ (ItemSplitter, HighlightParser, $sanitize, CommentParser)->
 
   const TR_EXTRACTOR = /<tr[^>]*>(.+?)<\/tr>/gim
   const TD_EXTRACTOR = /<td[^>]*>(.*?)<\/td>/gim
@@ -356,6 +356,10 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected]>
 
   # Returned function
   (doc) ->
+
+    # 0. Get the comments
+    #
+    comments = CommentParser doc
 
     # 1. Scan through each <tr>
     #
@@ -389,8 +393,8 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected]>
 
         debate-arguments = for li in lis
           argument = ItemSplitter cleanup-li(li)
-          argument.content = HighlightParser $sanitize(argument.content)
-          argument.ref = HighlightParser $sanitize(argument.ref)
+          argument.content = HighlightParser $sanitize(argument.content), comments
+          argument.ref = HighlightParser $sanitize(argument.ref), comments
 
           # Return the argument for the iteration
           argument
@@ -402,20 +406,16 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected]>
       {title, positions}
 
     # Returned object
-    {position-title, perspectives}
+    {position-title, perspectives, comments}
 
 
 .factory \TableData, <[
-       TableParser  CommentParser  $http  DATA_URL  $q
-]> ++ (TableParser, CommentParser, $http, DATA_URL, $q) ->
-  deferred = $q.defer!
+       TableParser  CommentParser  $http  DATA_URL
+]> ++ (TableParser, CommentParser, $http, DATA_URL) ->
 
-  $http.get DATA_URL .success (data) !->
-    result = TableParser(data)
-    result.comments = CommentParser(data)
-    deferred.resolve result
-
-  return deferred.promise
+  # Return a promise that resolves to parsed table data
+  return $http.get DATA_URL .then (resp) ->
+    return TableParser(resp.data)
 
 #
 # Find comments and return in the following format:

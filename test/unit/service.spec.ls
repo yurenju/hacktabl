@@ -102,6 +102,7 @@ describe \TableParser (...) !->
     expect TableParser('arbitary string') .toEqual do
       position-title : []
       perspectives   : []
+      comments       : {}
 
   it 'should parse as many positions, perspectives and arguments as needed', inject (TableParser) !->
     expect-from-fixture TableParser, 'table-parser-positions'
