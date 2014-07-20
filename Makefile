@@ -1,6 +1,6 @@
 SRC=src
-GIT=git@github.com:fepztw/fepztw.github.io.git
-DEPLOY_BRANCH=master
+GIT=git@github.com:MrOrz/hacktabl.git
+DEPLOY_BRANCH=gh-pages
 
 .PHONY: build push clean deploy
 
