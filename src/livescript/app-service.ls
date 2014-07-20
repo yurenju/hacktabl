@@ -1,8 +1,9 @@
 #= require angular-sanitize/angular-sanitize.min.js
 #= require angular-ga/ga.js
 #= require ui-bootstrap-selected.js
+#= require app-router
 
-angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected]>
+angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
 #
 # Debounced window scroll event listener, built to avoid layout threshing
 #
@@ -429,11 +430,11 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected]>
     TableParser(resp.data)
 
 .factory \EtherCalcData, <[
-       $location  $http  $q
-]> ++ ($location, $http, $q) ->
+       ETHERPAD_ID  $http  $q
+]> ++ (ETHERPAD_ID, $http, $q) ->
 
   # console.log \hsh, $location.path!
-  $http.get "https://ethercalc.org#{$location.path!}.csv" .then (csv) ->
+  $http.get "https://ethercalc.org/#{ETHERPAD_ID}.csv" .then (csv) ->
     console.log 'CSV', csv
     data = {}
 

@@ -1,14 +1,19 @@
 #= require app-constant.js
 #= require app-service.js
+#= require app-router.js
 #= require angular-ga/ga.js
 
-angular.module \app.controller, <[app.constant app.service ga]>
+angular.module \app.controller, <[app.constant app.service ga app.router]>
 .controller \AppCtrl, <[
-       TableData Spy  State  EtherCalcData
-]> ++ (data,     Spy, State, EtherCalcData)!->
+       TableData Spy  State  EtherCalcData  $anchorScroll  $timeout
+]> ++ (data,     Spy, State, EtherCalcData, $anchorScroll, $timeout)!->
 
   data.then (d) ~>
     @data = d
+
+    # Go to anchor if there is one after all data is loaded
+    $timeout ->
+      $anchorScroll!
 
   @State = State
 
@@ -56,17 +61,17 @@ angular.module \app.controller, <[app.constant app.service ga]>
     write-label-action!
 
 .controller \ModalCtrl, <[
-       EtherCalcData  $location
-]> ++ (EtherCalcData, $location) !->
+       EtherCalcData  ETHERPAD_ID
+]> ++ (EtherCalcData, ETHERPAD_ID) !->
 
-  @ethercalc-id = $location.path!
+  @ethercalc-id = ETHERPAD_ID
   EtherCalcData.then (data) !~>
     @EDIT_URL = data.EDIT_URL
     @INFO_URL = data.INFO_URL
 
 .controller \HeadCtrl, <[
-       EtherCalcData  $location
-]> ++ (EtherCalcData, $location) !->
+       EtherCalcData
+]> ++ (EtherCalcData) !->
   @title = 'Hacktabl 協作比較表格'
   EtherCalcData.then (data) !~>
     @title = data.TITLE
