@@ -81,8 +81,8 @@ html(ng-app="app")
               ng-repeat="positionArgs in ::row.positions"
               ng-switch="::positionArgs.length"
               ng-style="{width: 100/row.positions.length+'%'}")
+              h3(ng-bind-html="::App.data.positionTitle[$index]")
               div(ng-switch-default)
-                h3(ng-bind-html="::App.data.positionTitle[$index]")
                 ul
                   li(ng-repeat="argument in ::positionArgs" vu-track="{perspective: row.title, position: 0, content: argument.content}")
                     div(vu-compile tmpl="::argument.content")
