@@ -10,7 +10,8 @@ build: clean
 	NODE_ENV=production gulp html
 	mkdir build
 
-	cp index.html build/
+	cp index.html build/index.html
+	cp index.html build/404.html
 	cp -R public  build/
 
 # Intialize git and push the content to master.
