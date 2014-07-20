@@ -141,7 +141,13 @@ gulp.task \server, <[html]>, ->
   gulp-livereload.listen!
 
   console.log 'Starting connect server...'
-  server = connect()
   port = process.env.PORT || 3000
-  server.use connect.static('./') .listen port, ->
+
+  connect!
+  .use (req, res, next) !->
+    # Rewrite to index.html if not from /public.
+    req.url = '/index.html' unless req.url.match /^\/public\//
+    next!
+  .use connect.static('./')
+  .listen port, ->
     console.log "Connect server starting at http://localhost:#port"
