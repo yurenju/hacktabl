@@ -8,7 +8,7 @@ div(class="tooltip {{placement}}" ng-class="{ in: isOpen(), fade: animation() }"
         span.label.label-info(ng-switch-when="NOTE") 補充說明
       div(ng-bind-html="comment.content")
 
-    p: a(ng-click="edit($event)" href="#" ga ga-label="comment.edit")
+    p: a(ng-href="{{::EDIT_URL}}" ga ga-label="comment.edit")
       span.glyphicon.glyphicon-plus
       | 
       | 新增回應

@@ -141,8 +141,8 @@ angular.module \app.directive, <[app.service ngAnimate ngSanitize ui.bootstrap.s
 # Comment popup, reference: https://github.com/angular-ui/bootstrap/blob/master/src/tooltip/tooltip.js
 #
 .directive \commentPopup, <[
-       TableData  ModalManager  State
-]> ++ (TableData, ModalManager, State)->
+       TableData  State  EtherCalcData
+]> ++ (TableData, State, EtherCalcData)->
 
   # Returned config object
   restrict: \EA
@@ -155,14 +155,12 @@ angular.module \app.directive, <[app.service ngAnimate ngSanitize ui.bootstrap.s
   templateUrl: 'public/templates/comment-popup.html'
   link: (scope, elem, attrs) ->
 
+    EtherCalcData.then (data) ->
+      scope.EDIT_URL = data.EDIT_URL
+
     TableData.then (data) ->
       scope.comments = for id in scope.content.split(',')
         data.comments[id]
-
-    scope.edit = (e) ->
-      e.prevent-default!
-      State.$reset \comment
-      ModalManager.open \edit
 
     # Prevent clicking in popup propagates to $document.
     #

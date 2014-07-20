@@ -54,11 +54,11 @@ html(ng-app="app")
                 span.glyphicon.glyphicon-tags
 
             .toolbox-btn-group.btn-group
-              button.btn(
-                ng-click="App.openEditModal($event)"
+              a.btn(
                 tooltip="編輯表格"
                 tooltip-placement="bottom" tooltip-append-to-body="true"
                 ga ga-label="'toolbox.edit'"
+                ng-href="{{App.EDIT_URL}}"
               )
                 span.glyphicon.glyphicon-pencil
 
@@ -87,7 +87,7 @@ html(ng-app="app")
                   li(ng-repeat="argument in ::positionArgs" vu-track="{perspective: row.title, position: 0, content: argument.content}")
                     div(vu-compile tmpl="::argument.content")
                     div.ref(vu-compile tmpl="::argument.ref")
-                p.add-more: a(ng-href="{{App.EDIT_URL}}" ng-click="App.openEditModal($event)" vu-track="{label: 'item.edit', perspective: row.title, position: 0}")
+                p.add-more: a(ng-href="{{App.EDIT_URL}}" vu-track="{label: 'item.edit', perspective: row.title, position: 0}")
                   span.glyphicon.glyphicon-pencil
                   | 我要補充……
               div(ng-switch-when="0"): .column-empty(ng-include="'public/templates/empty.html'" vu-track="{label: 'item.edit', perspective: row.title, position: 0}")
@@ -95,7 +95,6 @@ html(ng-app="app")
 
       #edit.row: .col-lg-4.col-lg-offset-4.col-xs-8.col-xs-offset-2
         a.btn.btn-primary.btn-lg.btn-block(
-          ng-click="App.openEditModal($event)"
           ng-href="{{::App.EDIT_URL}}"
           ga ga-label="'bottom.edit'")
           | 編輯表格
