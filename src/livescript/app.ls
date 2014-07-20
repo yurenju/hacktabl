@@ -11,6 +11,3 @@ angular.module 'app', <[
 ]>
 # Wake up user preference and sets user-id
 .run <[UserPreference]> ++ !->
-# Redirect user to fepz if no path is specified
-.run <[$location]> ++ ($location) !->
-  $location.path \fepz
