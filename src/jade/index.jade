@@ -1,9 +1,9 @@
 doctype html
 html(ng-app="app")
-  head
+  head(ng-controller="HeadCtrl as Head")
     meta(charset="utf-8")
     meta(name="viewport" content="width=device-width, initial-scale=1")
-    title 自經區正反意見比較表
+    title {{Head.title || 'Hacktabl 協作表格共筆'}}
     != stylesheetLinkTag('styles', {assetsPath: 'public/stylesheets/'})
 
   body(ng-controller="AppCtrl as App")
@@ -211,6 +211,6 @@ html(ng-app="app")
       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
       })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-      ga('create', 'UA-19512059-7', 'auto');
+      ga('create', 'UA-19512059-8', 'auto');
       ga('require', 'displayfeatures');
       ga('send', 'pageview');
