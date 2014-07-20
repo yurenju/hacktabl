@@ -62,139 +62,34 @@ html(ng-app="app")
               )
                 span.glyphicon.glyphicon-pencil
 
-              button.btn(
-                ng-click="Header.openSubscribeModal()"
-                tooltip="表格更新時寄信給我"
-                tooltip-placement="bottom" tooltip-append-to-body="true"
-                ga ga-label="'toolbox.subscribe'"
-              )
-                span.glyphicon.glyphicon-envelope
-
-        .header-left.pull-left
-          span.glyphicon.glyphicon-ok-sign
-          | 
-          | 正方
-          span.hidden-xs ／支持自經區
-
-        .header-right.pull-right
-          | 反方
-          span.hidden-xs ／自經區的疑慮
-          | 
-          span.glyphicon.glyphicon-exclamation-sign
-
     //- The scroll spy placeholder for the page title
     div.scroll-anchor-container
       a.scroll-anchor(vu-spy="'自經比一比'" id="自經比一比")
-
-      //- Information of the 說明會
-      .meeting-info.well.container(ng-controller="MeetingCtrl as Meeting" ng-hide="Meeting.isClosed" ng-cloak)
-        button.close(ng-click="Meeting.isClosed=true") &times;
-        h3
-          | 自經區溝通會 2.0
-          | 
-          span.hidden-xs 問題彙整與時間表
-        p 自經區比較表是目前雙方爭議點的共筆。若要在溝通會上對自經區發問，請到下面這些地方唷！
-        .row
-          .col-md-3.col-xs-6: a(href="http://j.mp/hackfepz1")
-            h4 第一場 總體政策
-            p(ng-switch="::Meeting.isDue('2014/7/19 00:00:00')")
-              span.glyphicon.glyphicon-pencil.hidden-xs
-              | 
-              | 提問截止：
-              span(ng-switch-when="false") 7/19 0:00
-              span.label.label-info(ng-switch-when="true" title="7/19 0:00") 已截止
-
-            p(ng-switch="::Meeting.isDue('2014/7/21 18:30:00')")
-              span.glyphicon.glyphicon-calendar.hidden-xs
-              | 
-              | 舉辦時間：
-              span(ng-switch-when="false") 7/21 18:30
-              span.label.label-info(ng-switch-when="true") 已舉辦
-
-          .col-md-3.col-xs-6: a(href="http://j.mp/hackfepz2")
-            h4 第二場 醫療問題
-
-            p(ng-switch="::Meeting.isDue('2014/7/22 00:00:00')")
-              span.glyphicon.glyphicon-pencil.hidden-xs
-              | 
-              | 提問截止：
-              span(ng-switch-when="false") 7/22 0:00
-              span.label.label-info(ng-switch-when="true" title="7/22 0:00") 已截止
-
-            p(ng-switch="::Meeting.isDue('2014/7/24 18:30:00')")
-              span.glyphicon.glyphicon-calendar.hidden-xs
-              | 
-              | 舉辦時間：
-              span(ng-switch-when="false") 7/24 18:30
-              span.label.label-info(ng-switch-when="true") 已舉辦
-
-          .col-md-3.col-xs-6: a(href="http://j.mp/hackfepz3")
-            h4 第三場 農業問題
-
-            p(ng-switch="::Meeting.isDue('2014/7/29 00:00:00')")
-              span.glyphicon.glyphicon-pencil.hidden-xs
-              | 
-              | 提問截止：
-              span(ng-switch-when="false") 7/29 0:00
-              span.label.label-info(ng-switch-when="true" title="7/29 0:00") 已截止
-
-            p(ng-switch="::Meeting.isDue('2014/7/31 18:30:00')")
-              span.glyphicon.glyphicon-calendar.hidden-xs
-              | 
-              | 舉辦時間：
-              span(ng-switch-when="false") 7/31 18:30
-              span.label.label-info(ng-switch-when="true") 已舉辦
-
-          .col-md-3.col-xs-6: a(href="http://j.mp/hackfepz4")
-            h4 第四場 教育問題
-
-            p(ng-switch="::Meeting.isDue('2014/8/2 00:00:00')")
-              span.glyphicon.glyphicon-pencil.hidden-xs
-              | 
-              | 提問截止：
-              span(ng-switch-when="false") 8/2 0:00
-              span.label.label-info(ng-switch-when="true" title="8/2 0:00") 已截止
-
-            p(ng-switch="::Meeting.isDue('2014/8/4 18:30:00')")
-              span.glyphicon.glyphicon-calendar.hidden-xs
-              | 
-              | 舉辦時間：
-              span(ng-switch-when="false") 8/4 18:30
-              span.label.label-info(ng-switch-when="true") 已舉辦
 
     div.container(ng-click="App.State.titlebar='title'")
       main#main
         div.main-loading.alert.alert-info.text-center(ng-hide="::App.data") Loading
 
-        .row.l-row.scroll-anchor-container(ng-repeat="row in ::App.data.perspectives" ng-cloak)
+        section.scroll-anchor-container(ng-repeat="row in ::App.data.perspectives" ng-cloak)
           a.scroll-anchor(id="{{::row.title}}" vu-spy="row.title")
-          .row-center.col-sm-2.col-sm-push-5.col-xs-12.text-center
-            h2
-              span(ng-bind-html="::row.title.split('&#33287;')[0]")
-              span.ampersand &amp;
-              span(ng-bind-html="::row.title.split('&#33287;')[1]")
+          .row.col-xs-12
+            h2(ng-bind-html="::row.title")
 
-          .row-left.col-sm-5.col-sm-pull-2.col-xs-6(ng-switch="::row.positions[0].length")
-            div(ng-switch-default)
-              ul
-                li(ng-repeat="argument in ::row.positions[0]" vu-track="{perspective: row.title, position: 0, content: argument.content}")
-                  div(vu-compile tmpl="::argument.content")
-                  div.ref(vu-compile tmpl="::argument.ref")
-              p.add-more: a(ng-href="{{App.EDIT_URL}}" ng-click="App.openEditModal($event)" vu-track="{label: 'item.edit', perspective: row.title, position: 0}")
-                span.glyphicon.glyphicon-pencil
-                | 我要補充……
-            div(ng-switch-when="0"): .column-empty(ng-include="'public/templates/empty.html'" vu-track="{label: 'item.edit', perspective: row.title, position: 0}")
-
-          .row-right.col-sm-5.col-xs-6(ng-switch="::row.positions[1].length")
-            div(ng-switch-default)
-              ul
-                li(ng-repeat="argument in ::row.positions[1]" vu-track="{perspective: row.title, position: 1, content: argument.content}")
-                  div(vu-compile tmpl="::argument.content")
-                  div.ref(vu-compile tmpl="::argument.ref")
-              p.add-more: a(ng-href="{{App.EDIT_URL}}" ng-click="App.openEditModal($event)" vu-track="{label: 'item.edit', perspective: row.title, position: 1}")
-                span.glyphicon.glyphicon-pencil
-                | 我要補充……
-            div(ng-switch-when="0"): .column-empty(ng-include="'public/templates/empty.html'" vu-track="{label: 'item.edit', perspective: row.title, position: 1}")
+          .row.l-row
+            .col-xs-1.l-col(
+              ng-repeat="positionArgs in ::row.positions"
+              ng-switch="::positionArgs.length"
+              ng-style="{width: 100/row.positions.length+'%'}")
+              div(ng-switch-default)
+                h3(ng-bind-html="::App.data.positionTitle[$index]")
+                ul
+                  li(ng-repeat="argument in ::positionArgs" vu-track="{perspective: row.title, position: 0, content: argument.content}")
+                    div(vu-compile tmpl="::argument.content")
+                    div.ref(vu-compile tmpl="::argument.ref")
+                p.add-more: a(ng-href="{{App.EDIT_URL}}" ng-click="App.openEditModal($event)" vu-track="{label: 'item.edit', perspective: row.title, position: 0}")
+                  span.glyphicon.glyphicon-pencil
+                  | 我要補充……
+              div(ng-switch-when="0"): .column-empty(ng-include="'public/templates/empty.html'" vu-track="{label: 'item.edit', perspective: row.title, position: 0}")
 
       #edit.row: .col-lg-4.col-lg-offset-4.col-xs-8.col-xs-offset-2
         a.btn.btn-primary.btn-lg.btn-block(
