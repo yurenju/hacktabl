@@ -443,6 +443,12 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected]>
 
     # console.log 'DATA', data
     return data
+
+.config <[
+       $sceDelegateProvider
+]> ++ ($sceDelegateProvider) !->
+  $sceDelegateProvider.resourceUrlWhitelist <[self https://docs.google.com/** https://hackpad.com/**]>
+
 #
 # Find comments and return in the following format:
 #
