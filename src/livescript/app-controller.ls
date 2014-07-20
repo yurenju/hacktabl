@@ -4,9 +4,8 @@
 
 angular.module \app.controller, <[app.constant app.service ga]>
 .controller \AppCtrl, <[
-       EDIT_URL  TableData Spy  State  ModalManager
-]> ++ (EDIT_URL, data,     Spy, State, ModalManager)!->
-  @EDIT_URL = EDIT_URL
+       TableData Spy  State  ModalManager  EtherCalcData
+]> ++ (data,     Spy, State, ModalManager, EtherCalcData)!->
 
   data.then (d) ~>
     @data = d
@@ -17,6 +16,8 @@ angular.module \app.controller, <[app.constant app.service ga]>
     evt.prevent-default!
     ModalManager.open \edit
 
+  EtherCalcData.then (data) !~>
+    @EDIT_URL = data.EDIT_URL
 
 .controller \HeaderCtrl, <[
        Spy  State  $scope  $anchorScroll  $location  ModalManager  ga  HtmlDecoder

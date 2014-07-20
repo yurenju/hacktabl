@@ -419,13 +419,30 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected]>
 
 
 .factory \TableData, <[
-       TableParser  CommentParser  $http  DATA_URL
-]> ++ (TableParser, CommentParser, $http, DATA_URL) ->
+       TableParser  $http  EtherCalcData
+]> ++ (TableParser, $http, EtherCalcData) ->
 
   # Return a promise that resolves to parsed table data
-  return $http.get DATA_URL .then (resp) ->
-    return TableParser(resp.data)
+  EtherCalcData.then (data)->
+    $http.get data.DATA_URL
+  .then (resp) ->
+    TableParser(resp.data)
 
+.factory \EtherCalcData, <[
+       $location  $http  $q
+]> ++ ($location, $http, $q) ->
+
+  # console.log \hsh, $location.path!
+  $http.get "https://ethercalc.org#{$location.path!}.csv" .then (csv) ->
+    console.log 'CSV', csv
+    data = {}
+
+    for row in csv.data.split "\n"
+      columns = row.split \,
+      data[columns.0] = columns.1.match(/^"?(.*)"?$/).1 if columns.length >= 2
+
+    # console.log 'DATA', data
+    return data
 #
 # Find comments and return in the following format:
 #
