@@ -18,6 +18,7 @@ angular.module \app.controller, <[app.constant app.service ga]>
 
   EtherCalcData.then (data) !~>
     @EDIT_URL = data.EDIT_URL
+    @TITLE = data.TITLE
 
 .controller \HeaderCtrl, <[
        Spy  State  $scope  $anchorScroll  $location  ModalManager  ga  HtmlDecoder
@@ -83,3 +84,10 @@ angular.module \app.controller, <[app.constant app.service ga]>
 .controller \MeetingCtrl, !->
   @is-due = (date-string) ->
     new Date > new Date(date-string)
+
+.controller \HeadCtrl, <[
+       EtherCalcData
+]> ++ (EtherCalcData) !->
+  @title = 'Hacktabl 協作比較表格'
+  EtherCalcData.then (data) !~>
+    @title = data.TITLE

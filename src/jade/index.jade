@@ -3,7 +3,7 @@ html(ng-app="app")
   head(ng-controller="HeadCtrl as Head")
     meta(charset="utf-8")
     meta(name="viewport" content="width=device-width, initial-scale=1")
-    title {{Head.title || 'Hacktabl 協作表格共筆'}}
+    title(ng-bind="Head.title")
     != stylesheetLinkTag('styles', {assetsPath: 'public/stylesheets/'})
 
   body(ng-controller="AppCtrl as App")
@@ -63,8 +63,9 @@ html(ng-app="app")
                 span.glyphicon.glyphicon-pencil
 
     //- The scroll spy placeholder for the page title
-    div.scroll-anchor-container
-      a.scroll-anchor(vu-spy="'自經比一比'" id="自經比一比")
+    //- Should load only after App.TITLE is ready
+    div.scroll-anchor-container(ng-if="App.TITLE")
+      a.scroll-anchor(vu-spy="App.TITLE" id="{{App.TITLE}}")
 
     div.container(ng-click="App.State.titlebar='title'")
       main#main
@@ -90,6 +91,7 @@ html(ng-app="app")
                   span.glyphicon.glyphicon-pencil
                   | 我要補充……
               div(ng-switch-when="0"): .column-empty(ng-include="'public/templates/empty.html'" vu-track="{label: 'item.edit', perspective: row.title, position: 0}")
+
 
       #edit.row: .col-lg-4.col-lg-offset-4.col-xs-8.col-xs-offset-2
         a.btn.btn-primary.btn-lg.btn-block(
