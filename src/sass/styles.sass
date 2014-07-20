@@ -70,8 +70,9 @@ body
     $toolbox-padding: ($h - $toolbox-btn-height) / 2
     .toolbox
       padding-top: $toolbox-padding
-      button
+      .btn
         height: $toolbox-btn-height
+        line-height: $toolbox-btn-height
 
     .toolbox-btn-group
       margin-left: $toolbox-padding
@@ -135,7 +136,7 @@ body
     .toolbox-btn-group // Overriding bootstrap btn-group
       float: none
       display: inline-block
-    button
+    .btn // Overriding bootstrap btn
       border: 0
       background: $gray
       color: $brand-primary
