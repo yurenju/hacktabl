@@ -197,37 +197,6 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
 
 #   return deferred.promise
 
-# Saves / loads the preference from localStorage.
-# The user preference include email and experiment settings
-#
-.service \UserPreference, class UserPreference
-  # localStorage object reference, populated in constructor
-  storage = null
-
-  @$inject = <[
-    $window
-  ]>
-  ( $window ) ->
-    # Populate the storage reference
-    storage := $window.localStorage
-
-    # Set user if we can send data to google analytics
-    if @can-send-data!
-      uid = storage.userId = storage.userId || "" + Math.random()
-      ga \set, \dimension1, uid
-
-  subscribe: (email) !->
-    storage.email := email
-
-  get-email: ->
-    storage.email
-
-  backout: !->
-    storage.isBackedout := true
-
-  can-send-data: ->
-    !storage.isBackedout
-
 #
 # Decodes HTML entities
 #

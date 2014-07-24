@@ -9,5 +9,3 @@ angular.module 'app', <[
   app.template
   app.directive
 ]>
-# Wake up user preference and sets user-id
-.run <[UserPreference]> ++ !->
