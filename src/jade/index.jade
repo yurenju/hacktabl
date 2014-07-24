@@ -96,7 +96,7 @@ html(ng-app="app")
                   | 我要補充……
               div(ng-switch-when="0"): .column-empty(ng-include="'public/templates/empty.html'" vu-track="{label: 'item.edit', perspective: row.title, position: 0}")
 
-      main#main(ng-switch-when="TABLE")
+      main#main.l-table(ng-switch-when="TABLE")
 
         //- Header row
         .row.l-row
