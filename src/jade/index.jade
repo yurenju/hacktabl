@@ -67,13 +67,10 @@ html(ng-app="app")
     div.scroll-anchor-container(ng-if="App.TITLE")
       a.scroll-anchor(vu-spy="App.TITLE" id="{{App.TITLE}}")
 
-    div.container(
-      ng-click="App.State.titlebar='title'"
+    div(ng-click="App.State.titlebar='title'"
       ng-switch="App.LAYOUT_TYPE")
 
-      div.main-loading.alert.alert-info.text-center(ng-hide="::App.data") Loading
-
-      main#main(ng-switch-default)
+      main#main.container(ng-switch-default)
 
         section.scroll-anchor-container(ng-repeat="row in ::App.data.perspectives" ng-cloak)
           a.scroll-anchor(id="{{::row.title}}" vu-spy="row.title")
@@ -99,7 +96,7 @@ html(ng-app="app")
       main#main.l-table(ng-switch-when="TABLE")
 
         //- Header row
-        .row.l-row
+        header.row-position-title: .container: .row.l-row
           .col-xs-1.l-col(ng-style="{width: 100/(App.data.positionTitle.length+1)+'%'}")
             h4 {{::App.TITLE}}
 
@@ -107,7 +104,7 @@ html(ng-app="app")
             h4 {{::title}}
 
         //- Content rows
-        section.scroll-anchor-container(
+        section.container.scroll-anchor-container(
           ng-cloak
           ng-repeat="row in ::App.data.perspectives"
           ng-controller="TableRowCtrl as TableRow")
@@ -115,7 +112,7 @@ html(ng-app="app")
           a.scroll-anchor(id="{{::row.title}}" vu-spy="row.title")
 
           .row.l-row
-            .col-xs-1.l-col(
+            .col-xs-1.l-col.col-perspective-title(
               ng-style="{width: 100/(row.positions.length+1)+'%'}"
               ng-click="TableRow.toggleExpand()")
 
@@ -142,6 +139,8 @@ html(ng-app="app")
 
               div(ng-switch-when="0"): .column-empty(ng-include="'public/templates/empty.html'" vu-track="{label: 'item.edit', perspective: row.title, position: 0}")
 
+
+      div.container: div.main-loading.alert.alert-info.text-center(ng-hide="::App.data") Loading
 
       #edit.row: .col-lg-4.col-lg-offset-4.col-xs-8.col-xs-offset-2
         a.btn.btn-primary.btn-lg.btn-block(
