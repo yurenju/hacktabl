@@ -64,7 +64,7 @@ html(ng-app="app")
 
     //- The scroll spy placeholder for the page title
     //- Should load only after App.TITLE is ready
-    div.scroll-anchor-container(ng-if="App.TITLE")
+    div.scroll-anchor-container(ng-if="App.TITLE" ng-class="{'is-table': App.LAYOUT_TYPE==='TABLE'}")
       a.scroll-anchor(vu-spy="App.TITLE" id="{{App.TITLE}}")
 
     div(ng-click="App.State.titlebar='title'"
@@ -128,9 +128,7 @@ html(ng-app="app")
               ng-style="{width: 100/(row.positions.length+1)+'%'}")
 
               div(ng-switch-default)
-                h2(ng-click="TableRow.toggleExpand()")
-                  small(ng-bind-html="::App.data.positionTitle[$index].slice(0,2) + '： '")
-                  span(ng-bind-html="::positions.summary")
+                h2(ng-click="TableRow.toggleExpand()" ng-bind-html="::positions.summary")
 
                 div(ng-show="TableRow.isExpanded")
                   ul
