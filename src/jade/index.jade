@@ -107,11 +107,18 @@ html(ng-app="app")
             h4 {{::title}}
 
         //- Content rows
-        section.scroll-anchor-container(ng-repeat="row in ::App.data.perspectives" ng-cloak)
+        section.scroll-anchor-container(
+          ng-cloak
+          ng-repeat="row in ::App.data.perspectives"
+          ng-controller="TableRowCtrl as TableRow")
+
           a.scroll-anchor(id="{{::row.title}}" vu-spy="row.title")
 
-          .row.l-row(ng-init="{expanded:false}" ng-click="expanded=true")
-            .col-xs-1.l-col(ng-style="{width: 100/(row.positions.length+1)+'%'}")
+          .row.l-row
+            .col-xs-1.l-col(
+              ng-style="{width: 100/(row.positions.length+1)+'%'}"
+              ng-click="TableRow.toggleExpand()")
+
               h2(ng-bind-html="::row.title")
 
             .col-xs-1.l-col(
@@ -120,11 +127,11 @@ html(ng-app="app")
               ng-style="{width: 100/(row.positions.length+1)+'%'}")
 
               div(ng-switch-default)
-                h2
+                h2(ng-click="TableRow.toggleExpand()")
                   small(ng-bind-html="::App.data.positionTitle[$index].slice(0,2) + '： '")
                   span(ng-bind-html="::positions.summary")
 
-                div(ng-show="expanded")
+                div(ng-show="TableRow.isExpanded")
                   ul
                     li(ng-repeat="argument in ::positions.debateArguments" vu-track="{perspective: row.title, position: 0, content: argument.content}")
                       div(vu-compile tmpl="::argument.content")

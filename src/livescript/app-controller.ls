@@ -76,3 +76,8 @@ angular.module \app.controller, <[app.constant app.service ga app.router]>
   @title = 'Hacktabl 協作比較表格'
   EtherCalcData.then (data) !~>
     @title = data.TITLE
+
+.controller \TableRowCtrl, !->
+  @is-expanded = false
+  @toggle-expand = !~>
+    @is-expanded = !@is-expanded
