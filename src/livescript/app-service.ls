@@ -372,8 +372,6 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
         lis = (td.match LI_EXTRACTOR) || []
         summary-matches = td.match SUMMARY_EXTRACTOR
         summary = cleanup-tags(if summary-matches then summary-matches.1 else '')
-        console.log "SUMMARY", summary
-
 
         debate-arguments = for li in lis
           argument = ItemSplitter cleanup-li(li)
