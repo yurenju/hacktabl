@@ -67,9 +67,13 @@ html(ng-app="app")
     div.scroll-anchor-container(ng-if="App.TITLE")
       a.scroll-anchor(vu-spy="App.TITLE" id="{{App.TITLE}}")
 
-    div.container(ng-click="App.State.titlebar='title'")
-      main#main
-        div.main-loading.alert.alert-info.text-center(ng-hide="::App.data") Loading
+    div.container(
+      ng-click="App.State.titlebar='title'"
+      ng-switch="App.LAYOUT_TYPE")
+
+      div.main-loading.alert.alert-info.text-center(ng-hide="::App.data") Loading
+
+      main#main(ng-switch-default)
 
         section.scroll-anchor-container(ng-repeat="row in ::App.data.perspectives" ng-cloak)
           a.scroll-anchor(id="{{::row.title}}" vu-spy="row.title")
@@ -78,18 +82,57 @@ html(ng-app="app")
 
           .row.l-row
             .col-xs-1.l-col(
-              ng-repeat="positionArgs in ::row.positions"
-              ng-switch="::positionArgs.length"
+              ng-repeat="positions in ::row.positions"
+              ng-switch="::positions.length"
               ng-style="{width: 100/row.positions.length+'%'}")
               h3(ng-bind-html="::App.data.positionTitle[$index]")
               div(ng-switch-default)
                 ul
-                  li(ng-repeat="argument in ::positionArgs" vu-track="{perspective: row.title, position: 0, content: argument.content}")
+                  li(ng-repeat="argument in ::positions.debateArguments" vu-track="{perspective: row.title, position: 0, content: argument.content}")
                     div(vu-compile tmpl="::argument.content")
                     div.ref(vu-compile tmpl="::argument.ref")
                 p.add-more: a(ng-href="{{App.EDIT_URL}}" vu-track="{label: 'item.edit', perspective: row.title, position: 0}")
                   span.glyphicon.glyphicon-pencil
                   | 我要補充……
+              div(ng-switch-when="0"): .column-empty(ng-include="'public/templates/empty.html'" vu-track="{label: 'item.edit', perspective: row.title, position: 0}")
+
+      main#main(ng-switch-when="TABLE")
+
+        //- Header row
+        .row.l-row
+          .col-xs-1.l-col(ng-style="{width: 100/(App.data.positionTitle.length+1)+'%'}")
+            h4 {{::App.TITLE}}
+
+          .col-xs-1.l-col(ng-style="{width: 100/(App.data.positionTitle.length+1)+'%'}" ng-repeat="title in ::App.data.positionTitle")
+            h4 {{::title}}
+
+        //- Content rows
+        section.scroll-anchor-container(ng-repeat="row in ::App.data.perspectives" ng-cloak)
+          a.scroll-anchor(id="{{::row.title}}" vu-spy="row.title")
+
+          .row.l-row(ng-init="{expanded:false}" ng-click="expanded=true")
+            .col-xs-1.l-col(ng-style="{width: 100/(row.positions.length+1)+'%'}")
+              h2(ng-bind-html="::row.title")
+
+            .col-xs-1.l-col(
+              ng-repeat="positions in ::row.positions"
+              ng-switch="::positions.length"
+              ng-style="{width: 100/(row.positions.length+1)+'%'}")
+
+              div(ng-switch-default)
+                h2
+                  small(ng-bind-html="::App.data.positionTitle[$index].slice(0,2) + '： '")
+                  span(ng-bind-html="::positions.summary")
+
+                div(ng-show="expanded")
+                  ul
+                    li(ng-repeat="argument in ::positions.debateArguments" vu-track="{perspective: row.title, position: 0, content: argument.content}")
+                      div(vu-compile tmpl="::argument.content")
+                      div.ref(vu-compile tmpl="::argument.ref")
+                  p.add-more: a(ng-href="{{App.EDIT_URL}}" vu-track="{label: 'item.edit', perspective: row.title, position: 0}")
+                    span.glyphicon.glyphicon-pencil
+                    | 我要補充……
+
               div(ng-switch-when="0"): .column-empty(ng-include="'public/templates/empty.html'" vu-track="{label: 'item.edit', perspective: row.title, position: 0}")
 
 

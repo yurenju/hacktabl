@@ -20,6 +20,7 @@ angular.module \app.controller, <[app.constant app.service ga app.router]>
   EtherCalcData.then (data) !~>
     @EDIT_URL = data.EDIT_URL
     @TITLE = data.TITLE
+    @LAYOUT_TYPE = data.TYPE
 
 .controller \HeaderCtrl, <[
        Spy  State  $scope  $anchorScroll  $location  $modal  ga  HtmlDecoder
