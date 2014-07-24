@@ -313,13 +313,13 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
 #
 #
 .factory \TableParser, <[
-       ItemSplitter  HighlightParser  $sanitize  CommentParser
-]> ++ (ItemSplitter, HighlightParser, $sanitize, CommentParser)->
+       ItemSplitter  HighlightParser  $sanitize  CommentParser  HtmlDecoder
+]> ++ (ItemSplitter, HighlightParser, $sanitize, CommentParser, HtmlDecoder)->
 
   const TR_EXTRACTOR = /<tr[^>]*>(.+?)<\/tr>/gim
   const TD_EXTRACTOR = /<td[^>]*>(.*?)<\/td>/gim
   const TAGS = /<\/?[^>]*>/gim
-
+  const SUMMARY_EXTRACTOR = /^<td[^>]*>(.*?)<ul[^>]*>/im # The first non-<li> paragraph is regarded as summary
   const LI_EXTRACTOR = /<li[^>]*>(.+?)<\/li>/gim
   const LI_START = /<li[^>]*>/
   const LI_END = /<\/li>/
@@ -349,7 +349,7 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
     tds = (trs[0].match(TD_EXTRACTOR)?.slice 1) || []
 
     # Each td is a title of position.
-    position-title = [cleanup-tags td for td in tds]
+    position-title = [cleanup-tags HtmlDecoder(td) for td in tds]
 
     # Remove first row
     trs.shift!
@@ -360,7 +360,7 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
       tds = tr.match TD_EXTRACTOR
 
       # First column should be the perspective title
-      title = cleanup-tags tds[0]
+      title = cleanup-tags HtmlDecoder(tds[0])
 
       # Remove first column
       tds.shift!
@@ -368,7 +368,12 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
       # 3 For each td, Scan trough each <li>
       #
       positions = for td in tds
+
         lis = (td.match LI_EXTRACTOR) || []
+        summary-matches = td.match SUMMARY_EXTRACTOR
+        summary = cleanup-tags(if summary-matches then summary-matches.1 else '')
+        console.log "SUMMARY", summary
+
 
         debate-arguments = for li in lis
           argument = ItemSplitter cleanup-li(li)
@@ -378,8 +383,8 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
           # Return the argument for the iteration
           argument
 
-        # Return all arguments of a position for the iteration
-        debate-arguments
+        # Return all arguments & its summary of a position for the iteration
+        {summary, debate-arguments}
 
       # Return the perspective object for this iteration of the for-loop
       {title, positions}
