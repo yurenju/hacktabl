@@ -100,7 +100,9 @@ html(ng-app="app")
           .col-xs-1.l-col(ng-style="{width: 100/(App.data.positionTitle.length+1)+'%'}")
             h4 面相 ＼ 立場
 
-          .col-xs-1.l-col(ng-style="{width: 100/(App.data.positionTitle.length+1)+'%'}" ng-repeat="title in ::App.data.positionTitle")
+          .col-xs-1.l-col(
+            ng-style="{width: 100/(App.data.positionTitle.length+1)+'%'}"
+            ng-repeat="title in ::App.data.positionTitle")
             h4 {{::title}}
 
         //- Content rows
@@ -112,15 +114,17 @@ html(ng-app="app")
           a.scroll-anchor(id="{{::row.title}}" vu-spy="row.title")
 
           .row.l-row
+            //- Perspective title
             .col-xs-1.l-col.col-perspective-title(
               ng-style="{width: 100/(row.positions.length+1)+'%'}"
               ng-click="TableRow.toggleExpand()")
 
               h2(ng-bind-html="::row.title")
 
+            //- Arguments of the perspective
             .col-xs-1.l-col(
               ng-repeat="positions in ::row.positions"
-              ng-switch="::positions.length"
+              ng-switch="::positions.debateArguments.length"
               ng-style="{width: 100/(row.positions.length+1)+'%'}")
 
               div(ng-switch-default)
