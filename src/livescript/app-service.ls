@@ -414,7 +414,11 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
       columns = row.split \,
       data[columns.0] = columns.1.match(/^"?(.*)"?$/).1 if columns.length >= 2
 
-    # console.log 'DATA', data
+    # populate EDIT_URL and DATA_URL when DOC_ID is given
+    if data.DOC_ID
+      data.EDIT_URL ||= "https://docs.google.com/document/d/#{data.DOC_ID}/edit"
+      data.DATA_URL ||= "https://docs.google.com/feeds/download/documents/export/Export?id=#{data.DOC_ID}&exportFormat=html"
+
     return data
 
 .config <[
