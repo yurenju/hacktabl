@@ -216,8 +216,8 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
 # Attach comment to highlighted content.
 #
 .factory \HighlightParser, <[
-       $interpolate  CommentParser
-]> ++ ($interpolate, CommentParser) ->
+       $interpolate  CommentParser  EtherCalcData
+]> ++ ($interpolate, CommentParser, EtherCalcData) ->
 
   const COMMENT = /<span[^>]*>([^<]+)<\/span>((?:<sup>.+?<\/sup>)+)/gim
   const EXTRACT_ID = /#cmnt(\d+)/g
@@ -238,9 +238,10 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
        comment-append-to-body="true" ng-class=\'{{classes}}\'>{{content}}</{{tagName}}>
       ') options
 
-  parser = (doc, comments = {}) ->
+  parser = (doc, comments = {}, options = {}) ->
+
     # Construct the comments
-    return doc.replace COMMENT, (m, content, sups) ->
+    result = doc.replace COMMENT, (m, content, sups) ->
       # sups should look like:
       # <sup>....</sup><sup>....</sup><sup>....</sup>...
       #
@@ -261,11 +262,21 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
         tag-name: SPAN_PLACEHOLDER_STR
         classes: classes
 
-    .replace SPAN_START, ''
-    .replace SPAN_END, ''
-    .replace CLASS, ''
-    .trim!
-    .replace SPAN_PLACEHOLDER, 'span'
+    # Dealing with span if not going to have highlight
+    #
+    unless options.has-highlight
+      result .= replace SPAN_START, ''
+        .replace SPAN_END, ''
+        .replace CLASS, ''
+    else
+      result .= replace CLASS, ' class="is-highlighted"'
+
+    # Lastly, do trimming and change the comment span back
+    #
+    result .= trim!
+      .replace SPAN_PLACEHOLDER, 'span'
+
+    return result
 
 
   parser.GENERATE_COMMENT = GENERATE_COMMENT
@@ -334,7 +345,7 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
     matched-string.replace LI_START, '' .replace LI_END, '' .trim!
 
   # Returned function
-  (doc) ->
+  (doc, parser-options = {}) ->
 
     # 0. Get the comments
     #
@@ -375,8 +386,8 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
 
         debate-arguments = for li in lis
           argument = ItemSplitter cleanup-li(li)
-          argument.content = HighlightParser $sanitize(argument.content), comments
-          argument.ref = HighlightParser $sanitize(argument.ref), comments
+          argument.content = HighlightParser $sanitize(argument.content), comments, parser-options
+          argument.ref = HighlightParser $sanitize(argument.ref), comments, parser-options
 
           # Return the argument for the iteration
           argument
@@ -395,11 +406,18 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
        TableParser  $http  EtherCalcData
 ]> ++ (TableParser, $http, EtherCalcData) ->
 
+  parser-options = {}
   # Return a promise that resolves to parsed table data
   EtherCalcData.then (data)->
+
+    # Populate the parser-options from ethercalc
+    parser-options :=
+      has-highlight: data.HIGHLIGHT
+
+    # return the promise of table data
     $http.get data.DATA_URL
   .then (resp) ->
-    TableParser(resp.data)
+    TableParser resp.data, parser-options
 
 .factory \EtherCalcData, <[
        ETHERPAD_ID  $http  $q
