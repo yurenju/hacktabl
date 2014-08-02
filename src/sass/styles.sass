@@ -261,7 +261,10 @@ body
     cursor: pointer
 
   h2
-    margin: $line-height 0
+    margin: $line-height 
+    &:hover 
+      .arrow
+        color: lighten(#680148, 18%)
 
   .col-perspective-title // Title of perspective
     font-family: $font-family-serif
@@ -293,3 +296,8 @@ body
 #edit
   margin-top: $line-height
   margin-bottom: $line-height
+
+.arrow
+  font-size: 20px
+  margin-left: 10px
+

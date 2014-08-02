@@ -19,7 +19,7 @@ html(ng-app="app")
               //- The title that reflects the currently spied perspective title
               span.title(
                 ng-repeat="title in Header.Spy.spies track by $index"
-                ng-class="{'is-prev': Header.Spy.current > $index, 'is-next': Header.Spy.current < $index}" ng-bind-html="::title")
+                ng-class="{'is-prev': Headader.Spy.current > $index, 'is-next': Header.Spy.current < $index}" ng-bind-html="::title")
           aside.titlebar.toolbox(ng-switch-when="toolbox")
             .toolbox-btn-group.btn-group(dropdown)
 
@@ -128,8 +128,10 @@ html(ng-app="app")
               ng-style="{width: 100/(row.positions.length+1)+'%'}")
 
               div(ng-switch-default)
-                h2(ng-click="TableRow.toggleExpand()" ng-bind-html="::positions.summary")
-
+                h2(ng-click="TableRow.toggleExpand()")
+                  span(ng-bind-html="::positions.summary")                  
+                  span.glyphicon.glyphicon-chevron-down.arrow(ng-hide="TableRow.isExpanded")
+                  span.glyphicon.glyphicon-chevron-up.arrow(ng-show="TableRow.isExpanded")
                 div(ng-show="TableRow.isExpanded")
                   ul
                     li(ng-repeat="argument in ::positions.debateArguments" vu-track="{perspective: row.title, position: 0, content: argument.content}")
