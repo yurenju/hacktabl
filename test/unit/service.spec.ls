@@ -19,6 +19,14 @@ before-each module('app.service')
 
 describe \HighlightParser (...) !->
 
+  before-each !->
+    ($provide) <-! module _
+    $provide.value \StyleData, do
+      c14:
+        underline: true
+        italic: false
+        bold: false
+
   it 'should be a function', inject (HighlightParser) !->
     expect(typeof HighlightParser).toBe 'function'
 
@@ -108,7 +116,7 @@ describe \HighlightParser (...) !->
 
   it 'should keep the <span>s if has-highlight option is provided', inject (HighlightParser) !->
     input    = '<span class="c14">示範區面對的「外國」，依國內法制，不包含中國。示範區對中國大陸另有限制。</span>'
-    expected = '<span class="is-highlighted">示範區面對的「外國」，依國內法制，不包含中國。示範區對中國大陸另有限制。</span>'
+    expected = '<span ng-class=\'{"underline":true,"italic":false,"bold":false}\'>示範區面對的「外國」，依國內法制，不包含中國。示範區對中國大陸另有限制。</span>'
 
     expect HighlightParser(input, {}, {has-highlight: true}) .toEqual expected
 

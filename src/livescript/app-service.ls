@@ -216,8 +216,8 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
 # Attach comment to highlighted content.
 #
 .factory \HighlightParser, <[
-       $interpolate  CommentParser  EtherCalcData
-]> ++ ($interpolate, CommentParser, EtherCalcData) ->
+       $interpolate  CommentParser  EtherCalcData  StyleData
+]> ++ ($interpolate, CommentParser, EtherCalcData, StyleData) ->
 
   const COMMENT = /<span[^>]*>([^<]+)<\/span>((?:<sup>.+?<\/sup>)+)/gim
   const EXTRACT_ID = /#cmnt(\d+)/g
@@ -226,7 +226,7 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
   const SPAN_END   = /<\/span>/gim
   const SPAN_PLACEHOLDER_STR = 'xx-span-xx'
   const SPAN_PLACEHOLDER = new RegExp SPAN_PLACEHOLDER_STR, 'gm'
-  const CLASS      = /\s+class="[^"]+"/gim
+  const CLASS      = /\s+class="([^"]+)"/gim
 
   const GENERATE_COMMENT = (^^options) ->
     options.placement = '{{placement}}' # By-pass for the comment directive
@@ -264,12 +264,20 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
 
     # Dealing with span if not going to have highlight
     #
+    console.log \HIGHLIGHT, options.has-highlight
     unless options.has-highlight
       result .= replace SPAN_START, ''
         .replace SPAN_END, ''
         .replace CLASS, ''
     else
-      result .= replace CLASS, ' class="is-highlighted"'
+      result .= replace CLASS, (matched, class-str) ->
+        merged-styles = {}
+        for style in class-str.split ' '
+          for own prop, val of StyleData[style]
+            merged-styles[prop] ||= val
+            # console.log "CLASSES", class-str.split ' '
+            # console.log "STYLEDATA", StyleData
+        return " ng-class='#{JSON.stringify merged-styles}'"
 
     # Lastly, do trimming and change the comment span back
     #
@@ -403,8 +411,8 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
 
 
 .factory \TableData, <[
-       TableParser  $http  EtherCalcData
-]> ++ (TableParser, $http, EtherCalcData) ->
+       TableParser  $http  EtherCalcData  StyleData
+]> ++ (TableParser, $http, EtherCalcData, StyleData) ->
 
   parser-options = {}
   # Return a promise that resolves to parsed table data
@@ -417,6 +425,7 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
     # return the promise of table data
     $http.get data.DATA_URL
   .then (resp) ->
+    StyleData.$parse resp.data
     TableParser resp.data, parser-options
 
 .factory \EtherCalcData, <[
