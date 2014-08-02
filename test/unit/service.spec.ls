@@ -18,92 +18,107 @@ before-each module('app.service')
 #       expect data.perspectives .toBeDefined!
 
 describe \HighlightParser (...) !->
-  it 'should be a function', inject (HighlightParser) !->
-    expect(typeof HighlightParser).toBe 'function'
 
-  it 'should return a string, given a string', inject (HighlightParser) !->
-    expect(typeof HighlightParser('arbitary string')).toBe 'string'
+  describe "(no highlight)" (...) !->
 
-  it 'should strip useless <span>s', inject (HighlightParser) !->
-    input    = '<span class="c14">示範區面對的「外國」，依國內法制，不包含中國。示範區對中國大陸另有限制。</span>'
-    expected = '示範區面對的「外國」，依國內法制，不包含中國。示範區對中國大陸另有限制。'
+    before-each !->
+      ($provide) <-! module _
 
-    expect HighlightParser(input) .toEqual expected
+      # Mocking EtherCalcData service
+      $provide.factory \EtherCalcData, <[
+             $q
+      ]> ++ ($q) ->
+        deferred = $q.defer!
+        # Directly resolve with empty object
+        deferred.resolve {}
+        return deferred.promise
 
-  it 'should parse one comment', inject (HighlightParser) !->
-    input    = '<span class="c14">去年的法令修改與鬆綁，必須要自經區條例通過後才會生效</span><sup><a href="#cmnt6" name="cmnt_ref6">[f]</a></sup><span class="c14">，並且受立法院監看；若自經區沒過，那法規鬆綁就不會生效。</span>'
-    comment  = HighlightParser.GENERATE_COMMENT do
-      content: '去年的法令修改與鬆綁，必須要自經區條例通過後才會生效'
-      id: '6'
-    expected = "#{comment}，並且受立法院監看；若自經區沒過，那法規鬆綁就不會生效。"
+    it 'should be a function', inject (HighlightParser) !->
+      expect(typeof HighlightParser).toBe 'function'
 
-    expect HighlightParser(input) .toEqual expected
+    it 'should return a string, given a string', inject (HighlightParser) !->
+      expect(typeof HighlightParser('arbitary string')).toBe 'string'
 
-  it 'should parse comments and its replies', inject (HighlightParser) !->
-    input    = '<span class="c5">去年的法令修改與鬆綁，必須要自經區條例通過後才會生效</span><sup><a href="#cmnt6" name="cmnt_ref6">[f]</a></sup><sup><a href="#cmnt7" name="cmnt_ref7">[g]</a></sup><sup><a href="#cmnt8" name="cmnt_ref8">[h]</a></sup><span class="c5">，並且受立法院監看；若自經區沒過，那法規鬆綁就不會生效。</span>'
-    comment  = HighlightParser.GENERATE_COMMENT do
-      content: '去年的法令修改與鬆綁，必須要自經區條例通過後才會生效'
-      id: '6,7,8'
-    expected = "#{comment}，並且受立法院監看；若自經區沒過，那法規鬆綁就不會生效。"
+    it 'should strip useless <span>s', inject (HighlightParser) !->
+      input    = '<span class="c14">示範區面對的「外國」，依國內法制，不包含中國。示範區對中國大陸另有限制。</span>'
+      expected = '示範區面對的「外國」，依國內法制，不包含中國。示範區對中國大陸另有限制。'
 
-    expect HighlightParser(input) .toEqual expected
+      expect HighlightParser(input) .toEqual expected
 
-  it 'should parse multiple separated comments', inject (HighlightParser) !->
-    input    = '<span class="c4">2012年政府民調顯示</span><sup><a href="#cmnt4" name="cmnt_ref4">[d]</a></sup><span class="c4">，超過</span><span class="c4">&nbsp;6 成民意</span><sup><a href="#cmnt5" name="cmnt_ref5">[e]</a></sup><span class="c4">支持台灣</span><sup><a href="#cmnt6" name="cmnt_ref6">[f]</a></sup><span class="c4">加入區域經濟整合，包含 TPP。</span>'
-    content1 = HighlightParser.GENERATE_COMMENT do
-      content: '2012年政府民調顯示'
-      id: 4
-    content2 = HighlightParser.GENERATE_COMMENT do
-      content: '&nbsp;6 成民意'
-      id: 5
-    content3 = HighlightParser.GENERATE_COMMENT do
-      content: '支持台灣'
-      id: 6
+    it 'should parse one comment', inject (HighlightParser) !->
+      input    = '<span class="c14">去年的法令修改與鬆綁，必須要自經區條例通過後才會生效</span><sup><a href="#cmnt6" name="cmnt_ref6">[f]</a></sup><span class="c14">，並且受立法院監看；若自經區沒過，那法規鬆綁就不會生效。</span>'
+      comment  = HighlightParser.GENERATE_COMMENT do
+        content: '去年的法令修改與鬆綁，必須要自經區條例通過後才會生效'
+        id: '6'
+      expected = "#{comment}，並且受立法院監看；若自經區沒過，那法規鬆綁就不會生效。"
 
-    expected = "#{content1}，超過#{content2}#{content3}加入區域經濟整合，包含 TPP。"
+      expect HighlightParser(input) .toEqual expected
 
-    expect HighlightParser(input) .toEqual expected
+    it 'should parse comments and its replies', inject (HighlightParser) !->
+      input    = '<span class="c5">去年的法令修改與鬆綁，必須要自經區條例通過後才會生效</span><sup><a href="#cmnt6" name="cmnt_ref6">[f]</a></sup><sup><a href="#cmnt7" name="cmnt_ref7">[g]</a></sup><sup><a href="#cmnt8" name="cmnt_ref8">[h]</a></sup><span class="c5">，並且受立法院監看；若自經區沒過，那法規鬆綁就不會生效。</span>'
+      comment  = HighlightParser.GENERATE_COMMENT do
+        content: '去年的法令修改與鬆綁，必須要自經區條例通過後才會生效'
+        id: '6,7,8'
+      expected = "#{comment}，並且受立法院監看；若自經區沒過，那法規鬆綁就不會生效。"
 
-  it 'should deal with reference section as well', inject (HighlightParser) !->
-    input = '</span><span class="c4">&#27492;&#21477;&#26159;&#21738;&#35041;&#30475;&#21040;&#30340;&#65292;&#38468;&#36229;&#36899;&#32080;&#30340;&#36899;&#32080;&#12290;&#35519;&#25104; 8pt &#28784;&#33394;&#65292;&#26371;&#35731;&#27491;&#25991;&#27604;&#36611;&#26126;&#39023;&#12290;</span><sup><a href="#cmnt2" name="cmnt_ref2">[b]</a></sup><sup><a href="#cmnt3" name="cmnt_ref3">[c]</a></sup>'
-    content = HighlightParser.GENERATE_COMMENT do
-      content: '&#27492;&#21477;&#26159;&#21738;&#35041;&#30475;&#21040;&#30340;&#65292;&#38468;&#36229;&#36899;&#32080;&#30340;&#36899;&#32080;&#12290;&#35519;&#25104; 8pt &#28784;&#33394;&#65292;&#26371;&#35731;&#27491;&#25991;&#27604;&#36611;&#26126;&#39023;&#12290;'
-      id: '2,3'
+      expect HighlightParser(input) .toEqual expected
 
-    expected = content
+    it 'should parse multiple separated comments', inject (HighlightParser) !->
+      input    = '<span class="c4">2012年政府民調顯示</span><sup><a href="#cmnt4" name="cmnt_ref4">[d]</a></sup><span class="c4">，超過</span><span class="c4">&nbsp;6 成民意</span><sup><a href="#cmnt5" name="cmnt_ref5">[e]</a></sup><span class="c4">支持台灣</span><sup><a href="#cmnt6" name="cmnt_ref6">[f]</a></sup><span class="c4">加入區域經濟整合，包含 TPP。</span>'
+      content1 = HighlightParser.GENERATE_COMMENT do
+        content: '2012年政府民調顯示'
+        id: 4
+      content2 = HighlightParser.GENERATE_COMMENT do
+        content: '&nbsp;6 成民意'
+        id: 5
+      content3 = HighlightParser.GENERATE_COMMENT do
+        content: '支持台灣'
+        id: 6
 
-    expect HighlightParser(input) .toEqual expected
+      expected = "#{content1}，超過#{content2}#{content3}加入區域經濟整合，包含 TPP。"
 
-  it 'should add classes according to comment types', inject (HighlightParser, CommentParser) !->
-    input = '<span>A</span><sup><a href="#cmnt4" name="cmnt_ref4">[d]</a></sup><span>B</span><sup><a href="#cmnt5" name="cmnt_ref5">[d]</a></sup><span>C</span><sup><a href="#cmnt6" name="cmnt_ref6">[d]</a></sup>'
-    comments =
-      \4 :
-        type: CommentParser.types.REF_MISSING
-      \5 :
-        type: CommentParser.types.SECOND
-      \6 :
-        type: CommentParser.types.NOTE
+      expect HighlightParser(input) .toEqual expected
 
-    content1 = HighlightParser.GENERATE_COMMENT do
-      content: \A
-      id: \4
-      classes:
-        \is-controversial : true
+    it 'should deal with reference section as well', inject (HighlightParser) !->
+      input = '</span><span class="c4">&#27492;&#21477;&#26159;&#21738;&#35041;&#30475;&#21040;&#30340;&#65292;&#38468;&#36229;&#36899;&#32080;&#30340;&#36899;&#32080;&#12290;&#35519;&#25104; 8pt &#28784;&#33394;&#65292;&#26371;&#35731;&#27491;&#25991;&#27604;&#36611;&#26126;&#39023;&#12290;</span><sup><a href="#cmnt2" name="cmnt_ref2">[b]</a></sup><sup><a href="#cmnt3" name="cmnt_ref3">[c]</a></sup>'
+      content = HighlightParser.GENERATE_COMMENT do
+        content: '&#27492;&#21477;&#26159;&#21738;&#35041;&#30475;&#21040;&#30340;&#65292;&#38468;&#36229;&#36899;&#32080;&#30340;&#36899;&#32080;&#12290;&#35519;&#25104; 8pt &#28784;&#33394;&#65292;&#26371;&#35731;&#27491;&#25991;&#27604;&#36611;&#26126;&#39023;&#12290;'
+        id: '2,3'
 
-    content2 = HighlightParser.GENERATE_COMMENT do
-      content: \B
-      id: \5
-      classes: {}
+      expected = content
 
-    content3 = HighlightParser.GENERATE_COMMENT do
-      content: \C
-      id: \6
-      classes:
-        \is-info : true
+      expect HighlightParser(input) .toEqual expected
 
-    expected = [content1, content2, content3].join ''
+    it 'should add classes according to comment types', inject (HighlightParser, CommentParser) !->
+      input = '<span>A</span><sup><a href="#cmnt4" name="cmnt_ref4">[d]</a></sup><span>B</span><sup><a href="#cmnt5" name="cmnt_ref5">[d]</a></sup><span>C</span><sup><a href="#cmnt6" name="cmnt_ref6">[d]</a></sup>'
+      comments =
+        \4 :
+          type: CommentParser.types.REF_MISSING
+        \5 :
+          type: CommentParser.types.SECOND
+        \6 :
+          type: CommentParser.types.NOTE
 
-    expect HighlightParser(input, comments) .toEqual expected
+      content1 = HighlightParser.GENERATE_COMMENT do
+        content: \A
+        id: \4
+        classes:
+          \is-controversial : true
+
+      content2 = HighlightParser.GENERATE_COMMENT do
+        content: \B
+        id: \5
+        classes: {}
+
+      content3 = HighlightParser.GENERATE_COMMENT do
+        content: \C
+        id: \6
+        classes:
+          \is-info : true
+
+      expected = [content1, content2, content3].join ''
+
+      expect HighlightParser(input, comments) .toEqual expected
 
 describe \ItemSplitter (...) !->
   it 'should be a function', inject (ItemSplitter) !->
