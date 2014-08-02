@@ -1,7 +1,7 @@
-fepztw.github.io
+hacktabl.org
 ================
 
-臺灣自經區比較表
+Comparison table generator, using [Ethercalc](http://ethercalc.org) and Google Doc as the content backend.
 
 
 Development
