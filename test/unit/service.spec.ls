@@ -5,7 +5,12 @@ expect-from-fixture = (parser, basename) ->
   expected = JSON.parse __html__["test/unit/fixtures/#{basename}.json"]
   expect parser(input) .toEqual expected
 
-beforeEach module('app.service')
+# Mock app.router to skip any router activity
+#
+angular.module 'app.router', []
+.value \ETHERPAD_ID, \dummy
+
+before-each module('app.service')
 
 # describe \MockData (...) !->
 #   it 'should return object asynchronously', inject (MockData) !->
