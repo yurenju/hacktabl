@@ -5,7 +5,12 @@ expect-from-fixture = (parser, basename) ->
   expected = JSON.parse __html__["test/unit/fixtures/#{basename}.json"]
   expect parser(input) .toEqual expected
 
-beforeEach module('app.service')
+# Mock app.router to skip any router activity
+#
+angular.module 'app.router', []
+.value \ETHERPAD_ID, \dummy
+
+before-each module('app.service')
 
 # describe \MockData (...) !->
 #   it 'should return object asynchronously', inject (MockData) !->
@@ -13,6 +18,15 @@ beforeEach module('app.service')
 #       expect data.perspectives .toBeDefined!
 
 describe \HighlightParser (...) !->
+
+  before-each !->
+    ($provide) <-! module _
+    $provide.value \StyleData, do
+      c14:
+        underline: true
+        italic: false
+        bold: false
+
   it 'should be a function', inject (HighlightParser) !->
     expect(typeof HighlightParser).toBe 'function'
 
@@ -100,6 +114,13 @@ describe \HighlightParser (...) !->
 
     expect HighlightParser(input, comments) .toEqual expected
 
+  it 'should keep the <span>s if has-highlight option is provided', inject (HighlightParser) !->
+    input    = '<span class="c14">示範區面對的「外國」，依國內法制，不包含中國。示範區對中國大陸另有限制。</span>'
+    expected = '<span ng-class=\'{"underline":true,"italic":false,"bold":false}\'>示範區面對的「外國」，依國內法制，不包含中國。示範區對中國大陸另有限制。</span>'
+
+    expect HighlightParser(input, {}, {has-highlight: true}) .toEqual expected
+
+
 describe \ItemSplitter (...) !->
   it 'should be a function', inject (ItemSplitter) !->
     expect(typeof ItemSplitter).toBe 'function'
@@ -108,7 +129,7 @@ describe \ItemSplitter (...) !->
 
     expect ItemSplitter('arbitary string') .toEqual do
       content : 'arbitary string'
-      ref      : ''
+      ref     : ''
 
   it 'should extract simple reference from <li> content', inject (ItemSplitter) !->
     input      = '<span class="c5">國外對示範區內的實質投資免稅。</span><span class="c9">[&#20986;&#34389; </span><span class="c9 c18"><a class="c3" href="AAAA">自經區草案§31</a></span><span class="c21 c9">]</span>'
@@ -163,3 +184,7 @@ describe \CommentParser (...) !->
 
   it 'parses multiple comments correctly', inject (CommentParser) !->
     expect-from-fixture CommentParser, 'comment-parser-multiple'
+
+describe \StyleData (...) !->
+  it 'extracts styles of interest', inject (StyleData) !->
+    expect-from-fixture StyleData.$parse, 'style-parser-extract'

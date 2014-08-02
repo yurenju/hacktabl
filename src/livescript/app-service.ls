@@ -216,8 +216,8 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
 # Attach comment to highlighted content.
 #
 .factory \HighlightParser, <[
-       $interpolate  CommentParser
-]> ++ ($interpolate, CommentParser) ->
+       $interpolate  CommentParser  EtherCalcData  StyleData
+]> ++ ($interpolate, CommentParser, EtherCalcData, StyleData) ->
 
   const COMMENT = /<span[^>]*>([^<]+)<\/span>((?:<sup>.+?<\/sup>)+)/gim
   const EXTRACT_ID = /#cmnt(\d+)/g
@@ -226,7 +226,7 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
   const SPAN_END   = /<\/span>/gim
   const SPAN_PLACEHOLDER_STR = 'xx-span-xx'
   const SPAN_PLACEHOLDER = new RegExp SPAN_PLACEHOLDER_STR, 'gm'
-  const CLASS      = /\s+class="[^"]+"/gim
+  const CLASS      = /\s+class="([^"]+)"/gim
 
   const GENERATE_COMMENT = (^^options) ->
     options.placement = '{{placement}}' # By-pass for the comment directive
@@ -238,9 +238,10 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
        comment-append-to-body="true" ng-class=\'{{classes}}\'>{{content}}</{{tagName}}>
       ') options
 
-  parser = (doc, comments = {}) ->
+  parser = (doc, comments = {}, options = {}) ->
+
     # Construct the comments
-    return doc.replace COMMENT, (m, content, sups) ->
+    result = doc.replace COMMENT, (m, content, sups) ->
       # sups should look like:
       # <sup>....</sup><sup>....</sup><sup>....</sup>...
       #
@@ -261,11 +262,29 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
         tag-name: SPAN_PLACEHOLDER_STR
         classes: classes
 
-    .replace SPAN_START, ''
-    .replace SPAN_END, ''
-    .replace CLASS, ''
-    .trim!
-    .replace SPAN_PLACEHOLDER, 'span'
+    # Dealing with span if not going to have highlight
+    #
+    console.log \HIGHLIGHT, options.has-highlight
+    unless options.has-highlight
+      result .= replace SPAN_START, ''
+        .replace SPAN_END, ''
+        .replace CLASS, ''
+    else
+      result .= replace CLASS, (matched, class-str) ->
+        merged-styles = {}
+        for style in class-str.split ' '
+          for own prop, val of StyleData[style]
+            merged-styles[prop] ||= val
+            # console.log "CLASSES", class-str.split ' '
+            # console.log "STYLEDATA", StyleData
+        return " ng-class='#{JSON.stringify merged-styles}'"
+
+    # Lastly, do trimming and change the comment span back
+    #
+    result .= trim!
+      .replace SPAN_PLACEHOLDER, 'span'
+
+    return result
 
 
   parser.GENERATE_COMMENT = GENERATE_COMMENT
@@ -334,7 +353,7 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
     matched-string.replace LI_START, '' .replace LI_END, '' .trim!
 
   # Returned function
-  (doc) ->
+  (doc, parser-options = {}) ->
 
     # 0. Get the comments
     #
@@ -375,8 +394,8 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
 
         debate-arguments = for li in lis
           argument = ItemSplitter cleanup-li(li)
-          argument.content = HighlightParser $sanitize(argument.content), comments
-          argument.ref = HighlightParser $sanitize(argument.ref), comments
+          argument.content = HighlightParser $sanitize(argument.content), comments, parser-options
+          argument.ref = HighlightParser $sanitize(argument.ref), comments, parser-options
 
           # Return the argument for the iteration
           argument
@@ -392,14 +411,22 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
 
 
 .factory \TableData, <[
-       TableParser  $http  EtherCalcData
-]> ++ (TableParser, $http, EtherCalcData) ->
+       TableParser  $http  EtherCalcData  StyleData
+]> ++ (TableParser, $http, EtherCalcData, StyleData) ->
 
+  parser-options = {}
   # Return a promise that resolves to parsed table data
   EtherCalcData.then (data)->
+
+    # Populate the parser-options from ethercalc
+    parser-options :=
+      has-highlight: data.HIGHLIGHT
+
+    # return the promise of table data
     $http.get data.DATA_URL
   .then (resp) ->
-    TableParser(resp.data)
+    StyleData.$parse resp.data
+    TableParser resp.data, parser-options
 
 .factory \EtherCalcData, <[
        ETHERPAD_ID  $http  $q
@@ -488,6 +515,37 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
   parser.types = {REF_MISSING, REF_CONTROVERSIAL, NOTE, SECOND, OTHER}
 
   return parser
+
+.factory \StyleData, <[
+]> ++ ->
+  const STYLE_TAG_EXTRACTOR = /<style[^>]*>(.*)<\/style>/im
+  const STYLE_RULE_EXTRACTOR = /\.(c\d+)\{([^}]+)\}/gim
+
+  const UNDERLINE = 'text-decoration:underline'
+  const ITALIC = 'font-style:italic'
+  const BOLD = 'font-weight:bold'
+
+  # Returned style data
+  #
+  style-data =
+    $parse: (doc) ->
+      style-content = doc.match STYLE_TAG_EXTRACTOR .1
+      styles = {}
+
+      # The parser function processes {+underline, +italic, +bold}
+      while matched = STYLE_RULE_EXTRACTOR.exec style-content
+        style-str = matched.2
+        interested-styles =
+          underline: style-str.index-of(UNDERLINE) != -1
+          italic: style-str.index-of(ITALIC) != -1
+          bold: style-str.index-of(BOLD) != -1
+
+        styles[matched.1] = interested-styles if interested-styles.underline || interested-styles.italic || interested-styles.bold
+
+      style-data <<< styles
+      return styles
+
+  return style-data
 
 #
 # "linkyUnsanitized" implementation

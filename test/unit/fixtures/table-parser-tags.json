@@ -3,7 +3,12 @@
   "perspectives": [
     {
       "title": "Perspective A",
-      "positions": [[]]
+      "positions": [
+        {
+          "summary": "",
+          "debateArguments": []
+        }
+      ]
     }
   ],
   "comments": {}

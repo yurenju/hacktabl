@@ -261,8 +261,12 @@ body
     cursor: pointer
 
   h2
-    margin: $line-height 
-    &:hover 
+    margin: $line-height
+    .arrow
+      font-size: 20px
+      margin-left: 10px
+
+    &:hover
       .arrow
         color: lighten(#680148, 18%)
 
@@ -297,7 +301,12 @@ body
   margin-top: $line-height
   margin-bottom: $line-height
 
-.arrow
-  font-size: 20px
-  margin-left: 10px
+// Content styles parsed by StyleData
+.italic
+  font-style: italic
 
+.underline
+  text-decoration: underline
+
+.bold
+  font-weight: bold
