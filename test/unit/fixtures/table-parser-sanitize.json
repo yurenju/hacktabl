@@ -3,12 +3,15 @@
   "perspectives": [
     {
       "title": "Perspective A",
-      "positions": [[
-        {
-          "ref": "",
-          "content": "Leaving this."
-        }
-      ]]
+      "positions": [{
+        "summary": "",
+        "debateArguments": [
+          {
+            "ref": "",
+            "content": "Leaving this."
+          }
+        ]
+      }]
     }
   ],
   "comments": {}

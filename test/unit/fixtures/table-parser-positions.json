@@ -4,44 +4,62 @@
     {
       "title": "Perspective A",
       "positions": [
-        [
-          {
-            "ref": "",
-            "content": "Argument 1"
-          }
-        ],[
-          {
-            "ref": "",
-            "content": "Argument 2"
-          }
-        ],[
-          {
-            "ref": "",
-            "content": "Argument 3"
-          }
-        ]
+        {
+          "summary": "",
+          "debateArguments": [
+            {
+              "ref": "",
+              "content": "Argument 1"
+            }
+          ]
+        },{
+          "summary": "",
+          "debateArguments": [
+            {
+              "ref": "",
+              "content": "Argument 2"
+            }
+          ]
+        },{
+          "summary": "",
+          "debateArguments": [
+            {
+              "ref": "",
+              "content": "Argument 3"
+            }
+          ]
+        }
       ]
     }, {
       "title": "Perspective B",
       "positions": [
-        [
-          {
-            "ref": "SRC",
-            "content": "Argument 4"
-          },
-          {
-            "ref": "",
-            "content": "Argument 5"
-          }
-        ],[],[
-          {
-            "ref": "",
-            "content": "Argument 6"
-          }, {
-            "ref": "",
-            "content": "Argument 7"
-          }
-        ]
+        {
+          "summary": "",
+          "debateArguments": [
+            {
+              "ref": "SRC",
+              "content": "Argument 4"
+            },
+            {
+              "ref": "",
+              "content": "Argument 5"
+            }
+          ]
+        },{
+          "summary": "",
+          "debateArguments": []
+        },{
+          "summary": "",
+          "debateArguments": [
+            {
+              "ref": "",
+              "content": "Argument 6"
+            }, {
+              "ref": "",
+              "content": "Argument 7"
+            }
+          ]
+        }
       ]
     }
   ],
