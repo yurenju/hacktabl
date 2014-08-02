@@ -128,7 +128,7 @@ describe \ItemSplitter (...) !->
 
     expect ItemSplitter('arbitary string') .toEqual do
       content : 'arbitary string'
-      ref      : ''
+      ref     : ''
 
   it 'should extract simple reference from <li> content', inject (ItemSplitter) !->
     input      = '<span class="c5">國外對示範區內的實質投資免稅。</span><span class="c9">[&#20986;&#34389; </span><span class="c9 c18"><a class="c3" href="AAAA">自經區草案§31</a></span><span class="c21 c9">]</span>'
