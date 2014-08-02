@@ -176,3 +176,7 @@ describe \CommentParser (...) !->
 
   it 'parses multiple comments correctly', inject (CommentParser) !->
     expect-from-fixture CommentParser, 'comment-parser-multiple'
+
+describe \StyleData (...) !->
+  it 'extracts styles of interest', inject (StyleData) !->
+    expect-from-fixture StyleData.$parse, 'style-parser-extract'

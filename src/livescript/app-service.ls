@@ -507,6 +507,37 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
 
   return parser
 
+.factory \StyleData, <[
+]> ++ ->
+  const STYLE_TAG_EXTRACTOR = /<style[^>]*>(.*)<\/style>/im
+  const STYLE_RULE_EXTRACTOR = /\.(c\d+)\{([^}]+)\}/gim
+
+  const UNDERLINE = 'text-decoration:underline'
+  const ITALIC = 'font-style:italic'
+  const BOLD = 'font-weight:bold'
+
+  # Returned style data
+  #
+  style-data =
+    $parse: (doc) ->
+      style-content = doc.match STYLE_TAG_EXTRACTOR .1
+      styles = {}
+
+      # The parser function processes {+underline, +italic, +bold}
+      while matched = STYLE_RULE_EXTRACTOR.exec style-content
+        style-str = matched.2
+        interested-styles =
+          underline: style-str.index-of(UNDERLINE) != -1
+          italic: style-str.index-of(ITALIC) != -1
+          bold: style-str.index-of(BOLD) != -1
+
+        styles[matched.1] = interested-styles if interested-styles.underline || interested-styles.italic || interested-styles.bold
+
+      style-data <<< styles
+      return styles
+
+  return style-data
+
 #
 # "linkyUnsanitized" implementation
 # http://stackoverflow.com/questions/14692640/angularjs-directive-to-replace-text/24291287#24291287
