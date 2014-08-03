@@ -344,8 +344,8 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
   const LI_EXTRACTOR = /<li[^>]*>(.+?)<\/li>/gim
   const LI_START = /<li[^>]*>/
   const LI_END = /<\/li>/
-  const BLOCK_TAG_START = /<(?:(?:td)|(?:p)|(?:div))[^>]*>/g
-  const BLOCK_TAG_END = /<\/(?:(?:td)|(?:p)|(?:div))>/g
+  const BLOCK_TAG_START = /<(?:(?:td)|(?:p)|(?:div)|(?:h\d))[^>]*>/g
+  const BLOCK_TAG_END = /<\/(?:(?:td)|(?:p)|(?:div)|(?:h\d))>/g
   const SUP_EXTRACTOR = /<sup[^>]*>.+?<\/sup>/g
 
   # Helper function that cleans up tag matches
