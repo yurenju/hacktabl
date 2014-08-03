@@ -27,6 +27,9 @@ describe \HighlightParser (...) !->
         italic: false
         bold: false
 
+  parser-option =
+    no-sanitize: true
+
   it 'should be a function', inject (HighlightParser) !->
     expect(typeof HighlightParser).toBe 'function'
 
@@ -37,7 +40,7 @@ describe \HighlightParser (...) !->
     input    = '<span class="c14">示範區面對的「外國」，依國內法制，不包含中國。示範區對中國大陸另有限制。</span>'
     expected = '示範區面對的「外國」，依國內法制，不包含中國。示範區對中國大陸另有限制。'
 
-    expect HighlightParser(input) .toEqual expected
+    expect HighlightParser(input, {}, parser-option) .toEqual expected
 
   it 'should parse one comment', inject (HighlightParser) !->
     input    = '<span class="c14">去年的法令修改與鬆綁，必須要自經區條例通過後才會生效</span><sup><a href="#cmnt6" name="cmnt_ref6">[f]</a></sup><span class="c14">，並且受立法院監看；若自經區沒過，那法規鬆綁就不會生效。</span>'
@@ -46,7 +49,7 @@ describe \HighlightParser (...) !->
       id: '6'
     expected = "#{comment}，並且受立法院監看；若自經區沒過，那法規鬆綁就不會生效。"
 
-    expect HighlightParser(input) .toEqual expected
+    expect HighlightParser(input, {}, parser-option) .toEqual expected
 
   it 'should parse comments and its replies', inject (HighlightParser) !->
     input    = '<span class="c5">去年的法令修改與鬆綁，必須要自經區條例通過後才會生效</span><sup><a href="#cmnt6" name="cmnt_ref6">[f]</a></sup><sup><a href="#cmnt7" name="cmnt_ref7">[g]</a></sup><sup><a href="#cmnt8" name="cmnt_ref8">[h]</a></sup><span class="c5">，並且受立法院監看；若自經區沒過，那法規鬆綁就不會生效。</span>'
@@ -55,7 +58,7 @@ describe \HighlightParser (...) !->
       id: '6,7,8'
     expected = "#{comment}，並且受立法院監看；若自經區沒過，那法規鬆綁就不會生效。"
 
-    expect HighlightParser(input) .toEqual expected
+    expect HighlightParser(input, {}, parser-option) .toEqual expected
 
   it 'should parse multiple separated comments', inject (HighlightParser) !->
     input    = '<span class="c4">2012年政府民調顯示</span><sup><a href="#cmnt4" name="cmnt_ref4">[d]</a></sup><span class="c4">，超過</span><span class="c4">&nbsp;6 成民意</span><sup><a href="#cmnt5" name="cmnt_ref5">[e]</a></sup><span class="c4">支持台灣</span><sup><a href="#cmnt6" name="cmnt_ref6">[f]</a></sup><span class="c4">加入區域經濟整合，包含 TPP。</span>'
@@ -71,7 +74,7 @@ describe \HighlightParser (...) !->
 
     expected = "#{content1}，超過#{content2}#{content3}加入區域經濟整合，包含 TPP。"
 
-    expect HighlightParser(input) .toEqual expected
+    expect HighlightParser(input, {}, parser-option) .toEqual expected
 
   it 'should deal with reference section as well', inject (HighlightParser) !->
     input = '</span><span class="c4">&#27492;&#21477;&#26159;&#21738;&#35041;&#30475;&#21040;&#30340;&#65292;&#38468;&#36229;&#36899;&#32080;&#30340;&#36899;&#32080;&#12290;&#35519;&#25104; 8pt &#28784;&#33394;&#65292;&#26371;&#35731;&#27491;&#25991;&#27604;&#36611;&#26126;&#39023;&#12290;</span><sup><a href="#cmnt2" name="cmnt_ref2">[b]</a></sup><sup><a href="#cmnt3" name="cmnt_ref3">[c]</a></sup>'
@@ -81,7 +84,7 @@ describe \HighlightParser (...) !->
 
     expected = content
 
-    expect HighlightParser(input) .toEqual expected
+    expect HighlightParser(input, {}, parser-option) .toEqual expected
 
   it 'should add classes according to comment types', inject (HighlightParser, CommentParser) !->
     input = '<span>A</span><sup><a href="#cmnt4" name="cmnt_ref4">[d]</a></sup><span>B</span><sup><a href="#cmnt5" name="cmnt_ref5">[d]</a></sup><span>C</span><sup><a href="#cmnt6" name="cmnt_ref6">[d]</a></sup>'
@@ -118,8 +121,13 @@ describe \HighlightParser (...) !->
     input    = '<span class="c14">示範區面對的「外國」，依國內法制，不包含中國。示範區對中國大陸另有限制。</span>'
     expected = '<span ng-class=\'{"underline":true,"italic":false,"bold":false}\'>示範區面對的「外國」，依國內法制，不包含中國。示範區對中國大陸另有限制。</span>'
 
-    expect HighlightParser(input, {}, {has-highlight: true}) .toEqual expected
+    expect HighlightParser(input, {}, {has-highlight: true, no-sanitize: true}) .toEqual expected
 
+  it 'should $sanitize its input and output ng-class when has-highlight is on', inject (HighlightParser) !->
+    input    = 'Test <span class="c14">Highlighted</span> <script>alert("evil")</script>'
+    expected = 'Test <span ng-class=\'{"underline":true,"italic":false,"bold":false}\'>Highlighted</span>'
+
+    expect HighlightParser(input, {}, {has-highlight: true}) .toEqual expected
 
 describe \ItemSplitter (...) !->
   it 'should be a function', inject (ItemSplitter) !->
@@ -168,8 +176,6 @@ describe \TableParser (...) !->
   # (Trivial)
   # it 'should parse as many arguments as needed', inject (TableParser) !->
 
-  it 'should pass the output through $sanitize', inject (TableParser) !->
-    expect-from-fixture TableParser, 'table-parser-sanitize'
 
 describe \CommentParser (...) !->
 

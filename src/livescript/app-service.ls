@@ -216,8 +216,8 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
 # Attach comment to highlighted content.
 #
 .factory \HighlightParser, <[
-       $interpolate  CommentParser  EtherCalcData  StyleData
-]> ++ ($interpolate, CommentParser, EtherCalcData, StyleData) ->
+       $interpolate  CommentParser  EtherCalcData  StyleData  $sanitize
+]> ++ ($interpolate, CommentParser, EtherCalcData, StyleData, $sanitize) ->
 
   const COMMENT = /<span[^>]*>([^<]+)<\/span>((?:<sup>.+?<\/sup>)+)/gim
   const EXTRACT_ID = /#cmnt(\d+)/g
@@ -239,6 +239,8 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
       ') options
 
   parser = (doc, comments = {}, options = {}) ->
+
+    doc = $sanitize doc unless options.no-sanitize
 
     # Construct the comments
     result = doc.replace COMMENT, (m, content, sups) ->
@@ -332,8 +334,8 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
 #
 #
 .factory \TableParser, <[
-       ItemSplitter  HighlightParser  $sanitize  CommentParser  HtmlDecoder
-]> ++ (ItemSplitter, HighlightParser, $sanitize, CommentParser, HtmlDecoder)->
+       ItemSplitter  HighlightParser  CommentParser  HtmlDecoder
+]> ++ (ItemSplitter, HighlightParser, CommentParser, HtmlDecoder)->
 
   const TR_EXTRACTOR = /<tr[^>]*>(.+?)<\/tr>/gim
   const TD_EXTRACTOR = /<td[^>]*>(.*?)<\/td>/gim
@@ -375,7 +377,7 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
 
     # Each td is a title of position.
     position-title = for td in tds
-      HighlightParser $sanitize(cleanup-block-tags(HtmlDecoder(td))), comments, parser-options
+      HighlightParser cleanup-block-tags(HtmlDecoder(td)), comments, parser-options
 
     # Remove first row
     trs.shift!
@@ -387,9 +389,8 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
 
       # First column should be the perspective title
       decoded-title = HtmlDecoder(tds[0])
-      console.log decoded-title
       title = cleanup-tags decoded-title.replace(SUP_EXTRACTOR, '')
-      title-html = HighlightParser $sanitize(cleanup-block-tags(decoded-title)), comments, parser-options
+      title-html = HighlightParser cleanup-block-tags(decoded-title), comments, parser-options
 
       # Remove first column
       tds.shift!
@@ -404,8 +405,8 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
 
         debate-arguments = for li in lis
           argument = ItemSplitter cleanup-li(li)
-          argument.content = HighlightParser $sanitize(argument.content), comments, parser-options
-          argument.ref = HighlightParser $sanitize(argument.ref), comments, parser-options
+          argument.content = HighlightParser argument.content, comments, parser-options
+          argument.ref = HighlightParser argument.ref, comments, parser-options
 
           # Return the argument for the iteration
           argument
