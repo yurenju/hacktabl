@@ -19,7 +19,7 @@ html(ng-app="app")
               //- The title that reflects the currently spied perspective title
               span.title(
                 ng-repeat="title in Header.Spy.spies track by $index"
-                ng-class="{'is-prev': Headader.Spy.current > $index, 'is-next': Header.Spy.current < $index}" ng-bind-html="::title")
+                ng-class="{'is-prev': Header.Spy.current > $index, 'is-next': Header.Spy.current < $index}" ng-bind-html="::title")
           aside.titlebar.toolbox(ng-switch-when="toolbox")
             .toolbox-btn-group.btn-group(dropdown)
 
