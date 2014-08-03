@@ -3,6 +3,7 @@
   "perspectives": [
     {
       "title": "Perspective A",
+      "titleHtml": "Perspective A",
       "positions": [
         {
           "summary": "",
@@ -32,6 +33,7 @@
       ]
     }, {
       "title": "Perspective B",
+      "titleHtml": "Perspective B",
       "positions": [
         {
           "summary": "",

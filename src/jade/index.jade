@@ -75,14 +75,14 @@ html(ng-app="app")
         section.scroll-anchor-container(ng-repeat="row in ::App.data.perspectives" ng-cloak)
           a.scroll-anchor(id="{{::row.title}}" vu-spy="row.title")
           .row.col-xs-12
-            h2(ng-bind-html="::row.title")
+            h2(vu-compile tmpl="::row.titleHtml")
 
           .row.l-row
             .col-xs-1.l-col(
               ng-repeat="positions in ::row.positions"
               ng-switch="::positions.length"
               ng-style="{width: 100/row.positions.length+'%'}")
-              h3(ng-bind-html="::App.data.positionTitle[$index]")
+              h3(vu-compile tmpl="::App.data.positionTitle[$index]")
               div(ng-switch-default)
                 ul
                   li(ng-repeat="argument in ::positions.debateArguments" vu-track="{perspective: row.title, position: 0, content: argument.content}")
@@ -103,7 +103,7 @@ html(ng-app="app")
           .col-xs-1.l-col(
             ng-style="{width: 100/(App.data.positionTitle.length+1)+'%'}"
             ng-repeat="title in ::App.data.positionTitle")
-            h4 {{::title}}
+            h4(vu-compile tmpl="::title")
 
         //- Content rows
         section.container.scroll-anchor-container(
@@ -119,7 +119,7 @@ html(ng-app="app")
               ng-style="{width: 100/(row.positions.length+1)+'%'}"
               ng-click="TableRow.toggleExpand()")
 
-              h2(ng-bind-html="::row.title")
+              h2(vu-compile tmpl="::row.titleHtml")
 
             //- Arguments of the perspective
             .col-xs-1.l-col(
@@ -129,7 +129,7 @@ html(ng-app="app")
 
               div(ng-switch-default)
                 h2(ng-click="TableRow.toggleExpand()")
-                  span(ng-bind-html="::positions.summary")                  
+                  span(ng-bind-html="::positions.summary")
                   span.glyphicon.glyphicon-chevron-down.arrow(ng-hide="TableRow.isExpanded")
                   span.glyphicon.glyphicon-chevron-up.arrow(ng-show="TableRow.isExpanded")
                 div(ng-show="TableRow.isExpanded")

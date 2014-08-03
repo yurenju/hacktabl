@@ -264,7 +264,7 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
 
     # Dealing with span if not going to have highlight
     #
-    console.log \HIGHLIGHT, options.has-highlight
+    # console.log \HIGHLIGHT, options.has-highlight
     unless options.has-highlight
       result .= replace SPAN_START, ''
         .replace SPAN_END, ''
@@ -342,12 +342,18 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
   const LI_EXTRACTOR = /<li[^>]*>(.+?)<\/li>/gim
   const LI_START = /<li[^>]*>/
   const LI_END = /<\/li>/
+  const BLOCK_TAG_START = /<(?:(?:td)|(?:p)|(?:div))[^>]*>/g
+  const BLOCK_TAG_END = /<\/(?:(?:td)|(?:p)|(?:div))>/g
+  const SUP_EXTRACTOR = /<sup[^>]*>.+?<\/sup>/g
 
   # Helper function that cleans up tag matches
   # to include only the textual content inside the tag
   #
   function cleanup-tags matched-string
     matched-string.replace TAGS, '' .trim!
+
+  function cleanup-block-tags matched-string
+    matched-string.replace BLOCK_TAG_START, '' .replace BLOCK_TAG_END, '' .trim!
 
   function cleanup-li matched-string
     matched-string.replace LI_START, '' .replace LI_END, '' .trim!
@@ -368,7 +374,8 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
     tds = (trs[0].match(TD_EXTRACTOR)?.slice 1) || []
 
     # Each td is a title of position.
-    position-title = [cleanup-tags HtmlDecoder(td) for td in tds]
+    position-title = for td in tds
+      HighlightParser $sanitize(cleanup-block-tags(HtmlDecoder(td))), comments, parser-options
 
     # Remove first row
     trs.shift!
@@ -379,7 +386,10 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
       tds = tr.match TD_EXTRACTOR
 
       # First column should be the perspective title
-      title = cleanup-tags HtmlDecoder(tds[0])
+      decoded-title = HtmlDecoder(tds[0])
+      console.log decoded-title
+      title = cleanup-tags decoded-title.replace(SUP_EXTRACTOR, '')
+      title-html = HighlightParser $sanitize(cleanup-block-tags(decoded-title)), comments, parser-options
 
       # Remove first column
       tds.shift!
@@ -404,7 +414,7 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
         {summary, debate-arguments}
 
       # Return the perspective object for this iteration of the for-loop
-      {title, positions}
+      {title, title-html, positions}
 
     # Returned object
     {position-title, perspectives, comments}

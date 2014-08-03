@@ -3,6 +3,7 @@
   "perspectives": [
     {
       "title": "Perspective A",
+      "titleHtml": "Perspective A",
       "positions": [{
         "summary": "",
         "debateArguments": [

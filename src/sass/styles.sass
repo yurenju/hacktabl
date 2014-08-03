@@ -226,20 +226,6 @@ body
         +box-shadow(0 2px 6px 2px rgba(#000, .2))
         +transition-delay($delay)
 
-  [comment]
-    cursor: pointer
-    border-bottom: 1px dashed $gray-light
-
-  [comment].is-info
-    cursor: help
-    border-bottom-color: $brand-primary
-
-  [comment].is-controversial
-    $line-color: desaturate(lighten($brand-success, 60%), 20%)
-    border-bottom: none
-    background: $line-color image-url('line.png') repeat-x bottom center
-
-
   .add-more
     position: relative
     z-index: 0 // As high as the <li>s
@@ -300,6 +286,22 @@ body
 #edit
   margin-top: $line-height
   margin-bottom: $line-height
+
+// Highlight styles
+//
+[comment]
+  cursor: pointer
+  border-bottom: 1px dashed $gray-light
+
+[comment].is-info
+  cursor: help
+  border-bottom-color: $brand-primary
+
+[comment].is-controversial
+  $line-color: desaturate(lighten($brand-success, 60%), 20%)
+  border-bottom: none
+  background: $line-color image-url('line.png') repeat-x bottom center
+
 
 // Content styles parsed by StyleData
 .italic

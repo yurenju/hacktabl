@@ -124,7 +124,7 @@ angular.module \app.directive, <[app.service ngAnimate ngSanitize ui.bootstrap.s
   restrict: 'EA'
   link: (scope, elem, attrs) ->
     html = scope.$eval attrs.tmpl
-    dom = ($compile "<div>#{html}</div>") scope
+    dom = ($compile "<span>#{html}</span>") scope
 
     elem.html '' .append dom
 
