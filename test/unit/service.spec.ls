@@ -176,6 +176,9 @@ describe \TableParser (...) !->
   # (Trivial)
   # it 'should parse as many arguments as needed', inject (TableParser) !->
 
+  it 'should parse summary', inject (TableParser) !->
+    expect-from-fixture TableParser, 'table-parser-summary'
+
 
 describe \CommentParser (...) !->
 
