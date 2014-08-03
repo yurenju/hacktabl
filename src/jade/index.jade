@@ -129,7 +129,7 @@ html(ng-app="app")
 
               div(ng-switch-default)
                 h2(ng-click="TableRow.toggleExpand()")
-                  span(ng-bind-html="::positions.summary")
+                  span(vu-compile tmpl="::positions.summary")
                   span.glyphicon.glyphicon-chevron-down.arrow(ng-hide="TableRow.isExpanded")
                   span.glyphicon.glyphicon-chevron-up.arrow(ng-show="TableRow.isExpanded")
                 div(ng-show="TableRow.isExpanded")
