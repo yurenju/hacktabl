@@ -41,6 +41,7 @@ You may change an existing hacktabl's URL from `http://hacktabl.org/<table-id>` 
 
 * `TYPE`: Whether or not to represent each cell with a short summary so that the entire table looks more succinct. Can be either empty or `TABLE`. For a running example, please refer to [FEPZ comparison table for education](http://hacktabl.org/fepz-edu) and [its settings on EtherCalc](http://ethercalc.org/fepz-edu).
 * `HIGHLIGHT`: Whether or not to enable bold, italic and underlines. Can be either empty or `TRUE`. For a running example, please refer to [Copyright 2014](http://hacktabl.org/copyright2014) and [its settings on EtherCalc](http://ethercalc.org/copyright2014).
+* `EMPHASIZE_NO_REF`: Whether or not to emphasize the arguments with no references. Can be either empty or `TRUE`. For a running example, please refer to [Taipei Mayoral Election](http://hacktabl.org/taipei-mayoral-election-2014) and [its settings on EtherCalc](http://ethercalc.org/taipei-mayoral-election-2014).
 
 
 Development
