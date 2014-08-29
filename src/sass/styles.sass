@@ -183,16 +183,6 @@ body
     +transition(z-index 0.2s)
     +transition-delay(0)
 
-    // Style for no-ref
-    .content
-      span
-        text-decoration: line-through
-        color: rgba($brand-warning, .5)
-      &:after
-        font-size: 80%
-        text-decoration: none
-        content: '（無出處）'
-
   li.has-ref
     $delay: 0.5s
 
@@ -244,6 +234,18 @@ body
         opacity: 1
         +box-shadow(0 2px 6px 2px rgba(#000, .2))
         +transition-delay($delay)
+
+  // Emphasized no-ref styles
+  li.has-no-ref
+    .content
+      span
+        text-decoration: line-through
+        color: rgba($brand-warning, .5)
+      &:after
+        font-size: 80%
+        text-decoration: none
+        content: '（無出處）'
+
 
   .add-more
     position: relative

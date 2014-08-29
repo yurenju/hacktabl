@@ -21,6 +21,7 @@ angular.module \app.controller, <[app.constant app.service ga app.router]>
     @EDIT_URL = data.EDIT_URL
     @TITLE = data.TITLE
     @LAYOUT_TYPE = data.TYPE
+    @EMPHASIZE_NO_REF = data.EMPHASIZE_NO_REF
 
 .controller \HeaderCtrl, <[
        Spy  State  $scope  $anchorScroll  $location  $modal  ga  HtmlDecoder  ETHERPAD_ID
