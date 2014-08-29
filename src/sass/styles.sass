@@ -178,11 +178,31 @@ body
     margin-bottom: 0
 
   li
-    $delay: 0.5s
     position: relative // For the pseudo element
     z-index: 0
     +transition(z-index 0.2s)
     +transition-delay(0)
+
+    // Style for no-ref
+    .content
+      span
+        text-decoration: line-through
+        color: rgba($brand-warning, .5)
+      &:after
+        font-size: 80%
+        text-decoration: none
+        content: '（無出處）'
+
+  li.has-ref
+    $delay: 0.5s
+
+    .content
+      span
+        text-decoration: none
+        color: inherit
+
+      &:after
+        content: ''
 
     .ref
       font-style: italic
@@ -199,6 +219,7 @@ body
 
       &:before
         content: '出處：'
+
 
     // The white card with box shadow when hover
     &:after

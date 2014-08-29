@@ -85,8 +85,8 @@ html(ng-app="app")
               h3(vu-compile tmpl="::App.data.positionTitle[$index]")
               div(ng-switch-default)
                 ul
-                  li(ng-repeat="argument in ::positions.debateArguments" vu-track="{perspective: row.title, position: 0, content: argument.content}")
-                    div(vu-compile tmpl="::argument.content")
+                  li(ng-repeat="argument in ::positions.debateArguments" ng-class="{'has-ref':!!argument.ref}" vu-track="{perspective: row.title, position: 0, content: argument.content}")
+                    div.content(vu-compile tmpl="::argument.content")
                     div.ref(vu-compile tmpl="::argument.ref")
                 p.add-more: a(ng-href="{{App.EDIT_URL}}" vu-track="{label: 'item.edit', perspective: row.title, position: 0}")
                   span.glyphicon.glyphicon-pencil
@@ -134,8 +134,8 @@ html(ng-app="app")
                   span.glyphicon.glyphicon-chevron-up.arrow(ng-show="TableRow.isExpanded")
                 div(ng-show="TableRow.isExpanded")
                   ul
-                    li(ng-repeat="argument in ::positions.debateArguments" vu-track="{perspective: row.title, position: 0, content: argument.content}")
-                      div(vu-compile tmpl="::argument.content")
+                    li(ng-repeat="argument in ::positions.debateArguments" ng-class="{'has-ref':!!argument.ref}" vu-track="{perspective: row.title, position: 0, content: argument.content}")
+                      div.content(vu-compile tmpl="::argument.content")
                       div.ref(vu-compile tmpl="::argument.ref")
                   p.add-more: a(ng-href="{{App.EDIT_URL}}" vu-track="{label: 'item.edit', perspective: row.title, position: 0}")
                     span.glyphicon.glyphicon-pencil
