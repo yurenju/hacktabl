@@ -1,6 +1,8 @@
 hacktabl.org
 ================
 
+[![Build Status](https://travis-ci.org/MrOrz/hacktabl.svg?branch=dev)](https://travis-ci.org/MrOrz/hacktabl)
+
 Comparison table generator, using [Ethercalc](http://ethercalc.org) and Google Doc as the content backend.
 
 
