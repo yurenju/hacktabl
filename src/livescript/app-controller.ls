@@ -23,8 +23,8 @@ angular.module \app.controller, <[app.constant app.service ga app.router]>
     @LAYOUT_TYPE = data.TYPE
 
 .controller \HeaderCtrl, <[
-       Spy  State  $scope  $anchorScroll  $location  $modal  ga  HtmlDecoder
-]> ++ (Spy, State, $scope, $anchorScroll, $location, $modal, ga, HtmlDecoder)!->
+       Spy  State  $scope  $anchorScroll  $location  $modal  ga  HtmlDecoder  ETHERPAD_ID
+]> ++ (Spy, State, $scope, $anchorScroll, $location, $modal, ga, HtmlDecoder, ETHERPAD_ID)!->
 
   @Spy = Spy
 
@@ -60,6 +60,13 @@ angular.module \app.controller, <[app.constant app.service ga app.router]>
   @toggle-labels = ->
     State.$cycle \labels
     write-label-action!
+
+  # During page load, show the info modal for users that visits the table for the first time
+  #
+  visit-key = "visit(#{ETHERPAD_ID})"
+  unless local-storage[visit-key]
+    local-storage[visit-key] = true
+    @open-info-modal!
 
 .controller \ModalCtrl, <[
        EtherCalcData  ETHERPAD_ID
