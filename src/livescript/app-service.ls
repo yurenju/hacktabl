@@ -450,7 +450,7 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
 
     for row in csv.data.split "\n"
       columns = row.split \,
-      data[columns.0] = columns.1.match(/^"?(.*)"?$/).1 if columns.length >= 2
+      data[columns.0] = columns.1.match(/^"?(.*?)"?$/).1 if columns.length >= 2
 
     # populate EDIT_URL and DATA_URL when DOC_ID is given
     if data.DOC_ID
