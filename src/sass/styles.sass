@@ -195,12 +195,10 @@ body
       color: $gray-dark
 
       // Insert the two word into the compiled content
-      > div
-        +ellipsis
-        height: $line-height
+      +ellipsis
 
-        &:before
-          content: '出處：'
+      &:before
+        content: '出處：'
 
     // The white card with box shadow when hover
     &:after
