@@ -462,7 +462,7 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
 .config <[
        $sceDelegateProvider
 ]> ++ ($sceDelegateProvider) !->
-  $sceDelegateProvider.resourceUrlWhitelist <[self https://docs.google.com/** https://hackpad.com/**]>
+  $sceDelegateProvider.resourceUrlWhitelist <[self https://docs.google.com/** https://hackpad.com/** https://*.hackpad.com/**]>
 
 #
 # Find comments and return in the following format:
