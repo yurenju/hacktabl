@@ -31,8 +31,7 @@ require! {
   'gulp-uglify'
   'gulp-jade'
   'gulp-angular-templatecache'
-  child_process.exec
-  child_process.execFile
+  child_process: {exec, execFile}
 }
 
 Sprocket = require 'sprocket'
