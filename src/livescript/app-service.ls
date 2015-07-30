@@ -253,7 +253,7 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
       classes = {}
       for id in ids
         cls = switch comments[id]?type
-        case CommentParser.types.REF_MISSING, CommentParser.types.REF_CONTROVERSIAL => \is-controversial
+        case CommentParser.types.REF_MISSING, CommentParser.types.REF_CONTROVERSIAL, CommentParser.types.QUESTIONABLE => \is-controversial
         case CommentParser.types.NOTE => \is-info
 
         classes[cls] = true if cls
@@ -480,6 +480,7 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
 
   const REF_MISSING = \REF_MISSING
   const REF_CONTROVERSIAL = \REF_CONTROVERSIAL
+  const QUESTIONABLE = \QUESTIONABLE
   const NOTE = \NOTE
   const SECOND = \SECOND # 附議
   const OTHER = \OTHER
@@ -503,9 +504,10 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
       raw-type = raw-content.match(TYPE_EXTRACTOR)?1
 
       type = switch raw-type
-      | "&#35036;&#20805;&#35498;&#26126;" => NOTE
-      | "&#38656;&#35201;&#20986;&#34389;" => REF_MISSING
-      | "&#20986;&#34389;&#29229;&#35696;" => REF_CONTROVERSIAL
+      | '&#35036;&#20805;&#35498;&#26126;' => NOTE
+      | '&#38656;&#35201;&#20986;&#34389;' => REF_MISSING
+      | '&#20986;&#34389;&#29229;&#35696;' => REF_CONTROVERSIAL
+      | '&#36074;&#30097;' => QUESTIONABLE
       | _  => OTHER
 
       # Remove []
@@ -523,7 +525,7 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
     comments
 
   # Expose the type constants
-  parser.types = {REF_MISSING, REF_CONTROVERSIAL, NOTE, SECOND, OTHER}
+  parser.types = {REF_MISSING, REF_CONTROVERSIAL, QUESTIONABLE, NOTE, SECOND, OTHER}
 
   return parser
 
