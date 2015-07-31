@@ -41,7 +41,7 @@ You may change an existing hacktabl's URL from `http://hacktabl.org/<table-id>` 
 
 ### Optional Settings
 
-* `TYPE`: Whether or not to represent each cell with a short summary so that the entire table looks more succinct. Can be either empty or `TABLE`. For a running example, please refer to [FEPZ comparison table for education](http://hacktabl.org/fepz-edu) and [its settings on EtherCalc](http://ethercalc.org/fepz-edu).
+* `TYPE`: Whether or not to represent each cell with a short summary so that the entire table`` looks more succinct. Can be either empty or `TABLE`. For a running example, please refer to [FEPZ comparison table for education](http://hacktabl.org/fepz-edu) and [its settings on EtherCalc](http://ethercalc.org/fepz-edu).
 * `HIGHLIGHT`: Whether or not to enable bold, italic and underlines. Can be either empty or `TRUE`. For a running example, please refer to [Copyright 2014](http://hacktabl.org/copyright2014) and [its settings on EtherCalc](http://ethercalc.org/copyright2014).
 * `EMPHASIZE_NO_REF`: Whether or not to emphasize the arguments with no references. Can be either empty or `TRUE`. For a running example, please refer to [Taipei Mayoral Election](http://hacktabl.org/taipei-mayoral-election-2014) and [its settings on EtherCalc](http://ethercalc.org/taipei-mayoral-election-2014).
 
@@ -70,3 +70,9 @@ When developing parsers, please run unit test using:
 ```
 npm test
 ```
+
+
+Deploy to Github Pages
+----------------------
+
+Open up `Makefile` and make necessary changes to variable `GIT` and `DEPLOY_BRANCH`, then execute `make deploy`.
