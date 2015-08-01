@@ -42,15 +42,17 @@
   },
   "scripts": {
     "test": "node_modules/karma/bin/karma start test/karma.conf.js",
-    "start": "parallelshell 'webpack-dev-server' 'npm run build:jade -- -O {\"hash\":\"app\"}",
-    "build": "npm run build:webpack -- --json > $npm_package_config_webpack_stat && npm run build:jade -- -O $npm_package_config_webpack_stat",
+    "clean": "rm -rf build/",
+    "start": "parallelshell 'webpack-dev-server --progress' 'npm run build:jade:dev'",
+    "build": "npm run build:webpack -- --json > $npm_package_config_webpack_stat && npm run build:jade -- --obj $npm_package_config_webpack_stat",
     "build:jade": "jade $npm_package_config_jade_in --out $npm_package_config_jade_out",
+    "build:jade:dev": "npm run build:jade -- --obj '{\"hash\":\"app\"}' --pretty --watch",
     "build:webpack": "webpack --progress",
     "deploy": "make deploy"
   },
   "config": {
-    "jade_in": "client/jade/*.jade",
-    "jade_out": "client/build",
+    "jade_in": "src/jade/index.jade",
+    "jade_out": "./",
     "webpack_stat": "webpack-stats.json"
   },
   "repository": {
