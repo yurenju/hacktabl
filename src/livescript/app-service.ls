@@ -1,4 +1,4 @@
-require 'angular-sanitize/angular-sanitize.min.js'
+require 'angular-sanitize/angular-sanitize.js'
 require 'angular-ga/ga.js'
 require '../../vendor/javascripts/ui-bootstrap-selected'
 require './app-router'

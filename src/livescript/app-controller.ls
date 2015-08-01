@@ -46,7 +46,7 @@ angular.module \app.controller, <[app.constant app.service ga app.router]>
 
   @open-info-modal = !->
     $modal.open do
-      templateUrl: require('ngtemplate!html!jade-html!../jade/templates/info.jade')
+      templateUrl: require('ngtemplate?module=app.controller!html!jade-html!../jade/templates/info.jade')
       controller: 'ModalCtrl as Modal'
 
   # Setup @labelAction
