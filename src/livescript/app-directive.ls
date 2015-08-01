@@ -4,6 +4,8 @@ require 'angular-ga/ga.js'
 require '../../vendor/javascripts/ui-bootstrap-selected'
 require './app-service'
 
+require 'ngtemplate?relativeTo=templates/!html!jade-html!../jade/templates/comment-popup.jade'
+
 angular.module \app.directive, <[app.service ngAnimate ngSanitize ui.bootstrap.selected ga]>
 
 # Scroll spy
@@ -152,7 +154,7 @@ angular.module \app.directive, <[app.service ngAnimate ngSanitize ui.bootstrap.s
     placement: \@
     animation: \&
     isOpen: \&
-  templateUrl: require 'ngtemplate?module=app.directive!html!jade-html!../jade/templates/comment-popup.jade'
+  templateUrl: 'comment-popup.jade'
   link: (scope, elem, attrs) ->
 
     EtherCalcData.then (data) ->

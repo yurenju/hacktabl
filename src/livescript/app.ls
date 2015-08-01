@@ -10,4 +10,4 @@ angular.module 'app', <[
   app.directive
 ]>
 
-require 'ngtemplate?relativeTo=templates/&module=app!html!jade-html!../jade/templates/empty.jade'
+require 'ngtemplate?relativeTo=templates/!html!jade-html!../jade/templates/empty.jade'

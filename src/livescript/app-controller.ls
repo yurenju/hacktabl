@@ -3,6 +3,8 @@ require './app-constant'
 require './app-service'
 require './app-router'
 
+require('ngtemplate?relativeTo=templates/!html!jade-html!../jade/templates/info.jade')
+
 angular.module \app.controller, <[app.constant app.service ga app.router]>
 .controller \AppCtrl, <[
        TableData Spy  State  EtherCalcData  $anchorScroll  $timeout
@@ -46,7 +48,7 @@ angular.module \app.controller, <[app.constant app.service ga app.router]>
 
   @open-info-modal = !->
     $modal.open do
-      templateUrl: require('ngtemplate?module=app.controller!html!jade-html!../jade/templates/info.jade')
+      templateUrl: 'info.jade'
       controller: 'ModalCtrl as Modal'
 
   # Setup @labelAction
