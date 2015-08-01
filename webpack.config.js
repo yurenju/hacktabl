@@ -1,4 +1,5 @@
-var path = require('path'),
+var DEVSERVER_PORT = 5000,
+    path = require('path'),
     webpack = require('webpack'),
     ExtractText = require('extract-text-webpack-plugin');
 
@@ -66,16 +67,31 @@ if( isProduction ){
   // http://gaearon.github.io/react-hot-loader/#enabling-hot-module-replacement
   //
   webpackCfg.entry.app = [
-    // Instruct socket.io in weboack-dev-server to connect to hostname-agnostic '/'
-    'webpack-dev-server/client?/',
+    'webpack-dev-server/client?localhost:' + DEVSERVER_PORT,
     'webpack/hot/dev-server',
     webpackCfg.entry.app
   ];
 
   webpackCfg.devServer = {
     host: '0.0.0.0',
-    port: 5000,
-    hot: true
+    port: DEVSERVER_PORT,
+    hot: true,
+
+    // Proxy any path except /build/... to '/'
+    proxy: [
+      {
+        path: /^(?!\/build|\/$)/,
+        target: 'http://localhost:' + DEVSERVER_PORT,
+        rewrite: function(req) {
+          console.log('Rewriting', req.path, 'to /');
+
+          // Rewriting example
+          // https://github.com/webpack/webpack-dev-server/pull/127#issuecomment-90702687
+          //
+          req.url = '/';
+        }
+      }
+    ]
   };
 
   webpackCfg.plugins.push(new webpack.HotModuleReplacementPlugin());
