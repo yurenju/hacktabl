@@ -33,7 +33,8 @@
     "webpack-dev-server": "^1.10.1"
   },
   "scripts": {
-    "test": "node_modules/karma/bin/karma start test/karma.conf.js",
+    "test": "karma start test/karma.conf.js",
+    "test:watch": "webpack && parallelshell 'webpack --watch' 'npm run test'",
     "clean": "rm -rf build/",
     "start": "parallelshell 'webpack-dev-server --progress' 'npm run build:index:dev'",
     "build": "npm run build:webpack && npm run build:index:prod",

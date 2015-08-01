@@ -68,7 +68,7 @@ gulp
 When developing parsers, please run unit test using:
 
 ```
-npm test
+npm run test:watch
 ```
 
 
