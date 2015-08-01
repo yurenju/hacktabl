@@ -7,13 +7,10 @@ DEPLOY_BRANCH=gh-pages
 # Build production html using gulp and put the site in /build directory
 #
 build: clean
-	NODE_ENV=production gulp html
-	mkdir build
-
+	NODE_ENV=production npm run build
 	cp index.html build/index.html
 	cp index.html build/404.html
 	cp config/CNAME build/CNAME
-	cp -R public  build/
 
 # Intialize git and push the content to master.
 # Note: It is supposed to be executed in build directory
@@ -36,6 +33,6 @@ push: build
 
 
 clean:
-	rm -rf build
+	npm run clean
 
 deploy: clean build push
