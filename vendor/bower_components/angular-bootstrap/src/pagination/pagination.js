@@ -1,5 +1,4 @@
 angular.module('ui.bootstrap.pagination', [])
-
 .controller('PaginationController', ['$scope', '$attrs', '$parse', function ($scope, $attrs, $parse) {
   var self = this,
       ngModelCtrl = { $setViewValue: angular.noop }, // nullModelCtrl
@@ -21,6 +20,20 @@ angular.module('ui.bootstrap.pagination', [])
     } else {
       this.itemsPerPage = config.itemsPerPage;
     }
+
+    $scope.$watch('totalItems', function() {
+      $scope.totalPages = self.calculateTotalPages();
+    });
+
+    $scope.$watch('totalPages', function(value) {
+      setNumPages($scope.$parent, value); // Readonly variable
+
+      if ( $scope.page > value ) {
+        $scope.selectPage(value);
+      } else {
+        ngModelCtrl.$render();
+      }
+    });
   };
 
   this.calculateTotalPages = function() {
@@ -32,8 +45,12 @@ angular.module('ui.bootstrap.pagination', [])
     $scope.page = parseInt(ngModelCtrl.$viewValue, 10) || 1;
   };
 
-  $scope.selectPage = function(page) {
-    if ( $scope.page !== page && page > 0 && page <= $scope.totalPages) {
+  $scope.selectPage = function(page, evt) {
+    var clickAllowed = !$scope.ngDisabled || !evt;
+    if (clickAllowed && $scope.page !== page && page > 0 && page <= $scope.totalPages) {
+      if (evt && evt.target) {
+        evt.target.blur();
+      }
       ngModelCtrl.$setViewValue(page);
       ngModelCtrl.$render();
     }
@@ -48,20 +65,6 @@ angular.module('ui.bootstrap.pagination', [])
   $scope.noNext = function() {
     return $scope.page === $scope.totalPages;
   };
-
-  $scope.$watch('totalItems', function() {
-    $scope.totalPages = self.calculateTotalPages();
-  });
-
-  $scope.$watch('totalPages', function(value) {
-    setNumPages($scope.$parent, value); // Readonly variable
-
-    if ( $scope.page > value ) {
-      $scope.selectPage(value);
-    } else {
-      ngModelCtrl.$render();
-    }
-  });
 }])
 
 .constant('paginationConfig', {
@@ -83,7 +86,8 @@ angular.module('ui.bootstrap.pagination', [])
       firstText: '@',
       previousText: '@',
       nextText: '@',
-      lastText: '@'
+      lastText: '@',
+      ngDisabled:'='
     },
     require: ['pagination', '?ngModel'],
     controller: 'PaginationController',
