@@ -22,7 +22,7 @@ Example: [Doraemon compare table](http://hacktabl.org/doratable) or [FEPZ compar
 
 ### Table view
 
-Example: [FEPZ compare table for agricultire](http://hacktabl.org/fepz-agriculture)
+Example: [FEPZ compare table for agriculture](http://hacktabl.org/fepz-agriculture)
 
 * Show succinct summaries for each table cell so that the table gives a bigger picture for the issue.
 * Clicking the table row toggles further arguments for that specific pespective.
