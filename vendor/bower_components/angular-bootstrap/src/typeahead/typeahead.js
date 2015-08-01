@@ -29,10 +29,11 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position', 'ui.bootstrap
   };
 }])
 
-  .directive('typeahead', ['$compile', '$parse', '$q', '$timeout', '$document', '$position', 'typeaheadParser',
-    function ($compile, $parse, $q, $timeout, $document, $position, typeaheadParser) {
+  .directive('typeahead', ['$compile', '$parse', '$q', '$timeout', '$document', '$window', '$rootScope', '$position', 'typeaheadParser',
+       function ($compile, $parse, $q, $timeout, $document, $window, $rootScope, $position, typeaheadParser) {
 
   var HOT_KEYS = [9, 13, 27, 38, 40];
+  var eventDebounceTime = 200;
 
   return {
     require:'ngModel',
@@ -41,9 +42,12 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position', 'ui.bootstrap
       //SUPPORTED ATTRIBUTES (OPTIONS)
 
       //minimal no of characters that needs to be entered before typeahead kicks-in
-      var minSearch = originalScope.$eval(attrs.typeaheadMinLength) || 1;
+      var minLength = originalScope.$eval(attrs.typeaheadMinLength);
+      if (!minLength && minLength !== 0) {
+        minLength = 1;
+      }
 
-      //minimal wait time after last character typed before typehead kicks-in
+      //minimal wait time after last character typed before typeahead kicks-in
       var waitTime = originalScope.$eval(attrs.typeaheadWaitMs) || 0;
 
       //should it restrict model values to the ones selected from the popup only?
@@ -55,9 +59,14 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position', 'ui.bootstrap
       //a callback executed when a match is selected
       var onSelectCallback = $parse(attrs.typeaheadOnSelect);
 
+      //should it select highlighted popup value when losing focus?
+      var isSelectOnBlur = angular.isDefined(attrs.typeaheadSelectOnBlur) ? originalScope.$eval(attrs.typeaheadSelectOnBlur) : false;
+
       var inputFormatter = attrs.typeaheadInputFormatter ? $parse(attrs.typeaheadInputFormatter) : undefined;
 
       var appendToBody =  attrs.typeaheadAppendToBody ? originalScope.$eval(attrs.typeaheadAppendToBody) : false;
+
+      var focusFirst = originalScope.$eval(attrs.typeaheadFocusFirst) !== false;
 
       //INTERNAL VARIABLES
 
@@ -68,6 +77,11 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position', 'ui.bootstrap
       var parserResult = typeaheadParser.parse(attrs.typeahead);
 
       var hasFocus;
+
+      //Used to avoid bug in iOS webview where iOS keyboard does not fire
+      //mousedown & mouseup events
+      //Issue #3699
+      var selected;
 
       //create a child scope for the typeahead directive so we are not polluting original scope
       //with typeahead-specific data (matches, query etc.)
@@ -91,6 +105,7 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position', 'ui.bootstrap
         matches: 'matches',
         active: 'activeIdx',
         select: 'select(activeIdx)',
+        'move-in-progress': 'moveInProgress',
         query: 'query',
         position: 'position'
       });
@@ -129,9 +144,9 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position', 'ui.bootstrap
           //but we are interested only in responses that correspond to the current view value
           var onCurrentRequest = (inputValue === modelCtrl.$viewValue);
           if (onCurrentRequest && hasFocus) {
-            if (matches.length > 0) {
+            if (matches && matches.length > 0) {
 
-              scope.activeIdx = 0;
+              scope.activeIdx = focusFirst ? 0 : -1;
               scope.matches.length = 0;
 
               //transform labels
@@ -148,8 +163,7 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position', 'ui.bootstrap
               //position pop-up with matches - we need to re-calculate its position each time we are opening a window
               //with matches as a pop-up might be absolute-positioned and position of an input might have changed on a page
               //due to other elements being rendered
-              scope.position = appendToBody ? $position.offset(element) : $position.position(element);
-              scope.position.top = scope.position.top + element.prop('offsetHeight');
+              recalculatePosition();
 
               element.attr('aria-expanded', true);
             } else {
@@ -165,12 +179,54 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position', 'ui.bootstrap
         });
       };
 
+      // bind events only if appendToBody params exist - performance feature
+      if (appendToBody) {
+        angular.element($window).bind('resize', fireRecalculating);
+        $document.find('body').bind('scroll', fireRecalculating);
+      }
+
+      // Declare the timeout promise var outside the function scope so that stacked calls can be cancelled later
+      var timeoutEventPromise;
+
+      // Default progress type
+      scope.moveInProgress = false;
+
+      function fireRecalculating() {
+        if(!scope.moveInProgress){
+          scope.moveInProgress = true;
+          scope.$digest();
+        }
+
+        // Cancel previous timeout
+        if (timeoutEventPromise) {
+          $timeout.cancel(timeoutEventPromise);
+        }
+
+        // Debounced executing recalculate after events fired
+        timeoutEventPromise = $timeout(function () {
+          // if popup is visible
+          if (scope.matches.length) {
+            recalculatePosition();
+          }
+
+          scope.moveInProgress = false;
+          scope.$digest();
+        }, eventDebounceTime);
+      }
+
+      // recalculate actual position and set new values to scope
+      // after digest loop is popup in right position
+      function recalculatePosition() {
+        scope.position = appendToBody ? $position.offset(element) : $position.position(element);
+        scope.position.top += element.prop('offsetHeight');
+      }
+
       resetMatches();
 
       //we need to propagate user's query so we can higlight matches
       scope.query = undefined;
 
-      //Declare the timeout promise var outside the function scope so that stacked calls can be cancelled later 
+      //Declare the timeout promise var outside the function scope so that stacked calls can be cancelled later
       var timeoutPromise;
 
       var scheduleSearchWithTimeout = function(inputValue) {
@@ -191,7 +247,7 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position', 'ui.bootstrap
 
         hasFocus = true;
 
-        if (inputValue && inputValue.length >= minSearch) {
+        if (minLength === 0 || inputValue && inputValue.length >= minLength) {
           if (waitTime > 0) {
             cancelPreviousTimeout();
             scheduleSearchWithTimeout(inputValue);
@@ -223,9 +279,16 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position', 'ui.bootstrap
         var candidateViewValue, emptyViewValue;
         var locals = {};
 
+        // The validity may be set to false via $parsers (see above) if
+        // the model is restricted to selected values. If the model
+        // is set manually it is considered to be valid.
+        if (!isEditable) {
+          modelCtrl.$setValidity('editable', true);
+        }
+
         if (inputFormatter) {
 
-          locals['$model'] = modelValue;
+          locals.$model = modelValue;
           return inputFormatter(originalScope, locals);
 
         } else {
@@ -246,10 +309,12 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position', 'ui.bootstrap
         var locals = {};
         var model, item;
 
+        selected = true;
         locals[parserResult.itemName] = item = scope.matches[activeIdx].model;
         model = parserResult.modelMapper(originalScope, locals);
         $setModelValue(originalScope, model);
         modelCtrl.$setValidity('editable', true);
+        modelCtrl.$setValidity('parse', true);
 
         onSelectCallback(originalScope, {
           $item: item,
@@ -272,6 +337,18 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position', 'ui.bootstrap
           return;
         }
 
+        // if there's nothing selected (i.e. focusFirst) and enter is hit, don't do anything
+        if (scope.activeIdx === -1 && evt.which === 13) {
+          return;
+        }
+
+        // if there's nothing selected (i.e. focusFirst) and tab is hit, clear the results
+        if (scope.activeIdx === -1 && evt.which === 9) {
+          resetMatches();
+          scope.$digest();
+          return;
+        }
+
         evt.preventDefault();
 
         if (evt.which === 40) {
@@ -279,7 +356,7 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position', 'ui.bootstrap
           scope.$digest();
 
         } else if (evt.which === 38) {
-          scope.activeIdx = (scope.activeIdx ? scope.activeIdx : scope.matches.length) - 1;
+          scope.activeIdx = (scope.activeIdx > 0 ? scope.activeIdx : scope.matches.length) - 1;
           scope.$digest();
 
         } else if (evt.which === 13 || evt.which === 9) {
@@ -295,15 +372,26 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position', 'ui.bootstrap
         }
       });
 
-      element.bind('blur', function (evt) {
+      element.bind('blur', function () {
+        if (isSelectOnBlur && scope.matches.length && scope.activeIdx !== -1 && !selected) {
+          selected = true;
+          scope.$apply(function () {
+            scope.select(scope.activeIdx);
+          });
+        }
         hasFocus = false;
+        selected = false;
       });
 
       // Keep reference to click handler to unbind it.
       var dismissClickHandler = function (evt) {
-        if (element[0] !== evt.target) {
+        // Issue #3973
+        // Firefox treats right click as a click on document
+        if (element[0] !== evt.target && evt.which !== 3) {
           resetMatches();
-          scope.$digest();
+          if (!$rootScope.$$phase) {
+            scope.$digest();
+          }
         }
       };
 
@@ -311,10 +399,16 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position', 'ui.bootstrap
 
       originalScope.$on('$destroy', function(){
         $document.unbind('click', dismissClickHandler);
+        if (appendToBody) {
+          $popup.remove();
+        }
+        // Prevent jQuery cache memory leak
+        popUpEl.remove();
       });
 
       var $popup = $compile(popUpEl)(scope);
-      if ( appendToBody ) {
+
+      if (appendToBody) {
         $document.find('body').append($popup);
       } else {
         element.after($popup);
@@ -331,7 +425,8 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position', 'ui.bootstrap
         matches:'=',
         query:'=',
         active:'=',
-        position:'=',
+        position:'&',
+        moveInProgress:'=',
         select:'&'
       },
       replace:true,
@@ -359,7 +454,7 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position', 'ui.bootstrap
     };
   })
 
-  .directive('typeaheadMatch', ['$http', '$templateCache', '$compile', '$parse', function ($http, $templateCache, $compile, $parse) {
+  .directive('typeaheadMatch', ['$templateRequest', '$compile', '$parse', function ($templateRequest, $compile, $parse) {
     return {
       restrict:'EA',
       scope:{
@@ -369,8 +464,10 @@ angular.module('ui.bootstrap.typeahead', ['ui.bootstrap.position', 'ui.bootstrap
       },
       link:function (scope, element, attrs) {
         var tplUrl = $parse(attrs.templateUrl)(scope.$parent) || 'template/typeahead/typeahead-match.html';
-        $http.get(tplUrl, {cache: $templateCache}).success(function(tplContent){
-           element.replaceWith($compile(tplContent.trim())(scope));
+        $templateRequest(tplUrl).then(function(tplContent) {
+          $compile(tplContent.trim())(scope, function(clonedElement){
+            element.replaceWith(clonedElement);
+          });
         });
       }
     };

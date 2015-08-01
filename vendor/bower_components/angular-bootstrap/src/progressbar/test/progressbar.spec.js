@@ -1,5 +1,5 @@
 describe('progressbar directive', function () {
-  var $rootScope, element;
+  var $rootScope, $compile, element;
   beforeEach(module('ui.bootstrap.progressbar'));
   beforeEach(module('template/progressbar/progressbar.html', 'template/progressbar/progress.html', 'template/progressbar/bar.html'));
   beforeEach(inject(function(_$compile_, _$rootScope_) {
@@ -116,6 +116,13 @@ describe('progressbar directive', function () {
     it('transcludes "bar" text', function() {
       expect(getBar(0).text()).toBe('22/200');
     });
+
+    it('adjusts the valuemax when it changes', function() {
+      expect(getBar(0).attr('aria-valuemax')).toBe('200');
+      $rootScope.max = 300;
+      $rootScope.$digest();
+      expect(getBar(0).attr('aria-valuemax')).toBe('300');
+    });
   });
 
   describe('"type" attribute', function () {
@@ -207,6 +214,50 @@ describe('progressbar directive', function () {
       expect(getBar(0)).toHaveClass(BAR_CLASS + '-info');
       expect(getBar(0)).not.toHaveClass(BAR_CLASS + '-success');
       expect(getBar(0)).not.toHaveClass(BAR_CLASS + '-warning');
+    });
+
+    describe('"max" attribute', function() {
+      beforeEach(inject(function() {
+        $rootScope.max = 200;
+        element = $compile('<progress max="max" animate="false"><bar ng-repeat="o in objects" value="o.value">{{o.value}}/{{max}}</bar></progress>')($rootScope);
+        $rootScope.$digest();
+      }));
+
+      it('has the appropriate aria markup', function() {
+        expect(getBar(0).attr('aria-valuemax')).toBe('200');
+      });
+
+      it('adjusts the "bar" width when it changes', function() {
+        expect(getBar(0).css('width')).toBe('5%');
+        $rootScope.max = 250;
+        $rootScope.$digest();
+        expect(getBar(0).css('width')).toBe('4%');
+      });
+
+      it('adjusts the "bar" width when value changes', function() {
+        $rootScope.objects[0].value = 60;
+        $rootScope.$digest();
+        expect(getBar(0).css('width')).toBe('30%');
+
+        $rootScope.objects[0].value += 12;
+        $rootScope.$digest();
+        expect(getBar(0).css('width')).toBe('36%');
+
+        $rootScope.objects[0].value = 0;
+        $rootScope.$digest();
+        expect(getBar(0).css('width')).toBe('0%');
+      });
+
+      it('transcludes "bar" text', function() {
+        expect(getBar(0).text()).toBe('10/200');
+      });
+
+      it('adjusts the valuemax when it changes', function() {
+        expect(getBar(0).attr('aria-valuemax')).toBe('200');
+        $rootScope.max = 300;
+        $rootScope.$digest();
+        expect(getBar(0).attr('aria-valuemax')).toBe('300');
+      });
     });
   });
 });

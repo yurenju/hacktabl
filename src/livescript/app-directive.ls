@@ -1,8 +1,10 @@
-#= require app-service.js
-#= require angular-animate/angular-animate.min.js
-#= require angular-sanitize/angular-sanitize.min.js
-#= require ui-bootstrap-selected.js
-#= require angular-ga/ga.js
+require 'angular-animate/angular-animate.js'
+require 'angular-sanitize/angular-sanitize.js'
+require 'angular-ga/ga.js'
+require '../../vendor/javascripts/ui-bootstrap-selected'
+require './app-service'
+
+require 'ngtemplate?relativeTo=templates/!html!jade-html!../jade/templates/comment-popup.jade'
 
 angular.module \app.directive, <[app.service ngAnimate ngSanitize ui.bootstrap.selected ga]>
 
@@ -152,7 +154,7 @@ angular.module \app.directive, <[app.service ngAnimate ngSanitize ui.bootstrap.s
     placement: \@
     animation: \&
     isOpen: \&
-  templateUrl: 'public/templates/comment-popup.html'
+  templateUrl: 'comment-popup.jade'
   link: (scope, elem, attrs) ->
 
     EtherCalcData.then (data) ->

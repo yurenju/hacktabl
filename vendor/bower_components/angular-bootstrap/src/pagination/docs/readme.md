@@ -5,9 +5,17 @@ A lightweight pagination directive that is focused on ... providing pagination &
 
 Settings can be provided as attributes in the `<pagination>` or globally configured through the `paginationConfig`.
 
+ * `ng-change`
+ 	:
+ 	`ng-change` can be used together with `ng-model` to call a function whenever the page changes.
+
  * `ng-model` <i class="glyphicon glyphicon-eye-open"></i>
  	:
  	Current page number. First page is 1.
+
+ * `ng-disabled` <i class="glyphicon glyphicon-eye-open"></i>
+  :
+  Used to disable the pagination component
 
  * `total-items` <i class="glyphicon glyphicon-eye-open"></i>
  	:

@@ -1,13 +1,9 @@
-/*
- *= require_self
- */
-
 // customize bootstrap variables here:
-@import variables
-@import bootstrap
-@import compass/typography
-@import compass/css3
-@import compass/layout/stretching
+@import '_variables'
+@import '~bootstrap-sass/assets/stylesheets/bootstrap.scss'
+@import 'compass/_typography.scss'
+@import 'compass/_css3.scss'
+@import 'compass/layout/_stretching.scss'
 
 html
   font-size: $font-size-base
@@ -321,7 +317,7 @@ body
 [comment].is-controversial
   $line-color: desaturate(lighten($brand-success, 60%), 20%)
   border-bottom: none
-  background: $line-color image-url('line.png') repeat-x bottom center
+  background: $line-color url('../images/line.png') repeat-x bottom center
 
 
 // Content styles parsed by StyleData

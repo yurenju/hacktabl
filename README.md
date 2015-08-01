@@ -53,8 +53,6 @@ After cloning the repository, please do the following in the repository folder:
 
 ```
 npm install
-npm install -g gulp LiveScript
-bundle
 ```
 
 Bower components are included in repository so there's no need to do `bower install`.
@@ -62,13 +60,15 @@ Bower components are included in repository so there's no need to do `bower inst
 To start development server, please do:
 
 ```
-gulp
+npm start
 ```
+
+And open up `http://localhost:5000` to see the working website.
 
 When developing parsers, please run unit test using:
 
 ```
-npm test
+npm run test:watch
 ```
 
 

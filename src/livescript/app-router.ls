@@ -6,7 +6,9 @@
 
 angular.module 'app.router', []
 .config <[$locationProvider]> ++ ($locationProvider) !->
-  $locationProvider.html5Mode true
+  $locationProvider.html5Mode do
+    enabled: true
+    requireBase: false
 
 # Provide the etherpad id constant from path,
 # Remove the leading slash '/'
