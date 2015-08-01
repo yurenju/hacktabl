@@ -1,39 +1,54 @@
 {
-  "name": "fepztw",
+  "name": "hacktabl",
   "version": "0.0.0",
-  "description": "自經區正反意見比較表",
+  "description": "Comparison table generator, using Ethercalc and Google Doc as the content backend",
   "main": "index.html",
   "devDependencies": {
     "LiveScript": "^1.3.0",
+    "compass-mixins": "^0.12.7",
+    "connect": "~2.21.1",
+    "extract-text-webpack-plugin": "^0.8.2",
+    "gulp": "^3.9.0",
+    "gulp-angular-templatecache": "~1.2.1",
+    "gulp-compass": "^2.1.0",
+    "gulp-filter": "^3.0.0",
+    "gulp-jade": "^1.0.0",
+    "gulp-livereload": "^3.8.0",
+    "gulp-livescript": "^2.4.0",
+    "gulp-uglify": "^1.2.0",
+    "html-loader": "^0.3.0",
+    "jade": "^1.11.0",
+    "jade-html-loader": "0.0.2",
     "karma": "~0.12.16",
+    "karma-chrome-launcher": "~0.1.3",
+    "karma-firefox-launcher": "~0.1.3",
+    "karma-html2js-preprocessor": "~0.1.0",
+    "karma-jasmine": "~0.1.5",
     "karma-live-preprocessor": "^0.2.2",
     "karma-safari-launcher": "~0.1.1",
-    "karma-firefox-launcher": "~0.1.3",
-    "karma-chrome-launcher": "~0.1.3",
-    "karma-jasmine": "~0.1.5",
-    "gulp": "^3.9.0",
-    "gulp-uglify": "^1.2.0",
-    "gulp-jade": "^1.0.0",
-    "gulp-filter": "^3.0.0",
-    "gulp-compass": "^2.1.0",
-    "gulp-livescript": "^2.4.0",
-    "gulp-livereload": "^3.8.0",
-    "connect": "~2.21.1",
-    "gulp-angular-templatecache": "~1.2.1",
+    "livescript-loader": "^0.1.5",
+    "ngtemplate-loader": "^1.3.0",
+    "parallelshell": "^2.0.0",
     "q": "~1.0.1",
-    "karma-html2js-preprocessor": "~0.1.0"
-  },
-  "dependencies": {
-    "sprocket": "git+https://github.com/MrOrz/sprocket.git#emit-error-to-stream-when-require-failed"
+    "webpack": "^1.10.5",
+    "webpack-dev-server": "^1.10.1"
   },
   "scripts": {
     "test": "node_modules/karma/bin/karma start test/karma.conf.js",
-    "start": "gulp --require LiveScript server",
+    "start": "parallelshell 'webpack-dev-server' 'npm run build:jade -- -O {\"hash\":\"app\"}",
+    "build": "npm run build:webpack -- --json > $npm_package_config_webpack_stat && npm run build:jade -- -O $npm_package_config_webpack_stat",
+    "build:jade": "jade $npm_package_config_jade_in --out $npm_package_config_jade_out",
+    "build:webpack": "webpack --progress",
     "deploy": "make deploy"
+  },
+  "config": {
+    "jade_in": "client/jade/*.jade",
+    "jade_out": "client/build",
+    "webpack_stat": "webpack-stats.json"
   },
   "repository": {
     "type": "git",
-    "url": "git://git@github.com:fepztw/fepztw.github.io.git"
+    "url": "https://github.com/MrOrz/hacktabl.git"
   },
   "author": "MrOrz",
   "license": "MIT"

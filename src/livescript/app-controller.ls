@@ -1,7 +1,7 @@
-#= require app-constant.js
-#= require app-service.js
-#= require app-router.js
-#= require angular-ga/ga.js
+require 'angular-ga/ga.js'
+require './app-constant'
+require './app-service'
+require './app-router'
 
 angular.module \app.controller, <[app.constant app.service ga app.router]>
 .controller \AppCtrl, <[
@@ -46,7 +46,7 @@ angular.module \app.controller, <[app.constant app.service ga app.router]>
 
   @open-info-modal = !->
     $modal.open do
-      templateUrl: 'public/templates/info.html'
+      templateUrl: require('ngtemplate!html!jade-html!../jade/templates/info.jade')
       controller: 'ModalCtrl as Modal'
 
   # Setup @labelAction

@@ -1,0 +1,88 @@
+var path = require('path'),
+    webpack = require('webpack'),
+    ExtractText = require('extract-text-webpack-plugin');
+
+var isProduction = process.env.NODE_ENV === 'production';
+
+// Base config
+//
+var webpackCfg = {
+  entry: {
+    'app': './src/livescript/app.ls',
+  },
+  output: {
+    // __dirname is the path of webpack.js
+    path: path.join(__dirname, 'build'),
+    filename: ( isProduction ? '[hash].js' : 'app.js')
+  },
+  module: {
+    loaders: [
+      {
+        test: /\.ls$/,
+        loader: 'livescript'
+      },
+      {
+        test: /\.sass$/,
+        loader: ExtractText.extract("css?sourceMap!sass")
+      },
+      {
+        test: /\.(?:jpg|png|gif|eot|svg|ttf|woff|otf)$/,
+        loader: "url-loader?limit=10000"
+      },
+      {
+        test: /common\/.+\.js$/, loader: 'babel-loader'
+      },
+      {
+        test: /client\/js\/.+\.js$/, loader: 'babel-loader', exclude: /node_modules/
+      }
+    ],
+    noParse: /vendor\/bower_components/
+  },
+  plugins: [
+    new ExtractText( isProduction ? "[hash].css" : "styles.css" ),
+    new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin('bower.json', ['main'])
+  ],
+  debug: !isProduction,
+  externals: {
+    // require("jquery") is external and available
+    //  on the global var jQuery
+    "jquery": "jQuery"
+  },
+  resolve: {
+    root: [path.join(__dirname, 'vendor', 'bower_components')],
+    extensions: ['', '.js', '.ls']
+  }
+};
+
+// Other env-based configs
+//
+if( isProduction ){
+  webpackCfg.plugins.push(new webpack.optimize.UglifyJsPlugin({
+    sourceMap: false
+  }));
+} else {
+  webpackCfg.devtool = '#source-map';
+
+  // Hot module replacement setup
+  // Ref:
+  // http://webpack.github.io/docs/webpack-dev-server.html#combining-with-an-existing-server
+  // http://gaearon.github.io/react-hot-loader/#enabling-hot-module-replacement
+  //
+  webpackCfg.entry.app = [
+    // Instruct socket.io in weboack-dev-server to connect to hostname-agnostic '/'
+    'webpack-dev-server/client?/',
+    'webpack/hot/dev-server',
+    webpackCfg.entry.app
+  ];
+
+  webpackCfg.devServer = {
+    host: '0.0.0.0',
+    port: 5000,
+    hot: true
+  };
+
+  webpackCfg.plugins.push(new webpack.HotModuleReplacementPlugin());
+  webpackCfg.output.publicPath = '/build/'
+}
+
+module.exports = webpackCfg;

@@ -1,7 +1,7 @@
-#= require angular-sanitize/angular-sanitize.min.js
-#= require angular-ga/ga.js
-#= require ui-bootstrap-selected.js
-#= require app-router
+require 'angular-sanitize/angular-sanitize.min.js'
+require 'angular-ga/ga.js'
+require '../../vendor/javascripts/ui-bootstrap-selected'
+require './app-router'
 
 angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
 #

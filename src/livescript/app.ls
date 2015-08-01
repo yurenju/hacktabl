@@ -1,8 +1,9 @@
-#= require angular/angular.min.js
-#= require app-controller.js
-#= require app-template.js
-#= require app-directive.js
-#= require app-router.js
+require 'angular/angular.min.js'
+require './app-controller'
+require './app-directive'
+require './app-router'
+
+require 'ngtemplate?relativeTo=templates/!html!jade-html!../jade/templates/empty.jade'
 
 angular.module 'app', <[
   app.controller
