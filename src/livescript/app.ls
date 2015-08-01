@@ -1,3 +1,5 @@
+require '../sass/app.sass'
+
 require 'angular/angular.min.js'
 require './app-controller'
 require './app-directive'

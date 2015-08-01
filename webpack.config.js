@@ -22,24 +22,21 @@ var webpackCfg = {
         loader: 'livescript'
       },
       {
-        test: /\.sass$/,
-        loader: ExtractText.extract("css?sourceMap!sass")
+        test: /\.s[a|c]ss$/,
+        loader: ExtractText.extract(
+          "css!sass?sourceMap&indentedSyntax&includePaths[]=" +
+            path.resolve(__dirname, "./node_modules/compass-mixins/lib")
+        )
       },
       {
-        test: /\.(?:jpg|png|gif|eot|svg|ttf|woff|otf)$/,
+        test: /\.(?:jpg|png|gif|eot|svg|ttf|woff|woff2|otf)$/,
         loader: "url-loader?limit=10000"
-      },
-      {
-        test: /common\/.+\.js$/, loader: 'babel-loader'
-      },
-      {
-        test: /client\/js\/.+\.js$/, loader: 'babel-loader', exclude: /node_modules/
       }
     ],
     noParse: /vendor\/bower_components/
   },
   plugins: [
-    new ExtractText( isProduction ? "[hash].css" : "styles.css" ),
+    new ExtractText( isProduction ? "[hash].css" : "app.css" ),
     new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin('bower.json', ['main'])
   ],
   debug: !isProduction,
