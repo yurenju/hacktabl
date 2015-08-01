@@ -63,6 +63,8 @@ To start development server, please do:
 npm start
 ```
 
+And open up `http://localhost:5000` to see the working website.
+
 When developing parsers, please run unit test using:
 
 ```
