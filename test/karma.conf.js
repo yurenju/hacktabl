@@ -15,15 +15,8 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'vendor/bower_components/angular/angular.min.js',
-      'vendor/bower_components/angular-animate/angular-animate.min.js',
-      'vendor/bower_components/angular-sanitize/angular-sanitize.min.js',
-      'vendor/bower_components/angular-ga/ga.js',
-      'vendor/bower_components/angular-bootstrap/src/*/*.js',
+      'build/app.js',
       'vendor/bower_components/angular-mocks/angular-mocks.js',
-      'tmp/javascripts/angular-templates/*',
-      'vendor/javascripts/*.ls',
-      'src/livescript/**/*.ls',
       'test/unit/**/*.spec.ls',
 
       // Fixtures
