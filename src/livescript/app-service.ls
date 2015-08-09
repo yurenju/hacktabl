@@ -440,24 +440,32 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
     TableParser resp.data, parser-options
 
 .factory \EtherCalcData, <[
-       ETHERPAD_ID  $http  $q
-]> ++ (ETHERPAD_ID, $http, $q) ->
+       $rootScope  $http  $q
+]> ++ ($rootScope, $http, $q) ->
 
-  # console.log \hsh, $location.path!
-  $http.get "https://ethercalc.org/#{ETHERPAD_ID}.csv" .then (csv) ->
-    console.log 'CSV', csv
-    data = {}
+  return new Promise (resolve, reject) !~>
 
-    for row in csv.data.split "\n"
-      columns = row.split \,
-      data[columns.0] = columns.1.match(/^"?(.*?)"?$/).1 if columns.length >= 2
+    deregister = $rootScope.$on \$routeChangeSuccess, (e, route) !~>
+      id = route.params.id
 
-    # populate EDIT_URL and DATA_URL when DOC_ID is given
-    if data.DOC_ID
-      data.EDIT_URL ||= "https://docs.google.com/document/d/#{data.DOC_ID}/edit"
-      data.DATA_URL ||= "https://docs.google.com/feeds/download/documents/export/Export?id=#{data.DOC_ID}&exportFormat=html"
+      reject \EMPTY_ID if id?length is 0
 
-    return data
+      deregister!
+
+      $http.get "https://ethercalc.org/#{id}.csv" .then (csv) !->
+        console.log 'CSV', csv
+        data = {}
+
+        for row in csv.data.split "\n"
+          columns = row.split \,
+          data[columns.0] = columns.1.match(/^"?(.*?)"?$/).1 if columns.length >= 2
+
+        # populate EDIT_URL and DATA_URL when DOC_ID is given
+        if data.DOC_ID
+          data.EDIT_URL ||= "https://docs.google.com/document/d/#{data.DOC_ID}/edit"
+          data.DATA_URL ||= "https://docs.google.com/feeds/download/documents/export/Export?id=#{data.DOC_ID}&exportFormat=html"
+
+        resolve data
 
 .config <[
        $sceDelegateProvider

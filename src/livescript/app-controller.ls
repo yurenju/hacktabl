@@ -26,8 +26,8 @@ angular.module \app.controller, <[app.constant app.service ga app.router]>
     @EMPHASIZE_NO_REF = data.EMPHASIZE_NO_REF
 
 .controller \HeaderCtrl, <[
-       Spy  State  $scope  $anchorScroll  $location  $modal  ga  HtmlDecoder  ETHERPAD_ID
-]> ++ (Spy, State, $scope, $anchorScroll, $location, $modal, ga, HtmlDecoder, ETHERPAD_ID)!->
+       Spy  State  $scope  $anchorScroll  $location  $modal  ga  HtmlDecoder  $routeParams
+]> ++ (Spy, State, $scope, $anchorScroll, $location, $modal, ga, HtmlDecoder, $routeParams)!->
 
   @Spy = Spy
 
@@ -66,16 +66,16 @@ angular.module \app.controller, <[app.constant app.service ga app.router]>
 
   # During page load, show the info modal for users that visits the table for the first time
   #
-  visit-key = "visit(#{ETHERPAD_ID})"
+  visit-key = "visit(#{$routeParams.id})"
   unless local-storage[visit-key]
     local-storage[visit-key] = true
     @open-info-modal!
 
 .controller \ModalCtrl, <[
-       EtherCalcData  ETHERPAD_ID
-]> ++ (EtherCalcData, ETHERPAD_ID) !->
+       EtherCalcData  $routeParams
+]> ++ (EtherCalcData, $routeParams) !->
 
-  @ethercalc-id = ETHERPAD_ID
+  @ethercalc-id = $routeParams.id
   EtherCalcData.then (data) !~>
     @EDIT_URL = data.EDIT_URL
     @INFO_URL = data.INFO_URL
