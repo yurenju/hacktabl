@@ -4,6 +4,7 @@
 require 'angular-route/angular-route.js'
 
 require('ngtemplate?relativeTo=templates/!html!jade-html!../jade/templates/app.jade')
+require('ngtemplate?relativeTo=templates/!html!jade-html!../jade/templates/welcome.jade')
 
 angular.module 'app.router', <[ngRoute]> .config <[
        $locationProvider  $routeProvider
@@ -16,8 +17,6 @@ angular.module 'app.router', <[ngRoute]> .config <[
 
   .when '/', do
     templateUrl: 'welcome.jade'
-
-  .otherwise '/'
 
   $locationProvider.html5Mode do
     enabled: true
