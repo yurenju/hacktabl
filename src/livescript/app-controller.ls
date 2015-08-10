@@ -16,6 +16,8 @@ angular.module \app.controller, <[app.constant app.service ga app.router]>
     # Go to anchor if there is one after all data is loaded
     $timeout ->
       $anchorScroll!
+  .catch (reason) ~>
+    console.error reason
 
   @State = State
 
@@ -25,9 +27,12 @@ angular.module \app.controller, <[app.constant app.service ga app.router]>
     @LAYOUT_TYPE = data.TYPE
     @EMPHASIZE_NO_REF = data.EMPHASIZE_NO_REF
 
+.controller \WelcomeCtrl, !->
+  console.log \Welcome!
+
 .controller \HeaderCtrl, <[
-       Spy  State  $scope  $anchorScroll  $location  $modal  ga  HtmlDecoder  $routeParams
-]> ++ (Spy, State, $scope, $anchorScroll, $location, $modal, ga, HtmlDecoder, $routeParams)!->
+       Spy  State  $scope  $anchorScroll  $location  $modal  ga  HtmlDecoder  $routeParams  VisitHistory
+]> ++ (Spy, State, $scope, $anchorScroll, $location, $modal, ga, HtmlDecoder, $routeParams, VisitHistory)!->
 
   @Spy = Spy
 
@@ -66,10 +71,12 @@ angular.module \app.controller, <[app.constant app.service ga app.router]>
 
   # During page load, show the info modal for users that visits the table for the first time
   #
-  visit-key = "visit(#{$routeParams.id})"
-  unless local-storage[visit-key]
-    local-storage[visit-key] = true
+  unless VisitHistory.is-visited($routeParams.id)
     @open-info-modal!
+
+  # Add or update visit record
+  #
+  VisitHistory.add $routeParams.id
 
 .controller \ModalCtrl, <[
        EtherCalcData  $routeParams

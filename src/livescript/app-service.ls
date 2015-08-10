@@ -610,3 +610,28 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
       html.push '">'
       addText text
       html.push '</a>'
+
+.factory \VisitHistory, <[
+       EtherCalcData
+]> ++ (EtherCalcData)->
+  history-data = {}
+
+  reload-data = ->
+    if local-storage.visited
+      history-data := JSON.parse(local-storage.visited)
+
+  reload-data!
+
+  return do
+    is-visited: (key) ->
+      return !!history-data[key]
+
+    add: (key) ->
+      data <- EtherCalcData.then
+
+      history-data[key] = do
+        time: Date.now!
+        doc-id: data.DOC_ID
+
+      local-storage.visited = JSON.stringify history-data
+      reload-data!

@@ -17,6 +17,7 @@ angular.module 'app.router', <[ngRoute]> .config <[
 
   .when '/', do
     templateUrl: 'welcome.jade'
+    controller: 'WelcomeCtrl as Welcome'
 
   $locationProvider.html5Mode do
     enabled: true
