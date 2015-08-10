@@ -9,6 +9,7 @@
     "compass-mixins": "^0.12.7",
     "connect": "~2.21.1",
     "css-loader": "^0.15.6",
+    "express": "^4.13.3",
     "extract-text-webpack-plugin": "^0.8.2",
     "file-loader": "^0.8.4",
     "html-loader": "^0.3.0",
@@ -28,12 +29,13 @@
     "q": "~1.0.1",
     "raw-loader": "^0.5.1",
     "sass-loader": "^1.0.3",
+    "serve-static": "^1.10.0",
     "url-loader": "^0.5.6",
     "webpack": "^1.10.5",
     "webpack-dev-server": "^1.10.1"
   },
   "scripts": {
-    "test": "karma start test/karma.conf.js",
+    "test": "webpack && karma start test/karma.conf.js --single-run",
     "test:watch": "webpack && parallelshell 'webpack --watch' 'npm run test'",
     "clean": "rm -rf build/",
     "start": "parallelshell 'webpack-dev-server --progress' 'npm run build:index:dev'",

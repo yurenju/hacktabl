@@ -1,5 +1,7 @@
 var DEVSERVER_PORT = 5000,
     path = require('path'),
+    serveStatic = require('serve-static'),
+    router = require('express').Router(),
     webpack = require('webpack'),
     ExtractText = require('extract-text-webpack-plugin');
 
@@ -58,6 +60,10 @@ if( isProduction ){
   webpackCfg.plugins.push(new webpack.optimize.UglifyJsPlugin({
     sourceMap: false
   }));
+
+  webpackCfg.plugins.push(new webpack.DefinePlugin({
+    GOOGLE_API_KEY: 'AIzaSyAA0OqwnzmbCumAAdx0F0cKACCs-s5ncQY' // allows http://hacktabl.org/*
+  }));
 } else {
   webpackCfg.devtool = '#source-map';
 
@@ -72,29 +78,26 @@ if( isProduction ){
     webpackCfg.entry.app
   ];
 
+  // Serve static files outside /build as well
+  router.use(serveStatic(__dirname));
+
+  // If file not found and the path does not start with /build (such as /fepz),
+  // send out index.html
+  router.get(/^(?!\/build|\/$)/, function(req, res){
+    res.sendFile(__dirname+'index.html');
+  });
+
   webpackCfg.devServer = {
     host: '0.0.0.0',
     port: DEVSERVER_PORT,
     hot: true,
-
-    // Proxy any path except /build/... to '/'
-    proxy: [
-      {
-        path: /^(?!\/build|\/$)/,
-        target: 'http://localhost:' + DEVSERVER_PORT,
-        rewrite: function(req) {
-          console.log('Rewriting', req.path, 'to /');
-
-          // Rewriting example
-          // https://github.com/webpack/webpack-dev-server/pull/127#issuecomment-90702687
-          //
-          req.url = '/';
-        }
-      }
-    ]
+    historyApiFallback: router
   };
 
   webpackCfg.plugins.push(new webpack.HotModuleReplacementPlugin());
+  webpackCfg.plugins.push(new webpack.DefinePlugin({
+    GOOGLE_API_KEY: JSON.stringify('AIzaSyBgewvC_6aFKXJnnzX0y2tp0xPM2ZLdk_w') // allows http://localhost:5000/*
+  }));
   webpackCfg.output.publicPath = '/build/'
 }
 

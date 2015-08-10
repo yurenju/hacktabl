@@ -440,24 +440,42 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
     TableParser resp.data, parser-options
 
 .factory \EtherCalcData, <[
-       ETHERPAD_ID  $http  $q
-]> ++ (ETHERPAD_ID, $http, $q) ->
+       $rootScope  $http  $q
+]> ++ ($rootScope, $http, $q) ->
 
-  # console.log \hsh, $location.path!
-  $http.get "https://ethercalc.org/#{ETHERPAD_ID}.csv" .then (csv) ->
-    console.log 'CSV', csv
-    data = {}
+  return new Promise (resolve, reject) !~>
 
-    for row in csv.data.split "\n"
-      columns = row.split \,
-      data[columns.0] = columns.1.match(/^"?(.*?)"?$/).1 if columns.length >= 2
+    deregister = $rootScope.$on \$routeChangeSuccess, (e, route) !~>
+      id = route.params.id
 
-    # populate EDIT_URL and DATA_URL when DOC_ID is given
-    if data.DOC_ID
-      data.EDIT_URL ||= "https://docs.google.com/document/d/#{data.DOC_ID}/edit"
-      data.DATA_URL ||= "https://docs.google.com/feeds/download/documents/export/Export?id=#{data.DOC_ID}&exportFormat=html"
+      reject \EMPTY_ID if id?length is 0
 
-    return data
+      deregister!
+
+      $http.get "https://ethercalc.org/#{id}.csv" .then (csv) !->
+        console.log 'CSV', csv
+        data = {}
+
+        for row in csv.data.split "\n"
+          columns = row.split \,
+          data[columns.0] = columns.1.match(/^"?(.*?)"?$/).1 if columns.length >= 2
+
+
+        # populate EDIT_URL and DATA_URL when DOC_ID is given
+        if data.DOC_ID
+          data.EDIT_URL ||= "https://docs.google.com/document/d/#{data.DOC_ID}/edit"
+          data.DATA_URL ||= "https://docs.google.com/feeds/download/documents/export/Export?id=#{data.DOC_ID}&exportFormat=html"
+
+        else if data.DATA_URL
+          # populate DOC_ID if only DATA_URL is given
+          data.DOC_ID = data.DATA_URL.match /id=([^&]+)/ .1
+
+        resolve data
+      .catch (e) !->
+        if e.status is 404
+          reject \ID_NOT_EXIST
+        else
+          reject e
 
 .config <[
        $sceDelegateProvider
@@ -602,3 +620,37 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
       html.push '">'
       addText text
       html.push '</a>'
+
+.factory \VisitHistory, <[
+       EtherCalcData
+]> ++ (EtherCalcData)->
+  history-data = {}
+
+  reload-data = ->
+    if local-storage.visited
+      history-data := JSON.parse(local-storage.visited)
+
+  reload-data!
+
+  return do
+    is-visited: (key) ->
+      return !!history-data[key]
+
+    get: ->
+      data-arr = for own let key, data of history-data
+        data.key = key
+        data
+
+      return data-arr.sort (a, b) -> a.time - b.time
+
+
+    add: (key) ->
+      data <- EtherCalcData.then
+
+      history-data[key] = do
+        time: Date.now!
+        doc-id: data.DOC_ID
+        title: data.TITLE
+
+      local-storage.visited = JSON.stringify history-data
+      reload-data!

@@ -2,7 +2,7 @@ language: node_js
 node_js:
   - "iojs"
 
-script: node_modules/karma/bin/karma start test/karma.conf.js --single-run
+script: npm test
 
 # Google Chrome
 #
@@ -14,4 +14,3 @@ before_install:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
   - npm install
-  - npm run build

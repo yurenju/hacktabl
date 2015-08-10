@@ -2,7 +2,7 @@
 build
 tmp
 node_modules
-index.html
+/*.html
 public/*
 !public/fonts
 !public/image

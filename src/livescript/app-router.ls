@@ -1,25 +1,24 @@
 #
 # hacktabl has simple routing: /:etherpad-id
 #
-# No need for ui-router or ng-router.
-#
+require 'angular-route/angular-route.js'
 
-angular.module 'app.router', []
-.config <[$locationProvider]> ++ ($locationProvider) !->
+require('ngtemplate?relativeTo=templates/!html!jade-html!../jade/templates/app.jade')
+require('ngtemplate?relativeTo=templates/!html!jade-html!../jade/templates/welcome.jade')
+
+angular.module 'app.router', <[ngRoute]> .config <[
+       $locationProvider  $routeProvider
+]> ++ ($locationProvider, $routeProvider) !->
+
+  $routeProvider
+  .when '/:id', do
+    templateUrl: 'app.jade'
+    controller: 'AppCtrl as App'
+
+  .when '/', do
+    templateUrl: 'welcome.jade'
+    controller: 'WelcomeCtrl as Welcome'
+
   $locationProvider.html5Mode do
     enabled: true
     requireBase: false
-
-# Provide the etherpad id constant from path,
-# Remove the leading slash '/'
-#
-.factory \ETHERPAD_ID, <[$location]> ++ ($location) ->
-  $location.path!slice(1)
-
-# Default etherpad-id: fepz.
-# Use $window.location to trigger page reload.
-#
-.run <[
-       ETHERPAD_ID  $window
-]> ++ (ETHERPAD_ID, $window) !->
-  $window.location.href = "/fepz" if ETHERPAD_ID.length is 0
