@@ -471,6 +471,11 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
           data.DOC_ID = data.DATA_URL.match /id=([^&]+)/ .1
 
         resolve data
+      .catch (e) !->
+        if e.status is 404
+          reject \ID_NOT_EXIST
+        else
+          reject e
 
 .config <[
        $sceDelegateProvider
@@ -645,6 +650,7 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
       history-data[key] = do
         time: Date.now!
         doc-id: data.DOC_ID
+        title: data.TITLE
 
       local-storage.visited = JSON.stringify history-data
       reload-data!
