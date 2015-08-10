@@ -330,49 +330,62 @@ body
 .bold
   font-weight: bold
 
-#welcome-header
-  color: #fff
-  padding: 64px 0
-  background: $brand-primary
+#welcome
+  min-height: 100vh
+  display: flex
+  +flex-flow(column)
 
-  .welcome-header-button
+  > header
+    +flex(1)
+    display: flex
+    +flex-flow(column)
+    +justify-content(center)
+
     color: #fff
-    background: transparent
-    border: 3px solid rgba(#fff, .82)
+    padding: 64px 0
+    background: $brand-primary
 
-    &:hover
-      border-color: transparent
-      background: rgba(#fff, .82)
-      color: $brand-primary
+    .welcome-header-button
+      color: #fff
+      background: transparent
+      border: 3px solid rgba(#fff, .82)
 
+      &:hover
+        border-color: transparent
+        background: rgba(#fff, .82)
+        color: $brand-primary
 
-#welcome-history
-  padding: 64px
+  .welcome-history
+    padding: 64px 0
 
-  h2
-    padding-bottom: 32px
+    h2
+      padding-bottom: 32px
 
-  ul
-    padding-left: 0
-    list-style-type: none
+    ul
+      padding-left: 0
+      list-style-type: none
 
-  li
-    padding: 0 8px 16px
-    display: inline-block
+    li
+      border-bottom: 1px solid $gray
+      padding: 0 8px 16px
+      display: inline-block
 
-  .welcome-history-image
-    background: transparent center center no-repeat
-    width: 220px // Google doc gives width=220 or height=220 images
-    height: 220px
-    opacity: .5
-    +transition(opacity .4s)
-
-  a:hover
-    text-decoration: none
+      @media screen and (min-width: $screen-sm-min)
+        border-bottom: 0
 
     .welcome-history-image
-      opacity: 1
+      background: transparent center center no-repeat
+      width: 220px // Google doc gives width=220 or height=220 images
+      height: 220px
+      opacity: .5
+      +transition(opacity .4s)
 
-#welcome-footer
-  background: $gray
-  padding: 64px
+    a:hover
+      text-decoration: none
+
+      .welcome-history-image
+        opacity: 1
+
+  > footer
+    background: $gray
+    padding: 64px 0
