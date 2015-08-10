@@ -62,7 +62,7 @@ if( isProduction ){
   }));
 
   webpackCfg.plugins.push(new webpack.DefinePlugin({
-    GOOGLE_API_KEY: 'AIzaSyAA0OqwnzmbCumAAdx0F0cKACCs-s5ncQY' // allows http://hacktabl.org/*
+    GOOGLE_API_KEY: JSON.stringify('AIzaSyAA0OqwnzmbCumAAdx0F0cKACCs-s5ncQY') // allows http://hacktabl.org/*
   }));
 } else {
   webpackCfg.devtool = '#source-map';
