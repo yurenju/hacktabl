@@ -460,10 +460,15 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
           columns = row.split \,
           data[columns.0] = columns.1.match(/^"?(.*?)"?$/).1 if columns.length >= 2
 
+
         # populate EDIT_URL and DATA_URL when DOC_ID is given
         if data.DOC_ID
           data.EDIT_URL ||= "https://docs.google.com/document/d/#{data.DOC_ID}/edit"
           data.DATA_URL ||= "https://docs.google.com/feeds/download/documents/export/Export?id=#{data.DOC_ID}&exportFormat=html"
+
+        else if data.DATA_URL
+          # populate DOC_ID if only DATA_URL is given
+          data.DOC_ID = data.DATA_URL.match /id=([^&]+)/ .1
 
         resolve data
 
@@ -625,6 +630,14 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
   return do
     is-visited: (key) ->
       return !!history-data[key]
+
+    get: ->
+      data-arr = for own let key, data of history-data
+        data.key = key
+        data
+
+      return data-arr.sort (a, b) -> a.time - b.time
+
 
     add: (key) ->
       data <- EtherCalcData.then

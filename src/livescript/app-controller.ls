@@ -27,8 +27,26 @@ angular.module \app.controller, <[app.constant app.service ga app.router]>
     @LAYOUT_TYPE = data.TYPE
     @EMPHASIZE_NO_REF = data.EMPHASIZE_NO_REF
 
-.controller \WelcomeCtrl, !->
-  console.log \Welcome!
+.controller \WelcomeCtrl, <[
+       VisitHistory  $http  $window
+]> ++ (VisitHistory, $http, $window)!->
+  @history-records = ^^VisitHistory.get!
+
+  # Prepare scope.historyRecords
+  for let record, idx in @history-records
+    @history-records[idx].time-str = new Date(record.time).toLocaleString!
+
+    resp <~ $http.get "https://www.googleapis.com/drive/v2/files/#{record.doc-id}?fields=thumbnailLink&key=#{GOOGLE_API_KEY}" .then
+    @history-records[idx].style = do
+      'background-image': "url(#{resp.data.thumbnail-link})"
+
+  @handleClick = (e, key) !~>
+    # Forces a full-page reload,
+    # or the factories does not get initialized correctly.
+    #
+    e.prevent-default!
+    $window.location.href = '/' + key
+
 
 .controller \HeaderCtrl, <[
        Spy  State  $scope  $anchorScroll  $location  $modal  ga  HtmlDecoder  $routeParams  VisitHistory

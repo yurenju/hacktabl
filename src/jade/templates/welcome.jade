@@ -1,1 +1,12 @@
-h1 Hello!
+header#welcome-header.text-center
+  h1 Hacktabl<small>e</small>
+  p.lead Collaborative comparison tables
+
+ul#welcome-history.text-center
+  li(ng-repeat="record in Welcome.historyRecords track by $index")
+    a(ng-href="/{{::record.key}}" ng-click="::Welcome.handleClick($event, record.key)")
+      figure.text-center
+        div.welcome-history-image(ng-style="record.style")
+        figcaption
+          p {{::record.key}}
+          p {{::record.time-str}}
