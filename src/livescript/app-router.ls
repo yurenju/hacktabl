@@ -12,8 +12,9 @@ angular.module 'app.router', <[ngRoute]> .config <[
 
   $routeProvider
   .when '/:id.html' do # Get rid of .html postfix for pre-rendered results.
-    redirectTo: (routeParams) ->
-      "/#{routeParams.id}"
+    template: 'Redirecting...'
+    controller: <[$window $routeParams]> ++ ($window, $routeParams) ->
+      $window.location.href = "/#{$routeParams.id}"
 
   .when '/:id', do
     templateUrl: 'app.jade'
