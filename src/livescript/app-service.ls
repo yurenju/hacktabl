@@ -3,7 +3,7 @@ require 'angular-ga/ga.js'
 require '../../vendor/javascripts/ui-bootstrap-selected'
 require './app-router'
 
-angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
+angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router app.constant]>
 #
 # Debounced window scroll event listener, built to avoid layout threshing
 #
