@@ -12,8 +12,8 @@ require('ngtemplate?relativeTo=errors/!html!jade-html!../jade/errors/error.jade'
 
 angular.module \app.controller, <[app.constant app.service ga app.router]>
 .controller \AppCtrl, <[
-       TableData Spy  State  EtherCalcData  $anchorScroll  $timeout  ERRORS  $modal
-]> ++ (data,     Spy, State, EtherCalcData, $anchorScroll, $timeout, ERRORS, $modal)!->
+       TableData Spy  State  EtherCalcData  $anchorScroll  $timeout  ERRORS  $modal  $window
+]> ++ (data,     Spy, State, EtherCalcData, $anchorScroll, $timeout, ERRORS, $modal, $window)!->
 
   data.then (d) ~>
     @data = d
@@ -21,6 +21,11 @@ angular.module \app.controller, <[app.constant app.service ga app.router]>
     # Go to anchor if there is one after all data is loaded
     $timeout ->
       $anchorScroll!
+
+    # If window.__prerender exists, invoke it
+    if typeof($window.__prerender) is \function
+      $window.__prerender $window
+
   .catch (reason) ~>
 
     # Error handling
