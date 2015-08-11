@@ -10,6 +10,8 @@ require('ngtemplate?relativeTo=errors/!html!jade-html!../jade/errors/no-doc-info
 require('ngtemplate?relativeTo=errors/!html!jade-html!../jade/errors/not-shared.jade')
 require('ngtemplate?relativeTo=errors/!html!jade-html!../jade/errors/error.jade')
 
+const IS_PRERENDERING = typeof(__prerender) is \function
+
 angular.module \app.controller, <[app.constant app.service ga app.router]>
 .controller \AppCtrl, <[
        TableData Spy  State  EtherCalcData  $anchorScroll  $timeout  ERRORS  $modal  $window
@@ -23,7 +25,7 @@ angular.module \app.controller, <[app.constant app.service ga app.router]>
       $anchorScroll!
 
     # If window.__prerender exists, invoke it
-    if typeof($window.__prerender) is \function
+    if IS_PRERENDERING
       $window.__prerender $window
 
   .catch (reason) ~>
@@ -133,7 +135,7 @@ angular.module \app.controller, <[app.constant app.service ga app.router]>
 
   # During page load, show the info modal for users that visits the table for the first time
   #
-  unless VisitHistory.is-visited($routeParams.id)
+  unless VisitHistory.is-visited($routeParams.id) or IS_PRERENDERING
     @open-info-modal!
 
   # Add or update visit record
