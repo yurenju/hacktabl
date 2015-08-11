@@ -1,7 +1,6 @@
 var DEVSERVER_PORT = 5000,
     path = require('path'),
     serveStatic = require('serve-static'),
-    router = require('express').Router(),
     webpack = require('webpack'),
     ExtractText = require('extract-text-webpack-plugin');
 
@@ -78,20 +77,11 @@ if( isProduction ){
     webpackCfg.entry.app
   ];
 
-  // Serve static files outside /build as well
-  router.use(serveStatic(__dirname));
-
-  // If file not found and the path does not start with /build (such as /fepz),
-  // send out index.html
-  router.get(/^(?!\/build|\/$)/, function(req, res){
-    res.sendFile(__dirname+'index.html');
-  });
-
   webpackCfg.devServer = {
     host: '0.0.0.0',
     port: DEVSERVER_PORT,
     hot: true,
-    historyApiFallback: router
+    historyApiFallback: true
   };
 
   webpackCfg.plugins.push(new webpack.HotModuleReplacementPlugin());
