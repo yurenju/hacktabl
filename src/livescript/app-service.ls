@@ -434,17 +434,16 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
       has-highlight: data.HIGHLIGHT
 
     # return the promise of table data
-    $http.get data.DATA_URL
-  .catch (reason) ->
+    $http.get data.DATA_URL .catch (reason) ->
 
-    # If 'share option' of google doc is closed,
-    # it DATA_URL will be redirected to Google Login page,
-    # which is not alloed for cross-origin requests.
-    #
-    # It will trigger CORS error and returns with status 0.
-    #
-    if reason.status === 0
-      return Promise.reject(ERRORS.NOT_SHARED)
+      # If 'share option' of google doc is closed,
+      # it DATA_URL will be redirected to Google Login page,
+      # which is not alloed for cross-origin requests.
+      #
+      # It will trigger CORS error and returns with status 0.
+      #
+      if reason.status === 0
+        return Promise.reject(ERRORS.NOT_SHARED)
 
   .then (resp) ->
     StyleData.$parse resp.data
