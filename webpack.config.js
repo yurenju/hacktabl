@@ -1,5 +1,6 @@
 var DEVSERVER_PORT = 5000,
     path = require('path'),
+    fs = require('fs'),
     serveStatic = require('serve-static'),
     webpack = require('webpack'),
     ExtractText = require('extract-text-webpack-plugin');
@@ -81,7 +82,23 @@ if( isProduction ){
     host: '0.0.0.0',
     port: DEVSERVER_PORT,
     hot: true,
-    historyApiFallback: true
+    historyApiFallback: {
+      verbose: true,
+      rewrites: [{
+        from: /\.html$/,
+        to: function(context) {
+          try {
+            // Just try opening the file to see if it exists.
+            fs.statSync(path.join(__dirname, context.parsedUrl.pathname)).isFile();
+
+            // If file exists, don't rewrite.
+            return context.parsedUrl.pathname;
+          } catch(e) {
+            return '/index.html';
+          }
+        }
+      }]
+    }
   };
 
   webpackCfg.plugins.push(new webpack.HotModuleReplacementPlugin());
