@@ -5,10 +5,15 @@ require './app-router'
 
 require('ngtemplate?relativeTo=templates/!html!jade-html!../jade/templates/info.jade')
 
+require('ngtemplate?relativeTo=errors/!html!jade-html!../jade/errors/no-ethercalc.jade')
+require('ngtemplate?relativeTo=errors/!html!jade-html!../jade/errors/no-doc-info.jade')
+require('ngtemplate?relativeTo=errors/!html!jade-html!../jade/errors/not-shared.jade')
+require('ngtemplate?relativeTo=errors/!html!jade-html!../jade/errors/error.jade')
+
 angular.module \app.controller, <[app.constant app.service ga app.router]>
 .controller \AppCtrl, <[
-       TableData Spy  State  EtherCalcData  $anchorScroll  $timeout
-]> ++ (data,     Spy, State, EtherCalcData, $anchorScroll, $timeout)!->
+       TableData Spy  State  EtherCalcData  $anchorScroll  $timeout  ERRORS  $modal
+]> ++ (data,     Spy, State, EtherCalcData, $anchorScroll, $timeout, ERRORS, $modal)!->
 
   data.then (d) ~>
     @data = d
@@ -17,7 +22,24 @@ angular.module \app.controller, <[app.constant app.service ga app.router]>
     $timeout ->
       $anchorScroll!
   .catch (reason) ~>
-    console.error reason
+
+    # Error handling
+    #
+    templateUrl = switch reason
+    case ERRORS.NO_ETHERCALC
+      'no-ethercalc.jade'
+    case ERRORS.NO_DOC_INFO
+      'no-doc-info.jade'
+    case ERRORS.NOT_SHARED
+      'not-shared.jade'
+    default
+      'error.jade'
+
+    $modal.open do
+      templateUrl: templateUrl
+      controller: 'ErrorModalCtrl as ErrorModal'
+      resolve: do
+        reason: reason
 
   @State = State
 
@@ -26,6 +48,23 @@ angular.module \app.controller, <[app.constant app.service ga app.router]>
     @TITLE = data.TITLE
     @LAYOUT_TYPE = data.TYPE
     @EMPHASIZE_NO_REF = data.EMPHASIZE_NO_REF
+
+.controller \ErrorModalCtrl, <[
+       $window  $routeParams  reason  EtherCalcData
+]> ++ ($window, $routeParams, reason, EtherCalcData) !->
+
+  @id = $routeParams.id
+  @reason = JSON.stringify(reason)
+
+  EtherCalcData.then (data) !~>
+    @ethercalcData = data
+
+  @handleHomeButton = (e) !~>
+    # Forces a full-page reload,
+    # or the factories does not get initialized correctly.
+    #
+    $window.location.href = '/'
+
 
 .controller \WelcomeCtrl, <[
        VisitHistory  $http  $window

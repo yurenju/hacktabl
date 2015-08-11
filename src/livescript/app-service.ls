@@ -422,8 +422,8 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
 
 
 .factory \TableData, <[
-       TableParser  $http  EtherCalcData  StyleData
-]> ++ (TableParser, $http, EtherCalcData, StyleData) ->
+       TableParser  $http  EtherCalcData  StyleData  ERRORS
+]> ++ (TableParser, $http, EtherCalcData, StyleData, ERRORS) ->
 
   parser-options = {}
   # Return a promise that resolves to parsed table data
@@ -435,20 +435,32 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
 
     # return the promise of table data
     $http.get data.DATA_URL
+  .catch (reason) ->
+
+    # If 'share option' of google doc is closed,
+    # it DATA_URL will be redirected to Google Login page,
+    # which is not alloed for cross-origin requests.
+    #
+    # It will trigger CORS error and returns with status 0.
+    #
+    if reason.status === 0
+      return Promise.reject(ERRORS.NOT_SHARED)
+
   .then (resp) ->
     StyleData.$parse resp.data
     TableParser resp.data, parser-options
 
+
 .factory \EtherCalcData, <[
-       $rootScope  $http  $q
-]> ++ ($rootScope, $http, $q) ->
+       $rootScope  $http  $q  ERRORS
+]> ++ ($rootScope, $http, $q, ERRORS) ->
 
   return new Promise (resolve, reject) !~>
 
     deregister = $rootScope.$on \$routeChangeSuccess, (e, route) !~>
       id = route.params.id
 
-      reject \EMPTY_ID if id?length is 0
+      reject ERRORS.NO_ID if id?length is 0
 
       deregister!
 
@@ -470,10 +482,13 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router]>
           # populate DOC_ID if only DATA_URL is given
           data.DOC_ID = data.DATA_URL.match /id=([^&]+)/ .1
 
+        else
+          reject ERRORS.NO_DOC_INFO
+
         resolve data
       .catch (e) !->
         if e.status is 404
-          reject \ID_NOT_EXIST
+          reject ERRORS.NO_ETHERCALC
         else
           reject e
 

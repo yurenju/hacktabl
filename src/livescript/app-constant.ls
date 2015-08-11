@@ -5,3 +5,9 @@ angular.module \app.constant, []
   PERSPECTIVE: \dimension2
   POSITION: \dimension3
   ITEM_CONTENT: \dimension4 # For selections
+
+.constant \ERRORS, do
+  NO_ID: \NO_ID               # No ID in path at all.
+  NO_ETHERCALC: \NO_ETHERCALC # ethercalc.org/ID not found
+  NO_DOC_INFO: \NO_DOC_INFO   # No google doc URL / ID found in ethercalc
+  NOT_SHARED: \NOT_SHARED     # Google doc is not shared
