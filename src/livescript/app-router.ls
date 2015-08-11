@@ -11,6 +11,10 @@ angular.module 'app.router', <[ngRoute]> .config <[
 ]> ++ ($locationProvider, $routeProvider) !->
 
   $routeProvider
+  .when '/:id.html' do # Get rid of .html postfix for pre-rendered results.
+    redirectTo: (routeParams) ->
+      "/#{routeParams.id}"
+
   .when '/:id', do
     templateUrl: 'app.jade'
     controller: 'AppCtrl as App'
