@@ -157,7 +157,7 @@ angular.module \app.controller, <[app.constant app.service ga app.router]>
   @title = 'Hacktabl 協作比較表格'
   @ethercalc-id = ''
   @meta = do
-    'og:image': require('../images/default-og-image.png')
+    'og:image': "http://hacktabl.org/#{require('../images/default-og-image.png')}"
     'og:description': '用 Google doc 就能協作編輯的比較表。自己的比較表自己填！'
     'og:title': @title
     'og:site_name': 'Hacktabl 協作比較表格'
