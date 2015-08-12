@@ -152,11 +152,25 @@ angular.module \app.controller, <[app.constant app.service ga app.router]>
     @INFO_URL = data.INFO_URL
 
 .controller \HeadCtrl, <[
-       EtherCalcData
-]> ++ (EtherCalcData) !->
+       EtherCalcData  $routeParams
+]> ++ (EtherCalcData, $routeParams) !->
   @title = 'Hacktabl 協作比較表格'
+  @ethercalc-id = ''
+  @meta = do
+    'og:image': require('../images/default-og-image.png')
+    'og:description': '用 Google doc 就能協作編輯的比較表。自己的比較表自己填！'
+    'og:title': @title
+    'og:site_name': 'Hacktabl 協作比較表格'
+
+
   EtherCalcData.then (data) !~>
     @title = data.TITLE
+
+    #: Set all data to be meta tags in header!
+    angular.extend @meta, {'og:title': @title}, data
+
+    #: Set this only after we are sure the ethercalc id is correct
+    @ethercalc-id = $routeParams.id
 
 .controller \TableRowCtrl, !->
   @is-expanded = false

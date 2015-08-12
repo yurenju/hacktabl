@@ -459,7 +459,7 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router ap
     deregister = $rootScope.$on \$routeChangeSuccess, (e, route) !~>
       id = route.params.id
 
-      reject ERRORS.NO_ID if id?length is 0
+      reject ERRORS.NO_ID if id?length is 0 # Should not be here because we have router...
 
       deregister!
 
