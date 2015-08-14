@@ -19,9 +19,9 @@ angular.module \app.controller, <[app.constant app.service ga app.router]>
 
   data.then (d) ~>
     @data = d
-    if $routeParams.section
+    if $routeParams.perspective
       @data.perspectives = @data.perspectives.filter (perspective) ->
-        perspective.title == $routeParams.section
+        perspective.title == $routeParams.perspective
 
     # Go to anchor if there is one after all data is loaded
     $timeout ->
