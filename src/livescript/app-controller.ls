@@ -14,11 +14,14 @@ const IS_PRERENDERING = typeof(__prerender) is \function
 
 angular.module \app.controller, <[app.constant app.service ga app.router]>
 .controller \AppCtrl, <[
-       TableData Spy  State  EtherCalcData  $anchorScroll  $timeout  ERRORS  $modal  $window
-]> ++ (data,     Spy, State, EtherCalcData, $anchorScroll, $timeout, ERRORS, $modal, $window)!->
+       TableData Spy  State  EtherCalcData  $anchorScroll  $timeout  ERRORS  $modal  $window  $routeParams
+]> ++ (data,     Spy, State, EtherCalcData, $anchorScroll, $timeout, ERRORS, $modal, $window, $routeParams)!->
 
   data.then (d) ~>
     @data = d
+    if $routeParams.perspective
+      @data.perspectives = @data.perspectives.filter (perspective) ->
+        perspective.title == $routeParams.perspective
 
     # Go to anchor if there is one after all data is loaded
     $timeout ->
@@ -173,7 +176,13 @@ angular.module \app.controller, <[app.constant app.service ga app.router]>
     #: Set this only after we are sure the ethercalc id is correct
     @ethercalc-id = $routeParams.id
 
-.controller \TableRowCtrl, !->
-  @is-expanded = false
+.controller \TableRowCtrl, <[
+       $scope
+]> ++ ($scope)!->
+
+  #: When perspective size is small enough, expand all by default
+  #:
+  @is-expanded = $scope.App.data.perspectives.length <= 1
+
   @toggle-expand = !~>
     @is-expanded = !@is-expanded

@@ -16,6 +16,10 @@ angular.module 'app.router', <[ngRoute]> .config <[
     controller: <[$window $routeParams]> ++ ($window, $routeParams) ->
       $window.location.href = "/#{$routeParams.id}"
 
+  .when '/:id/:perspective', do
+    templateUrl: 'app.jade'
+    controller: 'AppCtrl as App'
+
   .when '/:id', do
     templateUrl: 'app.jade'
     controller: 'AppCtrl as App'
