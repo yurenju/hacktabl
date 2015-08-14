@@ -14,11 +14,14 @@ const IS_PRERENDERING = typeof(__prerender) is \function
 
 angular.module \app.controller, <[app.constant app.service ga app.router]>
 .controller \AppCtrl, <[
-       TableData Spy  State  EtherCalcData  $anchorScroll  $timeout  ERRORS  $modal  $window
-]> ++ (data,     Spy, State, EtherCalcData, $anchorScroll, $timeout, ERRORS, $modal, $window)!->
+       TableData Spy  State  EtherCalcData  $anchorScroll  $timeout  ERRORS  $modal  $window  $routeParams
+]> ++ (data,     Spy, State, EtherCalcData, $anchorScroll, $timeout, ERRORS, $modal, $window, $routeParams)!->
 
   data.then (d) ~>
     @data = d
+    if $routeParams.section
+      @data.perspectives = @data.perspectives.filter (perspective) ->
+        perspective.title == $routeParams.section
 
     # Go to anchor if there is one after all data is loaded
     $timeout ->
