@@ -1,9 +1,9 @@
 (...) <-! describe \service, _
 
-expect-from-fixture = (parser, basename) ->
+expect-from-fixture = (parser, basename, parser-options) ->
   input = __html__["test/unit/fixtures/#{basename}.html"]
   expected = JSON.parse __html__["test/unit/fixtures/#{basename}.json"]
-  expect parser(input) .toEqual expected
+  expect parser(input, parser-options) .toEqual expected
 
 # Mock app.router to skip any router activity
 #
@@ -189,6 +189,9 @@ describe \TableParser (...) !->
 
   it 'should parse summary', inject (TableParser) !->
     expect-from-fixture TableParser, 'table-parser-summary'
+
+  it 'should use labels when LABEL_SUMMARY is set', inject (TableParser) !->
+    expect-from-fixture TableParser, 'table-parser-label-summary', {label-count-to-use: 2}
 
 
 describe \CommentParser (...) !->

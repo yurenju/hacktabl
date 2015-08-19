@@ -435,6 +435,25 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router ap
           # Return the argument for the iteration
           argument
 
+        # use popular labels for summary when parser-option said so.
+        if parser-options.label-count-to-use
+          label-counts = {}
+
+          # Counting each label in this td
+          for argument in debate-arguments
+            for label in argument.labels
+              label-counts[label] = if label-counts[label] then label-counts[label]+1 else 1
+
+          # Generate summary using the most popular labels
+          summary-using-label = [{label: label, count: count} for own let label, count of label-counts].sort (a, b) ->
+            b.count - a.count
+          .map (item) ->
+            item.label
+          .slice(0, parser-options.label-count-to-use)
+          .join '、'
+
+          summary = if summary-using-label then summary-using-label else summary
+
         # Return all arguments & its summary of a position for the iteration
         {summary, debate-arguments}
 
@@ -456,6 +475,8 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router ap
     # Populate the parser-options from ethercalc
     parser-options :=
       has-highlight: data.HIGHLIGHT
+      label-count-to-use: +data.LABEL_SUMMARY
+
 
     # return the promise of table data
     $http.get data.DATA_URL .catch (reason) ->
