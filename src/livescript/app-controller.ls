@@ -127,9 +127,9 @@ angular.module \app.controller, <[app.constant app.service ga app.router]>
   do ~!function write-label-action
     @label-action =
       if State.labels # label is "on" now.
-        "按一下關閉"
+        "按一下隱藏"
       else
-        "按一下開啟"
+        "按一下顯示"
 
   # Toggle the label state on / off
   @toggle-labels = ->
