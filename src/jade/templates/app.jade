@@ -77,7 +77,7 @@ div(ng-click="App.State.titlebar='title'"
           div(ng-switch-default)
             ul
               li(ng-repeat="argument in ::positions.debateArguments" ng-class="{'has-ref':!!argument.ref, 'has-no-ref': App.EMPHASIZE_NO_REF && !argument.ref}" vu-track="{perspective: row.title, position: 0, content: argument.content}")
-                small.label.label-default(ng-repeat="label in ::argument.labels" ng-if="App.State.labels"){{label}}
+                small.label.label-default(ng-repeat="label in ::argument.labels" ng-if="App.State.labels") {{label}}
                 div.content(vu-compile tmpl="::argument.content")
                 div.ref(vu-compile tmpl="::argument.ref")
             p.add-more: a(ng-href="{{App.EDIT_URL}}" vu-track="{label: 'item.edit', perspective: row.title, position: 0}")
@@ -127,7 +127,7 @@ div(ng-click="App.State.titlebar='title'"
             div(ng-show="TableRow.isExpanded")
               ul
                 li(ng-repeat="argument in ::positions.debateArguments" ng-class="{'has-ref':!!argument.ref, 'has-no-ref': App.EMPHASIZE_NO_REF && !argument.ref}" vu-track="{perspective: row.title, position: 0, content: argument.content}")
-                  small.label.label-default(ng-repeat="label in ::argument.labels" ng-if="App.State.labels"){{label}}
+                  small.label.label-default(ng-repeat="label in ::argument.labels" ng-if="App.State.labels") {{label}}
                   div.content(vu-compile tmpl="::argument.content")
                   div.ref(vu-compile tmpl="::argument.ref")
               p.add-more: a(ng-href="{{App.EDIT_URL}}" vu-track="{label: 'item.edit', perspective: row.title, position: 0}")
