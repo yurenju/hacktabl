@@ -138,6 +138,7 @@ describe \ItemSplitter (...) !->
     expect ItemSplitter('arbitary string') .toEqual do
       content : 'arbitary string'
       ref     : ''
+      labels  : []
 
   it 'should extract simple reference from <li> content', inject (ItemSplitter) !->
     input      = '<span class="c5">國外對示範區內的實質投資免稅。</span><span class="c9">[&#20986;&#34389; </span><span class="c9 c18"><a class="c3" href="AAAA">自經區草案§31</a></span><span class="c21 c9">]</span>'
@@ -145,6 +146,7 @@ describe \ItemSplitter (...) !->
     expect ItemSplitter(input) .toEqual do
       content : '<span class="c5">國外對示範區內的實質投資免稅。</span><span class="c9">'
       ref      : '</span><span class="c9 c18"><a class="c3" href="AAAA">自經區草案§31</a></span>'
+      labels: []
 
   it 'should extract reference with multiple <a>', inject (ItemSplitter) !->
     input       = '<span class="c5">公有不動產（如政府土地）可以逕行讓售，不受</span><span class="c5">民意機關同意與行政院核准</span><sup><a href="#cmnt11" name="cmnt_ref11">[k]</a></sup><span class="c5">，公有地可不經民意監督私相讓售。</span><span class="c9">[&#20986;&#34389; </span><span class="c9 c18"><a class="c3" href="BBBB">沃草自經爭議書</a></span><span class="c9">、</span><span class="c9 c18"><a class="c3" href="AAAA">自經區草案 §19</a></span><span class="c9 c21">]</span>'
@@ -152,6 +154,15 @@ describe \ItemSplitter (...) !->
     expect ItemSplitter(input) .toEqual do
       content  : '<span class="c5">公有不動產（如政府土地）可以逕行讓售，不受</span><span class="c5">民意機關同意與行政院核准</span><sup><a href="#cmnt11" name="cmnt_ref11">[k]</a></sup><span class="c5">，公有地可不經民意監督私相讓售。</span><span class="c9">'
       ref       : '</span><span class="c9 c18"><a class="c3" href="BBBB">沃草自經爭議書</a></span><span class="c9">、</span><span class="c9 c18"><a class="c3" href="AAAA">自經區草案 §19</a></span>'
+      labels: []
+
+  it 'should extract labels', inject (ItemSplitter) !->
+    input = '<span>[反對台灣獨立][支持兩岸關係] 兩岸是「</span><span>整個中國</span><span>」內部的兩個憲政政府'
+    expect ItemSplitter(input) .toEqual do
+      content  : '<span>兩岸是「</span><span>整個中國</span><span>」內部的兩個憲政政府'
+      ref       : ''
+      labels: ['反對台灣獨立', '支持兩岸關係']
+
 
 describe \TableParser (...) !->
 

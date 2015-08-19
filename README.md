@@ -18,7 +18,7 @@ Example: [Doraemon compare table](http://hacktabl.org/doratable) or [FEPZ compar
 * Showing references for each argument.
 * Tooltips over words that needs further explanation.
 * Use public Google Doc as the data source so that everyone can edit.
-
+* Label with `[some-label-text]` at the beginning of each argument.
 
 ### Table view
 

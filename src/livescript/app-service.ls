@@ -294,26 +294,50 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router ap
   return parser
 
 #
-# Split a <li> content into content and its reference
+# Split a <li> content into labels, content and its reference
 # &#20986;&#34389; = 出處
 # &#160; = &nbsp; = space
 #
-.factory \ItemSplitter, ->
-  const SPLITTER   = /\[\s*&#20986;&#34389;\s*(?:&#160;)*/gm
+.factory \ItemSplitter, <[
+         HtmlDecoder
+  ]> ++ (HtmlDecoder) ->
+  const REF_SPLITTER  = /\[\s*&#20986;&#34389;\s*(?:&#160;)*/gm
+  const LABEL_MATCHER = /^\s*\[([^\]]+)\]\s*/
+  const INITIAL_SPAN_MATCHER = /^<span[&>]*>/
   const REF_END = /]/gim
   const EMPTY_SPAN = /<span\s*[^>]*><\/span>/gim
 
   # Returned function
   (doc) ->
-    idx = doc.search SPLITTER
+    doc = doc.trim!
 
-    # If splitter is not found, set to the end of the string
-    idx = doc.length if idx is -1
+    # Removing reference from content
+    #
+    ref-idx = doc.search REF_SPLITTER
+    # If REF_splitter is not found, set to the end of the string
+    ref-idx = doc.length if ref-idx is -1
+
+    content = doc.slice(0, ref-idx)
+
+    # Removing labels from content, and populate the labels into an array
+    #
+    matched = content.match INITIAL_SPAN_MATCHER
+    if matched
+      initial-span = matched[0]
+    else
+      initial-span = ''
+    content = content.slice initial-span.length
+
+    labels = []
+    while matched = content.match LABEL_MATCHER
+      labels.push HtmlDecoder(matched[1])
+      content = content.slice matched[0].length
 
     # Returned object
-    content: doc.slice(0, idx)
-    ref: doc.slice(idx)
-            .replace(SPLITTER, '').replace(REF_END, '')
+    labels: labels
+    content: initial-span + content
+    ref: doc.slice(ref-idx)
+            .replace(REF_SPLITTER, '').replace(REF_END, '')
 
             # Removal of the above two may cause empty spans.
             .replace(EMPTY_SPAN, '')

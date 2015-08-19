@@ -9,6 +9,7 @@
           "summary": "",
           "debateArguments": [
             {
+              "labels": [],
               "ref": "",
               "content": "Argument 1"
             }
@@ -17,6 +18,7 @@
           "summary": "",
           "debateArguments": [
             {
+              "labels": [],
               "ref": "",
               "content": "Argument 2"
             }
@@ -25,6 +27,7 @@
           "summary": "",
           "debateArguments": [
             {
+              "labels": [],
               "ref": "",
               "content": "Argument 3"
             }
@@ -39,10 +42,12 @@
           "summary": "",
           "debateArguments": [
             {
+              "labels": [],
               "ref": "SRC",
               "content": "Argument 4"
             },
             {
+              "labels": [],
               "ref": "",
               "content": "Argument 5"
             }
@@ -54,9 +59,11 @@
           "summary": "",
           "debateArguments": [
             {
+              "labels": [],
               "ref": "",
               "content": "Argument 6"
             }, {
+              "labels": [],
               "ref": "",
               "content": "Argument 7"
             }
