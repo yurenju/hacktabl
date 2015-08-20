@@ -156,12 +156,18 @@ describe \ItemSplitter (...) !->
       ref       : '</span><span class="c9 c18"><a class="c3" href="BBBB">沃草自經爭議書</a></span><span class="c9">、</span><span class="c9 c18"><a class="c3" href="AAAA">自經區草案 §19</a></span>'
       labels: []
 
-  it 'should extract labels', inject (ItemSplitter) !->
+  it 'should extract and html-decode labels', inject (ItemSplitter) !->
     input = '<span>[反對台灣獨立][支持兩岸關係] 兩岸是「</span><span>整個中國</span><span>」內部的兩個憲政政府'
     expect ItemSplitter(input) .toEqual do
       content  : '<span>兩岸是「</span><span>整個中國</span><span>」內部的兩個憲政政府'
       ref       : ''
       labels: ['反對台灣獨立', '支持兩岸關係']
+
+    input = '<span class="c5">[&#25844;&#22686;&#36557;&#20633;]</span><span class="c5">&nbsp;&#23565;&#26044;&#19968;&#33324;&#36557;&#20633;&#21450;&#27494;&#22120;&#35037;&#20633;'
+    expect ItemSplitter(input) .toEqual do
+      content  : '<span class="c5"></span><span class="c5">&nbsp;&#23565;&#26044;&#19968;&#33324;&#36557;&#20633;&#21450;&#27494;&#22120;&#35037;&#20633;'
+      ref       : ''
+      labels: ['擴增軍備']
 
 
 describe \TableParser (...) !->

@@ -303,7 +303,7 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router ap
   ]> ++ (HtmlDecoder) ->
   const REF_SPLITTER  = /\[\s*&#20986;&#34389;\s*(?:&#160;)*/gm
   const LABEL_MATCHER = /^\s*\[([^\]]+)\]\s*/
-  const INITIAL_SPAN_MATCHER = /^<span[&>]*>/
+  const INITIAL_SPAN_MATCHER = /^<span[^>]*>/
   const REF_END = /]/gim
   const EMPTY_SPAN = /<span\s*[^>]*><\/span>/gim
 
