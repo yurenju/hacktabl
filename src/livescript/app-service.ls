@@ -303,9 +303,9 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router ap
   ]> ++ (HtmlDecoder) ->
   const REF_SPLITTER  = /\[\s*&#20986;&#34389;\s*(?:&#160;)*/gm
   const LABEL_MATCHER = /^\s*\[([^\]]+)\]\s*/
-  const INITIAL_SPAN_MATCHER = /^<span[^>]*>/
   const REF_END = /]/gim
   const EMPTY_SPAN = /<span\s*[^>]*><\/span>/gim
+  const TAGS = /<\/?[^>]*>/gim
 
   # Returned function
   (doc) ->
@@ -319,23 +319,31 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router ap
 
     content = doc.slice(0, ref-idx)
 
-    # Removing labels from content, and populate the labels into an array
+    # Strip all html tags before processing labels so that html tags don't get
+    # in the way.
     #
-    matched = content.match INITIAL_SPAN_MATCHER
-    if matched
-      initial-span = matched[0]
-    else
-      initial-span = ''
-    content = content.slice initial-span.length
+    stripped-content = content.replace(TAGS, '')
 
     labels = []
-    while matched = content.match LABEL_MATCHER
+    while matched = stripped-content.match LABEL_MATCHER
       labels.push HtmlDecoder(matched[1])
-      content = content.slice matched[0].length
+      stripped-content = stripped-content.slice matched[0].length
+
+    # Remove all labels from content, but keep contents (like <span>) before
+    # 1st "[" and after the last "]"
+    #
+    if labels.length > 0
+      first-bracket-position = content.index-of '['
+      last-bracket-position = 0
+      for i til labels.length
+        last-bracket-position = content.index-of ']', last-bracket-position + 1
+
+      content = content.slice(0, first-bracket-position).trim! + content.slice(last-bracket-position+1).trim!
+
 
     # Returned object
     labels: labels
-    content: initial-span + content
+    content: content
     ref: doc.slice(ref-idx)
             .replace(REF_SPLITTER, '').replace(REF_END, '')
 

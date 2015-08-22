@@ -169,6 +169,13 @@ describe \ItemSplitter (...) !->
       ref       : ''
       labels: ['擴增軍備']
 
+    # HTMl tags should not get into labels
+    #
+    input = '<span>[</span><span class="c32">111B: Diluted Taiwan Independence</span><span>] &#24076;&#26395;'
+    expect ItemSplitter(input) .toEqual do
+      content : '<span>&#24076;&#26395;'
+      ref: ''
+      labels: ['111B: Diluted Taiwan Independence']
 
 describe \TableParser (...) !->
 
