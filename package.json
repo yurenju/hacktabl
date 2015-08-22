@@ -35,7 +35,7 @@
   },
   "scripts": {
     "test": "webpack && karma start test/karma.conf.js --single-run",
-    "test:watch": "webpack && parallelshell 'webpack --watch' 'npm run test'",
+    "test:watch": "webpack && parallelshell 'webpack --watch' 'karma start test/karma.conf.js'",
     "clean": "rm -rf build/",
     "start": "parallelshell 'webpack-dev-server --progress' 'npm run build:index:dev'",
     "build": "npm run build:webpack && npm run build:index:prod",

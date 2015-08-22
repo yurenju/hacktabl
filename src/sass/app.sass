@@ -182,7 +182,12 @@ body
   li.has-ref
     $delay: 0.5s
 
+    .label
+      margin-right: 0.25em // Add space
+
     .content
+      display: inline
+
       span
         text-decoration: none
         color: inherit
@@ -295,6 +300,11 @@ body
       color: $gray-darker
     .l-row
       border: 0
+
+  .empty-summary
+    color: $gray-dark
+    font-size: $font-size-large
+    line-height: $line-height-large
 
   // Override alignment.
   .column-empty

@@ -18,7 +18,7 @@ Example: [Doraemon compare table](http://hacktabl.org/doratable) or [FEPZ compar
 * Showing references for each argument.
 * Tooltips over words that needs further explanation.
 * Use public Google Doc as the data source so that everyone can edit.
-
+* Label with `[some-label-text]` at the beginning of each argument.
 
 ### Table view
 
@@ -41,9 +41,11 @@ You may change an existing hacktabl's URL from `http://hacktabl.org/<table-id>` 
 
 ### Optional Settings
 
-* `TYPE`: Whether or not to represent each cell with a short summary so that the entire table`` looks more succinct. Can be either empty or `TABLE`. For a running example, please refer to [FEPZ comparison table for education](http://hacktabl.org/fepz-edu) and [its settings on EtherCalc](http://ethercalc.org/fepz-edu).
+* `TYPE`: Whether or not to represent each cell with a short summary so that the entire table looks more succinct. Can be either empty or `TABLE`. For a running example, please refer to [FEPZ comparison table for education](http://hacktabl.org/fepz-edu) and [its settings on EtherCalc](http://ethercalc.org/fepz-edu).
+* `LABEL_SUMMARY`: Use popular labels as summary for each cell. The value can be an integer `n`, which tells hacktabl to take top `n` labels from the cell and make up a summary for the cell. Currently only used for `TYPE=TABLE` tables.
 * `HIGHLIGHT`: Whether or not to enable bold, italic and underlines. Can be either empty or `TRUE`. For a running example, please refer to [Copyright 2014](http://hacktabl.org/copyright2014) and [its settings on EtherCalc](http://ethercalc.org/copyright2014).
 * `EMPHASIZE_NO_REF`: Whether or not to emphasize the arguments with no references. Can be either empty or `TRUE`. For a running example, please refer to [Taipei Mayoral Election](http://hacktabl.org/taipei-mayoral-election-2014) and [its settings on EtherCalc](http://ethercalc.org/taipei-mayoral-election-2014).
+Also, for each key-value pairs defined in the EtherCalc, a `<meta property="KEY" content="VALUE">` element will be inserted into <head>. Properties like `og:image` can be set with this technique.
 
 
 Development

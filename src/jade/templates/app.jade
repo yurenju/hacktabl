@@ -36,7 +36,7 @@ header#header(
 
         .toolbox-btn-group.btn-group
           button.btn(
-            tooltip="{{ Header.labelAction }}爭議標記"
+            tooltip="{{ Header.labelAction }}所有標籤"
             tooltip-placement="bottom" tooltip-append-to-body="true"
             ng-class="{active: App.State.labels}"
             ng-click="Header.toggleLabels()"
@@ -77,6 +77,7 @@ div(ng-click="App.State.titlebar='title'"
           div(ng-switch-default)
             ul
               li(ng-repeat="argument in ::positions.debateArguments" ng-class="{'has-ref':!!argument.ref, 'has-no-ref': App.EMPHASIZE_NO_REF && !argument.ref}" vu-track="{perspective: row.title, position: 0, content: argument.content}")
+                small.label.label-default(ng-repeat="label in ::argument.labels" ng-if="App.State.labels") {{label}}
                 div.content(vu-compile tmpl="::argument.content")
                 div.ref(vu-compile tmpl="::argument.ref")
             p.add-more: a(ng-href="{{App.EDIT_URL}}" vu-track="{label: 'item.edit', perspective: row.title, position: 0}")
@@ -120,12 +121,14 @@ div(ng-click="App.State.titlebar='title'"
 
           div(ng-switch-default)
             h2(ng-click="TableRow.toggleExpand()")
-              span(vu-compile tmpl="::positions.summary")
+              span(vu-compile tmpl="::positions.summary" ng-if="::positions.summary")
+              span.empty-summary(ng-if="::positions.summary == ''") ({{positions.debateArguments.length}} 個論述)
               span.glyphicon.glyphicon-chevron-down.arrow(ng-hide="TableRow.isExpanded")
               span.glyphicon.glyphicon-chevron-up.arrow(ng-show="TableRow.isExpanded")
             div(ng-show="TableRow.isExpanded")
               ul
                 li(ng-repeat="argument in ::positions.debateArguments" ng-class="{'has-ref':!!argument.ref, 'has-no-ref': App.EMPHASIZE_NO_REF && !argument.ref}" vu-track="{perspective: row.title, position: 0, content: argument.content}")
+                  small.label.label-default(ng-repeat="label in ::argument.labels" ng-if="App.State.labels") {{label}}
                   div.content(vu-compile tmpl="::argument.content")
                   div.ref(vu-compile tmpl="::argument.ref")
               p.add-more: a(ng-href="{{App.EDIT_URL}}" vu-track="{label: 'item.edit', perspective: row.title, position: 0}")
@@ -137,7 +140,7 @@ div(ng-click="App.State.titlebar='title'"
 
   div.container: div.main-loading.alert.alert-info.text-center(ng-hide="::App.data") Loading
 
-  #edit.row: .col-lg-4.col-lg-offset-4.col-xs-8.col-xs-offset-2
+  #edit.container: .row: .col-lg-4.col-lg-offset-4.col-xs-8.col-xs-offset-2
     a.btn.btn-primary.btn-lg.btn-block(
       ng-href="{{::App.EDIT_URL}}"
       ga ga-label="'bottom.edit'")
