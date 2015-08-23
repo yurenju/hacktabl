@@ -2,6 +2,7 @@ require 'angular-sanitize/angular-sanitize.js'
 require 'angular-ga/ga.js'
 require '../../vendor/javascripts/ui-bootstrap-selected'
 require './app-router'
+const ethercalc-data-cache = require '../../config/ethercalc-data'
 
 angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router app.constant]>
 #
@@ -141,7 +142,7 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router ap
     options.classes = JSON.stringify(options.classes || {})
 
     return $interpolate('
-      <{{tagName}} comment="{{id}}" comment-placement="{{placement}}" 
+      <{{tagName}} comment="{{id}}" comment-placement="{{placement}}"
        comment-append-to-body="true" ng-class=\'{{classes}}\'>{{content}}</{{tagName}}>
       ') options
 
@@ -419,9 +420,16 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router ap
     deregister = $rootScope.$on \$routeChangeSuccess, (e, route) !~>
       id = route.params.id
 
-      reject ERRORS.NO_ID if id?length is 0 # Should not be here because we have router...
+      if id?length is 0 # Should not be here because we have router...
+        reject ERRORS.NO_ID
+        return
 
       deregister!
+
+      if ethercalc-data-cache[id]
+        # Check cache first
+        resolve ethercalc-data-cache[id]
+        return
 
       $http.get "https://ethercalc.org/#{id}.csv" .then (csv) !->
         console.log 'CSV', csv
@@ -431,25 +439,28 @@ angular.module \app.service, <[ngSanitize ga ui.bootstrap.selected app.router ap
           columns = row.split \,
           data[columns.0] = columns.1.match(/^"?(.*?)"?$/).1 if columns.length >= 2
 
-
-        # populate EDIT_URL and DATA_URL when DOC_ID is given
-        if data.DOC_ID
-          data.EDIT_URL ||= "https://docs.google.com/document/d/#{data.DOC_ID}/edit"
-          data.DATA_URL ||= "https://docs.google.com/feeds/download/documents/export/Export?id=#{data.DOC_ID}&exportFormat=html"
-
-        else if data.DATA_URL
-          # populate DOC_ID if only DATA_URL is given
-          data.DOC_ID = data.DATA_URL.match /id=([^&]+)/ .1
-
-        else
-          reject ERRORS.NO_DOC_INFO
-
         resolve data
+
       .catch (e) !->
         if e.status is 404
           reject ERRORS.NO_ETHERCALC
         else
           reject e
+
+  .then (data) ->
+    # populate EDIT_URL and DATA_URL when DOC_ID is given
+    if data.DOC_ID
+      data.EDIT_URL ||= "https://docs.google.com/document/d/#{data.DOC_ID}/edit"
+      data.DATA_URL ||= "https://docs.google.com/feeds/download/documents/export/Export?id=#{data.DOC_ID}&exportFormat=html"
+
+    else if data.DATA_URL
+      # populate DOC_ID if only DATA_URL is given
+      data.DOC_ID = data.DATA_URL.match /id=([^&]+)/ .1
+
+    else
+      return Promise.reject(ERRORS.NO_DOC_INFO)
+
+    return data
 
 .config <[
        $sceDelegateProvider
