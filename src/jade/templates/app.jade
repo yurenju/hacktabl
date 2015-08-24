@@ -120,7 +120,7 @@ div(ng-click="App.State.titlebar='title'"
           ng-style="{width: 100/(row.positions.length+1)+'%'}")
 
           div(ng-switch-default)
-            h2(ng-click="TableRow.toggleExpand()")
+            h3(ng-click="TableRow.toggleExpand()")
               span(vu-compile tmpl="::positions.summary" ng-if="::positions.summary")
               span.empty-summary(ng-if="::positions.summary == ''") ({{positions.debateArguments.length}} 個論述)
               span.glyphicon.glyphicon-chevron-down.arrow(ng-hide="TableRow.isExpanded")

@@ -170,11 +170,12 @@ body
   border-bottom: rem-calc(1px) dashed $brand-success
 
   ul
-    padding-left: 1rem
+    padding-left: 1.35rem // Tweaked. Magic.
     margin-bottom: 0
 
   li
     position: relative // For the pseudo element
+    margin-bottom: $line-height * .5
     z-index: 0
     +transition(z-index 0.2s)
     +transition-delay(0)
@@ -261,18 +262,23 @@ body
   .column-empty
     text-align: center
     color: $gray-dark
-    font-size: $font-size-large
-    line-height: $line-height-large
+    font-size: $font-size-h3
+    line-height: 1.5
 
 .l-table
   [ng-click]
     cursor: pointer
 
   h2
-    margin: $line-height 0
+    font-size: $font-size-h3
+    margin: 0
+
+  h3
+    margin: 0
     .arrow
-      font-size: 20px
-      margin-left: 10px
+      font-size: 0.75em
+      margin-left: 0.5em
+      opacity: 0.56
 
     &:hover
       .arrow
